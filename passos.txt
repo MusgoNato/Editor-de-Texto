@@ -1,0 +1,8 @@
+1° Criar a janela que será o menu
+    -1 Posicionar o cursor, para saber de onde a onde vai ser a janela do menu
+2° Criar as opções do menu
+    -1 Posicionar o cursor para ficar abaixo de onde foi criado a linha superior do menu
+3° Mexer em cada opção
+    -1 Saber abrir, fechar e salvar arquivos
+    -2 Centralizar a esquerda, justificar e centralizar a direita o texto
+    -3 Trocar a cor do fundo do fundo do menu e a cor do texto
