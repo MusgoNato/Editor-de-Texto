@@ -1,7 +1,7 @@
 /* Biblioteca que permite ler diferentes fontes de entrada: teclado e mouse.
 
-   OBSERVAÇÃO: para identificar as os pressionamentos dos botões do mouse é preciso que a opção 
-			   "Modo de Edição Rápida" (aba "Opções" das propriedades do janela do Console de ocmando)
+   OBSERVAï¿½ï¿½O: para identificar as os pressionamentos dos botï¿½es do mouse ï¿½ preciso que a opï¿½ï¿½o 
+			   "Modo de Ediï¿½ï¿½o Rï¿½pida" (aba "Opï¿½ï¿½es" das propriedades do janela do Console de ocmando)
 			   esteja DESMARCADA (unchecked).
 */
 #ifndef _CONSOLE
@@ -17,7 +17,7 @@
 */
 
 /****************************************************************************************************************/
-/*                                  INÍCIO DAS DECLARAÇÕES DE DEFINES E CONSTANTES                              */
+/*                                  INï¿½CIO DAS DECLARAï¿½ï¿½ES DE DEFINES E CONSTANTES                              */
 /****************************************************************************************************************/
 #define F1 112
 #define F2 113
@@ -51,39 +51,39 @@
 #define SETA_PARA_BAIXO 40
 
 /* Teclas de status */
-#define SHIFT_ESQUERDO_PRESSIONADO 0x0200  /* (constante definida por mim = 0x200 = shift esquerdo pressionado) + (0x010 = shift pressionado) = 0x210. Valor definido com base em uma extensão dos valores contidos na tabela: http://msdn.microsoft.com/pt-br/library/windows/desktop/ms684166%28v=vs.85%29.aspx */
-#define SHIFT_DIREITO_PRESSIONADO 0x0400  /* (constante definida por mim = 0x400 = shift direito pressionado) + (0x010 = shift pressionado) = 0x410. Valor definido com base em uma extensão dos valores contidos na tabela: http://msdn.microsoft.com/pt-br/library/windows/desktop/ms684166%28v=vs.85%29.aspx */
+#define SHIFT_ESQUERDO_PRESSIONADO 0x0200  /* (constante definida por mim = 0x200 = shift esquerdo pressionado) + (0x010 = shift pressionado) = 0x210. Valor definido com base em uma extensï¿½o dos valores contidos na tabela: http://msdn.microsoft.com/pt-br/library/windows/desktop/ms684166%28v=vs.85%29.aspx */
+#define SHIFT_DIREITO_PRESSIONADO 0x0400  /* (constante definida por mim = 0x400 = shift direito pressionado) + (0x010 = shift pressionado) = 0x410. Valor definido com base em uma extensï¿½o dos valores contidos na tabela: http://msdn.microsoft.com/pt-br/library/windows/desktop/ms684166%28v=vs.85%29.aspx */
 
 
-/* constantes definidas para identificar a liberação de um determinado botão do mouse */
+/* constantes definidas para identificar a liberaï¿½ï¿½o de um determinado botï¿½o do mouse */
 #define FROM_LEFT_1ST_BUTTON_RELEASED FROM_LEFT_1ST_BUTTON_PRESSED
 #define FROM_LEFT_2ND_BUTTON_RELEASED FROM_LEFT_2ND_BUTTON_PRESSED
 #define FROM_LEFT_3RD_BUTTON_RELEASED FROM_LEFT_3RD_BUTTON_PRESSED
 #define FROM_LEFT_4TH_BUTTON_RELEASED FROM_LEFT_4TH_BUTTON_PRESSED
 #define RIGHTMOST_BUTTON_RELEASED RIGHTMOST_BUTTON_PRESSED
 
-/* dar a opção ao programador de usar constantes em português, caso queira */
+/* dar a opï¿½ï¿½o ao programador de usar constantes em portuguï¿½s, caso queira */
 #define BOTAO_ESQUERDO_PRESSIONADO FROM_LEFT_1ST_BUTTON_PRESSED
 #define BOTAO_ESQUERDO_LIBERADO FROM_LEFT_1ST_BUTTON_RELEASED
 #define BOTAO_DIREITO_PRESSIONADO RIGHTMOST_BUTTON_RELEASED
 #define BOTAO_DIREITO_LIBERADO RIGHTMOST_BUTTON_RELEASED
 
-/* constantes utilizadas pela função IdentificarEvento() para definir o nivel
-   de detalhamento das informações a serem coletadas de um evento */
+/* constantes utilizadas pela funï¿½ï¿½o IdentificarEvento() para definir o nivel
+   de detalhamento das informaï¿½ï¿½es a serem coletadas de um evento */
 #define MINIMO 1
 #define MAXIMO 2
 
 #define BIT_SHORT_MAIS_SIGNIFICATIVO 0x80  /* (0x80) na base hexadecimal = (128) na base 10 = (1000 0000) na base 2 */
 #define TECLA_PRESSIONADA 0x80
 /****************************************************************************************************************/
-/*                                  FIM DAS DECLARAÇÕES DE DEFINES E CONSTANTES                              */
+/*                                  FIM DAS DECLARAï¿½ï¿½ES DE DEFINES E CONSTANTES                              */
 /****************************************************************************************************************/
 
 
 
 
 /****************************************************************************************************************/
-/*                                   DECLARAÇÕES DE ESTRUTURAS E ENUMERAÇÕES                                    */
+/*                                   DECLARAï¿½ï¿½ES DE ESTRUTURAS E ENUMERAï¿½ï¿½ES                                    */
 /****************************************************************************************************************/
 
  /* estrutura para o armazenamento das cores da janela de console */
@@ -101,7 +101,7 @@
     typedef enum{INVISIVEL, VISIVEL} VISIBILIDADE;
 
 
- /* tipo que permite identificar que tipo de evento deve ser verificada a existência no buffer de eventos */
+ /* tipo que permite identificar que tipo de evento deve ser verificada a existï¿½ncia no buffer de eventos */
     typedef enum{KEYBOARD_HIT, MOUSE_HIT, ALL} TYPE_HIT;
 
 
@@ -110,9 +110,9 @@
     enum T_STATUS_TECLA{LIBERADA, PRESSIONADA};
     typedef struct T_TECLADO{
                             enum T_STATUS_TECLA status_tecla; /* LIBERADA ou PRESSIONADA */
-		 				    DWORD codigo_tecla; /* código numérico que identifica uma tecla independente do tipo do teclado */
+		 				    DWORD codigo_tecla; /* cï¿½digo numï¿½rico que identifica uma tecla independente do tipo do teclado */
                             DWORD status_teclas_controle; /* CAPSLOCK_ON, ENHANCED_KEY (insert, delete, home, end, pg up, pg downl,
-						                                   setas de direção, etc), LEFT_ALT_PRESSED, LEFT_CTRL_PRESSED,
+						                                   setas de direï¿½ï¿½o, etc), LEFT_ALT_PRESSED, LEFT_CTRL_PRESSED,
 						                                   NUMLOCK_ON, RIGHT_ALT_PRESSED, RIGHT_CTRL_PRESSED, SCROLLLOCK_ON,
 								 						   SHIFT_PRESSED */
                             } TECLADO;
@@ -122,29 +122,29 @@
     typedef struct T_MOUSE{
                           DWORD botao_pressionado; /* FROM_LEFT_1ST_BUTTON_PRESSED, FROM_LEFT_2ND_BUTTON_PRESSED, FROM_LEFT_3RD_BUTTON_PRESSED,
                                                       FROM_LEFT_4TH_BUTTON_PRESSED, RIGHTMOST_BUTTON_PRESSED */
-		 				  DWORD botao_clicou;      /* se o botão tiver sido liberado, após ter sido pressionado */
-                          COORD posicao; /* coordenadas (em forma de células de caracteres e não de pixels) do cursor do
+		 				  DWORD botao_clicou;      /* se o botï¿½o tiver sido liberado, apï¿½s ter sido pressionado */
+                          COORD posicao; /* coordenadas (em forma de cï¿½lulas de caracteres e nï¿½o de pixels) do cursor do
 						                    mouse em termos do tamanho (em linhas e colunas) do buffer
 							 			    de console que estiver definido para a janela */
                           DWORD status_teclas_controle; /* CAPSLOCK_ON, ENHANCED_KEY (insert, delete, home, end, pg up, pg downl,
-						                                   setas de direção, etc), LEFT_ALT_PRESSED, LEFT_CTRL_PRESSED,
+						                                   setas de direï¿½ï¿½o, etc), LEFT_ALT_PRESSED, LEFT_CTRL_PRESSED,
 						                                   NUMLOCK_ON, RIGHT_ALT_PRESSED, RIGHT_CTRL_PRESSED, SCROLLLOCK_ON,
 							 							   SHIFT_PRESSED */
 						  DWORD flags_qual_evento_mouse; /* DOUBLE_CLICK, MOUSE_HWHEELED, MOUSE_MOVED, MOUSE_WHEELED */
                           } MOUSE;
 
- /* Evento que pode ter acontecido e que é identificado pela função Evento() */
+ /* Evento que pode ter acontecido e que ï¿½ identificado pela funï¿½ï¿½o Evento() */
     typedef struct T_EVENTO{
                            WORD tipo_evento; /* pode ser MOUSE_EVENT ou KEY_EVENT */
-		  				   TECLADO teclado; /* caso tenha ocorrido um KEY_EVENT, então esta estrutura será prenchida
+		  				   TECLADO teclado; /* caso tenha ocorrido um KEY_EVENT, entï¿½o esta estrutura serï¿½ prenchida
 						                    com os dados correspondentes */
-						   MOUSE mouse;    /* caso tenha ocorrido um MOUSE_EVENT, então esta estrutura será prenchida
+						   MOUSE mouse;    /* caso tenha ocorrido um MOUSE_EVENT, entï¿½o esta estrutura serï¿½ prenchida
 						                    com os dados correspondentes */
                            }EVENTO;
 
 
 /****************************************************************************************************************/
-/*                                  FIM DAS DECLARAÇÕES DE ESTRUTURAS E ENUMERAÇÕES                             */
+/*                                  FIM DAS DECLARAï¿½ï¿½ES DE ESTRUTURAS E ENUMERAï¿½ï¿½ES                             */
 /****************************************************************************************************************/
 
 
@@ -152,15 +152,15 @@
 
 
 /****************************************************************************************************************/
-/*                                INÍCIO DAS DECLARAÇÕES DOS PROTÓTIPOS DAS FUNÇÕES                             */
+/*                                INï¿½CIO DAS DECLARAï¿½ï¿½ES DOS PROTï¿½TIPOS DAS FUNï¿½ï¿½ES                             */
 /****************************************************************************************************************/
 
  /*****************************************************************************************************************
-  Descrição: imprime a mensagem do tipo LPSTR (ponteiro para uma string) juntamente com o código do último erro
+  Descriï¿½ï¿½o: imprime a mensagem do tipo LPSTR (ponteiro para uma string) juntamente com o cï¿½digo do ï¿½ltimo erro
              ocorrido no programa obtido do fluxo de erro (stderr) e encerra o programa.
-  Parâmetros de entrada:
-   -> Variável do tipo LPSTR: uma mensagem a ser impressa na tela.
-  Retorno da função:
+  Parï¿½metros de entrada:
+   -> Variï¿½vel do tipo LPSTR: uma mensagem a ser impressa na tela.
+  Retorno da funï¿½ï¿½o:
    -> Nenhum.
  *****************************************************************************************************************/
  void ErrorExit (LPSTR);
@@ -169,150 +169,150 @@
 
 
  /*****************************************************************************************************************
-  Descrição: permitir e identificar com todos os detalhes, eventos originários do teclado e/ou do mouse.
-  Parâmetros de entrada:
+  Descriï¿½ï¿½o: permitir e identificar com todos os detalhes, eventos originï¿½rios do teclado e/ou do mouse.
+  Parï¿½metros de entrada:
    -> Nenhum.
-  Retorno da função:
+  Retorno da funï¿½ï¿½o:
    -> Estrutura EVENTO:
-      - Campo "tipo_evento" que é do tipo WORD (inteiro sem sinal de 2 bytes):
-	      -> Valor MOUSE_EVENT: significa que o evento lido do buffer da janela de console é um evento originário do
+      - Campo "tipo_evento" que ï¿½ do tipo WORD (inteiro sem sinal de 2 bytes):
+	      -> Valor MOUSE_EVENT: significa que o evento lido do buffer da janela de console ï¿½ um evento originï¿½rio do
 		                       MOUSE;
-		  -> Valor KEY_EVENT: significa que o evento lido do buffer da janela de console é um evento originário do
+		  -> Valor KEY_EVENT: significa que o evento lido do buffer da janela de console ï¿½ um evento originï¿½rio do
 		                     TECLADO;
-		  -> Observação 1: esta função descarta os eventos FOCUS_EVENT, MENU_EVENT e WINDOW_BUFFER_SIZE_EVENT.
-		                   Caso a identificação de algum desses eventos seja necessário, a função deve ser
+		  -> Observaï¿½ï¿½o 1: esta funï¿½ï¿½o descarta os eventos FOCUS_EVENT, MENU_EVENT e WINDOW_BUFFER_SIZE_EVENT.
+		                   Caso a identificaï¿½ï¿½o de algum desses eventos seja necessï¿½rio, a funï¿½ï¿½o deve ser
 			 			   estendida para que armazene neste campo o valor correspondente a um desses 3 eventos;
-          -> Observação 2: o campo "tipo_evento" é um campo de bits. Isto é, cada um dos valores indicados
-		                   está associado a um bit do campo. Portanto, a identificação de qual valor está armazenado
+          -> Observaï¿½ï¿½o 2: o campo "tipo_evento" ï¿½ um campo de bits. Isto ï¿½, cada um dos valores indicados
+		                   estï¿½ associado a um bit do campo. Portanto, a identificaï¿½ï¿½o de qual valor estï¿½ armazenado
                            no campo deve ser feito por meio dos operadores bit-a-bit.
 						   Exemplo: EVENTO e;
 						            e = Evento();
 						            if (e.tipo_evento & MOUSE_EVENT) printf("Foi gerado um evento pelo mouse");
 						            if (e.tipo_evento & KEY_EVENT) printf("Foi gerado um evento pelo teclado");
-	  - Campo "teclado" que é uma estrutura do tipo TECLADO: se o campo "tipo_evento" contiver um valor KEY_EVENT
-	                                                         então esta estrutura conterá todos os dados relativos
-															 a esse evento. Caso contrário, os valores contidos
-															 nesta estrutura não tem sentido e, portanto, não devem
+	  - Campo "teclado" que ï¿½ uma estrutura do tipo TECLADO: se o campo "tipo_evento" contiver um valor KEY_EVENT
+	                                                         entï¿½o esta estrutura conterï¿½ todos os dados relativos
+															 a esse evento. Caso contrï¿½rio, os valores contidos
+															 nesta estrutura nï¿½o tem sentido e, portanto, nï¿½o devem
  															 ser utilizados.
-	      -> Campo "status_tecla" do tipo enumeração: armazena se o evento do teclado foi o pressionamento
-		                                              ou a liberação de uma tecla.
-		     - Valor LIBERADA: evento corresponde à liberação do pressionamento de uma tecla;
+	      -> Campo "status_tecla" do tipo enumeraï¿½ï¿½o: armazena se o evento do teclado foi o pressionamento
+		                                              ou a liberaï¿½ï¿½o de uma tecla.
+		     - Valor LIBERADA: evento corresponde ï¿½ liberaï¿½ï¿½o do pressionamento de uma tecla;
 			 - Valor PRESSIONADA: evento corresponde ao pressionamento de uma tecla.
-		  -> Campo "codigo_tecla" do tipo DWORD: contem um valor inteiro único independente do tipo do teclado para
+		  -> Campo "codigo_tecla" do tipo DWORD: contem um valor inteiro ï¿½nico independente do tipo do teclado para
 		                                       cada uma das teclas do teclado.
-		     - Observação:
-			   Recomenda-se o uso das constantes definidas no início deste arquivo (#defines) para
-			   referenciar as teclas, ao invés da escrita no programa do próprio código da tecla.
+		     - Observaï¿½ï¿½o:
+			   Recomenda-se o uso das constantes definidas no inï¿½cio deste arquivo (#defines) para
+			   referenciar as teclas, ao invï¿½s da escrita no programa do prï¿½prio cï¿½digo da tecla.
 		  -> Campo "status_teclas_controle" do tipo DWORD (4 bytes): contem o status das diversas teclas de
 		                                                             controle.
-             - Valor CAPSLOCK_ON: a luz da tecla CAPSLOCK está ligada;
-             - Valor ENHANCED_KEY: a tecla pressionada é uma tecla estendida (INSERT, DELETE, HOME, END, PG UP,
-			                       PG DOWN, SETAS DE DIREÇÃO, etc.);
-             - Valor LEFT_ALT_PRESSED: a tecla ALT da esquerda está pressionada;
-             - Valor LEFT_CTRL_PRESSED: a tecla CTRL da esquerda está pressionada;
-             - Valor NUMLOCK_ON: a luz da tecla NUMLOCK está ligada;
-             - Valor RIGHT_ALT_PRESSED: a tecla ALT da direita está pressionada;
-             - Valor RIGHT_CTRL_PRESSED: a tecla CTRL da direita está pressionada;
-             - Valor SCROLLLOCK_ON: a luz da tecla SCROLLLOCK está ligada;
-             - Valor SHIFT_PRESSED: uma, ou mesmo ambas, as teclas SHIFT estão pressionadas.
+             - Valor CAPSLOCK_ON: a luz da tecla CAPSLOCK estï¿½ ligada;
+             - Valor ENHANCED_KEY: a tecla pressionada ï¿½ uma tecla estendida (INSERT, DELETE, HOME, END, PG UP,
+			                       PG DOWN, SETAS DE DIREï¿½ï¿½O, etc.);
+             - Valor LEFT_ALT_PRESSED: a tecla ALT da esquerda estï¿½ pressionada;
+             - Valor LEFT_CTRL_PRESSED: a tecla CTRL da esquerda estï¿½ pressionada;
+             - Valor NUMLOCK_ON: a luz da tecla NUMLOCK estï¿½ ligada;
+             - Valor RIGHT_ALT_PRESSED: a tecla ALT da direita estï¿½ pressionada;
+             - Valor RIGHT_CTRL_PRESSED: a tecla CTRL da direita estï¿½ pressionada;
+             - Valor SCROLLLOCK_ON: a luz da tecla SCROLLLOCK estï¿½ ligada;
+             - Valor SHIFT_PRESSED: uma, ou mesmo ambas, as teclas SHIFT estï¿½o pressionadas.
 			 - Valor SHIFT_ESQUERDO_PRESSIONADO: se foi pressionada a tecla de SHIFT ESQUERDA;
 			 - Valor SHIFT_DIREITO_PRESSIONADO: se foi pressionada a tecla de SHIFT DIREITO;
-             -> Observação:
-			    Este campo "status_teclas_controle" é um campo de bits. Isto é, cada um dos valores indicados
-		        está associado a um bit do campo. Portanto, a identificação de qual valor está armazenado
+             -> Observaï¿½ï¿½o:
+			    Este campo "status_teclas_controle" ï¿½ um campo de bits. Isto ï¿½, cada um dos valores indicados
+		        estï¿½ associado a um bit do campo. Portanto, a identificaï¿½ï¿½o de qual valor estï¿½ armazenado
                 no campo deve ser feito por meio dos operadores bit-a-bit.
 				Exemplo: EVENTO e;
 				         e = Evento();
 						 if (e.tipo_evento & KEY_EVENT)
 						 {
-						     if (e.teclado.status_teclas_controle & CAPSLOCK_ON) printf("A luz da tecla CAPSLOCK está acessa");
+						     if (e.teclado.status_teclas_controle & CAPSLOCK_ON) printf("A luz da tecla CAPSLOCK estï¿½ acessa");
 						 }
-	  - Campo "mouse" que é uma estrutura do tipo MOUSE:
+	  - Campo "mouse" que ï¿½ uma estrutura do tipo MOUSE:
           -> Campo "botao_pressionado" do tipo DWORD:
-             - Valor FROM_LEFT_1ST_BUTTON_PRESSED: primeiro botão da esquerda pressionado;
-			 - Valor FROM_LEFT_2ND_BUTTON_PRESSED: segundo botão da esquerda pressionado;
-			 - Valor RIGHTMOST_BUTTON_PRESSED: botão mais à direita pressionado.
-             -> Observação 1:
-			    Este campo "botao_pressionado" é um campo de bits. Isto é, cada um dos valores indicados está
-				associado a um bit do campo. Portanto, a identificação de qual valor está armazenado no campo deve
+             - Valor FROM_LEFT_1ST_BUTTON_PRESSED: primeiro botï¿½o da esquerda pressionado;
+			 - Valor FROM_LEFT_2ND_BUTTON_PRESSED: segundo botï¿½o da esquerda pressionado;
+			 - Valor RIGHTMOST_BUTTON_PRESSED: botï¿½o mais ï¿½ direita pressionado.
+             -> Observaï¿½ï¿½o 1:
+			    Este campo "botao_pressionado" ï¿½ um campo de bits. Isto ï¿½, cada um dos valores indicados estï¿½
+				associado a um bit do campo. Portanto, a identificaï¿½ï¿½o de qual valor estï¿½ armazenado no campo deve
 				ser feito por meio dos operadores bit-a-bit.
 			    Exemplo: EVENTO e;
 				         e = Evento();
 						 if (e.tipo_evento & MOUSE_EVENT)
 						 {
 							 if (e.mouse.botao_pressionado & RIGHTMOST_BUTTON_PRESSED)
-								 printf("O botão da direita está pressionado");
+								 printf("O botï¿½o da direita estï¿½ pressionado");
 						 }
-             -> Observação 2:
-			    Foram definidas, na seção "DEFINES e CONSTANTES", constantes em português, para os botões esquerdo
-                e direito do mouse, que podem ser utilizadas ao invés dos valores anteriores para aumentar
-				a legibilidade do código:
+             -> Observaï¿½ï¿½o 2:
+			    Foram definidas, na seï¿½ï¿½o "DEFINES e CONSTANTES", constantes em portuguï¿½s, para os botï¿½es esquerdo
+                e direito do mouse, que podem ser utilizadas ao invï¿½s dos valores anteriores para aumentar
+				a legibilidade do cï¿½digo:
 				- BOTAO_ESQUERDO_PRESSIONADO
                 - BOTAO_DIREITO_PRESSIONADO
-             -> Observação 3:
-			    Embora o "windows.h" colete e disponibilize informações para mais dois botões que porventura o
+             -> Observaï¿½ï¿½o 3:
+			    Embora o "windows.h" colete e disponibilize informaï¿½ï¿½es para mais dois botï¿½es que porventura o
 				mouse tenha (constantes FROM_LEFT_3RD_BUTTON_PRESSED e FROM_LEFT_4TH_BUTTON_PRESSED, correspondentes
-				ao terceiro e quarto botões da esquerda, respectivamente), esta função ignora esses valores. Portanto,
-				caso seja necessário essa identificação, a função deve ser estendida nesse aspecto.
-		  -> Campo "botao_clicou" do tipo DWORD: contém se o evento foi a liberação de algum dos botões do mouse
+				ao terceiro e quarto botï¿½es da esquerda, respectivamente), esta funï¿½ï¿½o ignora esses valores. Portanto,
+				caso seja necessï¿½rio essa identificaï¿½ï¿½o, a funï¿½ï¿½o deve ser estendida nesse aspecto.
+		  -> Campo "botao_clicou" do tipo DWORD: contï¿½m se o evento foi a liberaï¿½ï¿½o de algum dos botï¿½es do mouse
 		                                         que previamente estavam pressionados, definindo um clique do mouse.
-             - Valor FROM_LEFT_1ST_BUTTON_RELEASED: primeiro botão da esquerda foi liberado (clicou);
-			 - Valor FROM_LEFT_2ND_BUTTON_RELEASED: segundo botão da esquerda foi liberado (clicou);
-			 - Valor RIGHTMOST_BUTTON_RELEASED: botão mais à direita foi liberado (clicou).
-             -> Observação 1:
-			    Este campo "botao_clicou" é um campo de bits. Isto é, cada um dos valores indicados está
-				associado a um bit do campo. Portanto, a identificação de qual valor está armazenado no campo deve
+             - Valor FROM_LEFT_1ST_BUTTON_RELEASED: primeiro botï¿½o da esquerda foi liberado (clicou);
+			 - Valor FROM_LEFT_2ND_BUTTON_RELEASED: segundo botï¿½o da esquerda foi liberado (clicou);
+			 - Valor RIGHTMOST_BUTTON_RELEASED: botï¿½o mais ï¿½ direita foi liberado (clicou).
+             -> Observaï¿½ï¿½o 1:
+			    Este campo "botao_clicou" ï¿½ um campo de bits. Isto ï¿½, cada um dos valores indicados estï¿½
+				associado a um bit do campo. Portanto, a identificaï¿½ï¿½o de qual valor estï¿½ armazenado no campo deve
 				ser feito por meio dos operadores bit-a-bit.
 			    Exemplo: EVENTO e;
 				         e = Evento();
 						 if (e.tipo_evento & MOUSE_EVENT)
 						 {
 						     if (e.mouse.botao_clicou & RIGHTMOST_BUTTON_RELEASED)
-						         printf("O botão da direita clicou/foi liberado");
+						         printf("O botï¿½o da direita clicou/foi liberado");
 						 } 
-             -> Observação 2:
-			    Foram definidas, na seção "DEFINES e CONSTANTES", constantes em português, para os botões esquerdo
-                e direito do mouse, que podem ser utilizadas ao invés dos valores anteriores para aumentar
-				a legibilidade do código:
+             -> Observaï¿½ï¿½o 2:
+			    Foram definidas, na seï¿½ï¿½o "DEFINES e CONSTANTES", constantes em portuguï¿½s, para os botï¿½es esquerdo
+                e direito do mouse, que podem ser utilizadas ao invï¿½s dos valores anteriores para aumentar
+				a legibilidade do cï¿½digo:
 				- BOTAO_ESQUERDO_LIBERADO
                 - BOTAO_DIREITO_LIBERADO
-          -> Campo "posicao" que é uma estrutura do tipo COORD: guarda as coordenadas (x,y) na janela de console em
-                                                                que ocorreu o evento do mouse. As coordenadas são
-																dadas em posições de caracteres e não de pixels.
+          -> Campo "posicao" que ï¿½ uma estrutura do tipo COORD: guarda as coordenadas (x,y) na janela de console em
+                                                                que ocorreu o evento do mouse. As coordenadas sï¿½o
+																dadas em posiï¿½ï¿½es de caracteres e nï¿½o de pixels.
 			 - Campo X: coluna da janela de console em que ocorreu o evento do mouse;
              - Campo Y: linha da janela de console em que ocorreu o evento do mouse.
 
 		  -> Campo "status_teclas_controle" do tipo DWORD: contem o status das diversas teclas de controle, quando
 		                                                   ocorreu o evento do mouse.
-             - Valor CAPSLOCK_ON: a luz da tecla CAPSLOCK está ligada;
-             - Valor ENHANCED_KEY: a tecla pressionada é uma tecla estendida (INSERT, DELETE, HOME, END, PG UP,
-			                       PG DOWN, SETAS DE DIREÇÃO, etc.);
-             - Valor LEFT_ALT_PRESSED: a tecla ALT da esquerda está pressionada;
-             - Valor LEFT_CTRL_PRESSED: a tecla CTRL da esquerda está pressionada;
-             - Valor NUMLOCK_ON: a luz da tecla NUMLOCK está ligada;
-             - Valor RIGHT_ALT_PRESSED: a tecla ALT da direita está pressionada;
-             - Valor RIGHT_CTRL_PRESSED: a tecla CTRL da direita está pressionada;
-             - Valor SCROLLLOCK_ON: a luz da tecla SCROLLLOCK está ligada;
-             - Valor SHIFT_PRESSED: uma, ou mesmo ambas, as teclas SHIFT estão pressionadas;
+             - Valor CAPSLOCK_ON: a luz da tecla CAPSLOCK estï¿½ ligada;
+             - Valor ENHANCED_KEY: a tecla pressionada ï¿½ uma tecla estendida (INSERT, DELETE, HOME, END, PG UP,
+			                       PG DOWN, SETAS DE DIREï¿½ï¿½O, etc.);
+             - Valor LEFT_ALT_PRESSED: a tecla ALT da esquerda estï¿½ pressionada;
+             - Valor LEFT_CTRL_PRESSED: a tecla CTRL da esquerda estï¿½ pressionada;
+             - Valor NUMLOCK_ON: a luz da tecla NUMLOCK estï¿½ ligada;
+             - Valor RIGHT_ALT_PRESSED: a tecla ALT da direita estï¿½ pressionada;
+             - Valor RIGHT_CTRL_PRESSED: a tecla CTRL da direita estï¿½ pressionada;
+             - Valor SCROLLLOCK_ON: a luz da tecla SCROLLLOCK estï¿½ ligada;
+             - Valor SHIFT_PRESSED: uma, ou mesmo ambas, as teclas SHIFT estï¿½o pressionadas;
 			 - Valor SHIFT_ESQUERDO_PRESSIONADO: se foi pressionada a tecla de SHIFT ESQUERDA;
 			 - Valor SHIFT_DIREITO_PRESSIONADO: se foi pressionada a tecla de SHIFT DIREITO;
-             -> Observação:
-			    O campo "status_teclas_controle" é um campo de bits. Isto é, cada um dos valores indicados
-		        está associado a um bit do campo. Portanto, a identificação de qual valor está armazenado
+             -> Observaï¿½ï¿½o:
+			    O campo "status_teclas_controle" ï¿½ um campo de bits. Isto ï¿½, cada um dos valores indicados
+		        estï¿½ associado a um bit do campo. Portanto, a identificaï¿½ï¿½o de qual valor estï¿½ armazenado
                 no campo deve ser feito por meio dos operadores bit-a-bit.
 				Exemplo: EVENTO e;
 				         e = Evento();
 						 if (e.tipo_evento & MOUSE_EVENT)
 						 {
-						     if (e.teclado.status_teclas_controle & CAPSLOCK_ON) printf("A luz da tecla CAPSLOCK está acessa");
+						     if (e.teclado.status_teclas_controle & CAPSLOCK_ON) printf("A luz da tecla CAPSLOCK estï¿½ acessa");
 						 }
 		  -> Campo "flags_qual_evento_mouse" do tipo DWORD: identifica qual o tipo de evento do mouse que ocorreu.
-             - Valor DOUBLE_CLICK: o segundo clique (pressionado de botão de um duplo-clique ocorreu.
-               * Observação: o primeiro clique é retornado como um evento normal de pressionamento de botão.
+             - Valor DOUBLE_CLICK: o segundo clique (pressionado de botï¿½o de um duplo-clique ocorreu.
+               * Observaï¿½ï¿½o: o primeiro clique ï¿½ retornado como um evento normal de pressionamento de botï¿½o.
              - Valor MOUSE_HWHEELED:  a roda de rolagem horizontal do mouse foi girada.
-			   * Observação: se a HIGH WORD do campo "botao_pressionado" contiver um valor positivo, então a roda foi
-			                 girada para a direita. Caso contrário, a roda foi girada para a esquerda.
-			                 Exemplo de identificação: EVENTO e;
+			   * Observaï¿½ï¿½o: se a HIGH WORD do campo "botao_pressionado" contiver um valor positivo, entï¿½o a roda foi
+			                 girada para a direita. Caso contrï¿½rio, a roda foi girada para a esquerda.
+			                 Exemplo de identificaï¿½ï¿½o: EVENTO e;
                                                        e = Evento();
 													   if (e.tipo_evento & MOUSE_EVENT)
 													   {
@@ -321,27 +321,27 @@
                                                            else
                                                                 printf("A roda do mouse foi girada para a esquerda");
 													   }
-             - Valor MOUSE_MOVED: ocorreu uma mudança na posição do mouse;
+             - Valor MOUSE_MOVED: ocorreu uma mudanï¿½a na posiï¿½ï¿½o do mouse;
              - Valor MOUSE_WHEELED: a roda de rolagem vertical do mouse foi girada.
-			   * Observação: se a HIGH WORD do campo "botao_pressionado" contiver um valor positivo, então a roda foi
-			                 girada para a frente. Caso contrário, a roda foi girada para trás.
-			                 Exemplo de identificação: EVENTO e;
+			   * Observaï¿½ï¿½o: se a HIGH WORD do campo "botao_pressionado" contiver um valor positivo, entï¿½o a roda foi
+			                 girada para a frente. Caso contrï¿½rio, a roda foi girada para trï¿½s.
+			                 Exemplo de identificaï¿½ï¿½o: EVENTO e;
                                                        e = Evento();
 													   if (e.tipo_evento & MOUSE_EVENT)
 													   {
                                                            if( (int)e.mouse.botao_pressionado > 0)
                                                                printf("A roda do mouse foi girada para frente");
                                                            else
-                                                               printf("A roda do mouse foi girada para trás");
+                                                               printf("A roda do mouse foi girada para trï¿½s");
 													    }
-  Observações:
-   a) Deve ser dada preferência ao uso desta função ao invés da função getch();
-   b) Ver a declaração da estrutura EVENTO na seção anterior denominada "DECLARAÇÕES DE ESTRUTURAS E ENUMERAÇÕES".
-   c) Ver a declaração da estrutura COORD na seção anterior denominada "DECLARAÇÕES DE ESTRUTURAS E ENUMERAÇÕES".
-   d) Ver a declaração da estrutura TECLADO na seção anterior denominada "DECLARAÇÕES DE ESTRUTURAS E ENUMERAÇÕES";
-   e) Ver a declaração da estrutura MOUSE na seção anterior denominada"DECLARAÇÕES DE ESTRUTURAS E ENUMERAÇÕES".
-   f) O tipo WORD é um inteiro sem sinal longo de 2 bytes definido na "windows.h";
-   g) O tipo DWORD é um inteiro sem sinal longo de 4 bytes definido na "windows.h";
+  Observaï¿½ï¿½es:
+   a) Deve ser dada preferï¿½ncia ao uso desta funï¿½ï¿½o ao invï¿½s da funï¿½ï¿½o getch();
+   b) Ver a declaraï¿½ï¿½o da estrutura EVENTO na seï¿½ï¿½o anterior denominada "DECLARAï¿½ï¿½ES DE ESTRUTURAS E ENUMERAï¿½ï¿½ES".
+   c) Ver a declaraï¿½ï¿½o da estrutura COORD na seï¿½ï¿½o anterior denominada "DECLARAï¿½ï¿½ES DE ESTRUTURAS E ENUMERAï¿½ï¿½ES".
+   d) Ver a declaraï¿½ï¿½o da estrutura TECLADO na seï¿½ï¿½o anterior denominada "DECLARAï¿½ï¿½ES DE ESTRUTURAS E ENUMERAï¿½ï¿½ES";
+   e) Ver a declaraï¿½ï¿½o da estrutura MOUSE na seï¿½ï¿½o anterior denominada"DECLARAï¿½ï¿½ES DE ESTRUTURAS E ENUMERAï¿½ï¿½ES".
+   f) O tipo WORD ï¿½ um inteiro sem sinal longo de 2 bytes definido na "windows.h";
+   g) O tipo DWORD ï¿½ um inteiro sem sinal longo de 4 bytes definido na "windows.h";
    h) Os tipos comuns definidos na "windows.h" podem ser consultados em:
       http://msdn.microsoft.com/en-us/library/cc230309.aspx
  *****************************************************************************************************************/
@@ -352,18 +352,18 @@
 
 
 /*****************************************************************************************************************
-  Descrição: obter as cores de fundo e do texto definidas para a janela de console
-  Parâmetros de entrada:
+  Descriï¿½ï¿½o: obter as cores de fundo e do texto definidas para a janela de console
+  Parï¿½metros de entrada:
    -> Nenhum.
-  Retorno da função:
+  Retorno da funï¿½ï¿½o:
    -> Estrutura CORES:
       - Campo CorTexto: cor definida para a escrita de na janela de console.
 	  - Campo CorFundo: cor definida para o fundo de qualquer caracteres escrito na
 	                    janela de console
 
-  Observação:
-   -> Ver a declaração da estrutura CORES na seção anterior denominada
-      "DECLARAÇÕES DE ESTRUTURAS E ENUMERAÇÕES".
+  Observaï¿½ï¿½o:
+   -> Ver a declaraï¿½ï¿½o da estrutura CORES na seï¿½ï¿½o anterior denominada
+      "DECLARAï¿½ï¿½ES DE ESTRUTURAS E ENUMERAï¿½ï¿½ES".
  *****************************************************************************************************************/
  CORES getCoresJanela(void);
 
@@ -371,18 +371,18 @@
 
 
  /*****************************************************************************************************************
-  Descrição: obter as coordenadas atuais da janela de console na tela.
-  Parâmetros de entrada:
+  Descriï¿½ï¿½o: obter as coordenadas atuais da janela de console na tela.
+  Parï¿½metros de entrada:
    -> Nenhum.
-  Retorno da função:
+  Retorno da funï¿½ï¿½o:
    -> Estrutura COORD:
       - Campo X representa a linha do pixel da borda superior da janela de console.
       - Campo Y representa a coluna do pixel da borda esquerda da janela de console
 
-  Observações:
-   a) A estrutura COORD é incluída por meio do arquivo cabeçalho "windows.h". Contudo, a sua declaração
-      pode ser consultada anteriormente neste mesmo arquivo, na linha em que é incluído o arquivo
-	  cabeçalho "windows.h".
+  Observaï¿½ï¿½es:
+   a) A estrutura COORD ï¿½ incluï¿½da por meio do arquivo cabeï¿½alho "windows.h". Contudo, a sua declaraï¿½ï¿½o
+      pode ser consultada anteriormente neste mesmo arquivo, na linha em que ï¿½ incluï¿½do o arquivo
+	  cabeï¿½alho "windows.h".
    b) Em outras palavras, retorna as coodenadas (x,y) do pixel do canto superior
       esquerdo da janela de console.
  *****************************************************************************************************************/
@@ -392,21 +392,21 @@
 
  
  /*****************************************************************************************************************
-  Descrição: obter a resolução do monitor em pixels:
-  Parâmetros de entrada:
+  Descriï¿½ï¿½o: obter a resoluï¿½ï¿½o do monitor em pixels:
+  Parï¿½metros de entrada:
    -> Nenhum.
-  Retorno da função:
+  Retorno da funï¿½ï¿½o:
    -> Estrutura COORD:
-      - Campo X representa o número de pixels da largura
-      - Campo Y representa o número de pixels da altura
+      - Campo X representa o nï¿½mero de pixels da largura
+      - Campo Y representa o nï¿½mero de pixels da altura
 
-  Observação:
-   -> A estrutura COORD é incluída por meio do arquivo cabeçalho "windows.h". Contudo, a sua declaração
-      pode ser consultada anteriormente neste mesmo arquivo, na linha em que é incluído o arquivo
-	  cabeçalho "windows.h".
-   -> Retornará  a resolução exata configurada para a tela se a escala da fonte estiver definida para 100%. Caso 
-      esteja configurada para uma outra escala o valor retornado será ajustado com base na escala definida. 
-	  Por exemplo: resolução da tela seja 1920 x 1080 configurada para 125%. Logo, a função retornará 1536 x 864 
+  Observaï¿½ï¿½o:
+   -> A estrutura COORD ï¿½ incluï¿½da por meio do arquivo cabeï¿½alho "windows.h". Contudo, a sua declaraï¿½ï¿½o
+      pode ser consultada anteriormente neste mesmo arquivo, na linha em que ï¿½ incluï¿½do o arquivo
+	  cabeï¿½alho "windows.h".
+   -> Retornarï¿½  a resoluï¿½ï¿½o exata configurada para a tela se a escala da fonte estiver definida para 100%. Caso 
+      esteja configurada para uma outra escala o valor retornado serï¿½ ajustado com base na escala definida. 
+	  Por exemplo: resoluï¿½ï¿½o da tela seja 1920 x 1080 configurada para 125%. Logo, a funï¿½ï¿½o retornarï¿½ 1536 x 864 
 	               (1980 = 1536 x 1,25  e 1080 = 864 x 1,25),
 	  
  *****************************************************************************************************************/
@@ -416,18 +416,18 @@
 
 
  /*****************************************************************************************************************
-  Descrição: obter, em número de pixels, as dimensões horizontal e vertical da fonte da janela do console.
-  Parâmetros de entrada:
+  Descriï¿½ï¿½o: obter, em nï¿½mero de pixels, as dimensï¿½es horizontal e vertical da fonte da janela do console.
+  Parï¿½metros de entrada:
    -> Nenhum.
-  Retorno da função:
+  Retorno da funï¿½ï¿½o:
    -> Estrutura COORD:
       - Campo X representa a quantidade de pixels na horizontal ocupada por um caractere na janela do console.
       - Campo Y representa a quantidade de pixels na vertical ocupada por um caractere na janela do console.
 
-  Observação:
-   -> A estrutura COORD é incluída por meio do arquivo cabeçalho "windows.h". Contudo, a sua declaração
-      pode ser consultada anteriormente neste mesmo arquivo, na linha em que é incluído o arquivo
-	  cabeçalho "windows.h".
+  Observaï¿½ï¿½o:
+   -> A estrutura COORD ï¿½ incluï¿½da por meio do arquivo cabeï¿½alho "windows.h". Contudo, a sua declaraï¿½ï¿½o
+      pode ser consultada anteriormente neste mesmo arquivo, na linha em que ï¿½ incluï¿½do o arquivo
+	  cabeï¿½alho "windows.h".
  *****************************************************************************************************************/
  COORD getTamanhoFonteConsole(void);
 
@@ -435,12 +435,12 @@
 
 
  /*****************************************************************************************************************
-  Descrição: obter o título da janela de console.
-  Parâmetros de entrada:
+  Descriï¿½ï¿½o: obter o tï¿½tulo da janela de console.
+  Parï¿½metros de entrada:
    -> Nenhum.
-   Retorno da função:
-   -> Um ponteiro ponteiro para o endereço da string contendo o título da janela, ou NULL se a janela
-      não tiver um título
+   Retorno da funï¿½ï¿½o:
+   -> Um ponteiro ponteiro para o endereï¿½o da string contendo o tï¿½tulo da janela, ou NULL se a janela
+      nï¿½o tiver um tï¿½tulo
  *****************************************************************************************************************/
  char *getTituloConsole(void);
 
@@ -448,24 +448,24 @@
 
 
  /*****************************************************************************************************************
-  Descrição: obter se há algum evento (teclado, mouse, ou redimensionamento da janela) no buffer de eventos
+  Descriï¿½ï¿½o: obter se hï¿½ algum evento (teclado, mouse, ou redimensionamento da janela) no buffer de eventos
              da janela de console.
-  Parâmetros de entrada:
-   -> Enumeração TYPE_HIT:
-      - Valor KEYBOARD_HIT: identificar somente os eventos originários do teclado;
-	  - Valor MOUSE_HIT: identificar somente os eventos originários do mouse;
+  Parï¿½metros de entrada:
+   -> Enumeraï¿½ï¿½o TYPE_HIT:
+      - Valor KEYBOARD_HIT: identificar somente os eventos originï¿½rios do teclado;
+	  - Valor MOUSE_HIT: identificar somente os eventos originï¿½rios do mouse;
 	  - Valor ALL: identificar qualquer evento presente no buffer de eventos da janela de console, sejam
 	               oriundos do teclado, do mouse, ou do redimensionamento da janela.
-  Retorno da função:
+  Retorno da funï¿½ï¿½o:
    -> Um valor inteiro:
-      - Valor 0: não há eventos do tipo solicitado no parâmetro da função no buffer de eventos da janela de
+      - Valor 0: nï¿½o hï¿½ eventos do tipo solicitado no parï¿½metro da funï¿½ï¿½o no buffer de eventos da janela de
 	             console;
-	  - Valor 1: há um ou mais eventos do tipo solicitado no parâmetro da função no buffer de eventos
+	  - Valor 1: hï¿½ um ou mais eventos do tipo solicitado no parï¿½metro da funï¿½ï¿½o no buffer de eventos
 	             da janela de console.
 
-  Observação:
-   -> Ver a declaração da enumeração TYPE_HIT na seção anterior denominada
-      "DECLARAÇÕES DE ESTRUTURAS E ENUMERAÇÕES".
+  Observaï¿½ï¿½o:
+   -> Ver a declaraï¿½ï¿½o da enumeraï¿½ï¿½o TYPE_HIT na seï¿½ï¿½o anterior denominada
+      "DECLARAï¿½ï¿½ES DE ESTRUTURAS E ENUMERAï¿½ï¿½ES".
  *****************************************************************************************************************/
  int hit(TYPE_HIT);
 
@@ -473,26 +473,26 @@
 
 
 /*****************************************************************************************************************
-  Descrição: apresentação detalhada de todas as informações possíveis de serem coletadas sobre um determinado evento
+  Descriï¿½ï¿½o: apresentaï¿½ï¿½o detalhada de todas as informaï¿½ï¿½es possï¿½veis de serem coletadas sobre um determinado evento
              ocorrido, cuja origem seja, ou o teclado, ou o mouse.
-  Parâmetros de entrada:
-   -> Variável do tipo da estrutura EVENTO:
-      - Essa variável deve conter os dados do evento lido anteriormente sobre o qual serão coletadas as informações;
-	  - Ver descrição do conteúdo dos campos da estrutura EVENTO na função Evento();
-	  - Exemplo de código: EVENTO e;
+  Parï¿½metros de entrada:
+   -> Variï¿½vel do tipo da estrutura EVENTO:
+      - Essa variï¿½vel deve conter os dados do evento lido anteriormente sobre o qual serï¿½o coletadas as informaï¿½ï¿½es;
+	  - Ver descriï¿½ï¿½o do conteï¿½do dos campos da estrutura EVENTO na funï¿½ï¿½o Evento();
+	  - Exemplo de cï¿½digo: EVENTO e;
 	                       e = Evento();
 						   IdentificarEvento(e, MAXIMO);
-   -> Número inteiro que pode ser dois valores:
-      - Valor 0: apresentar na tela o mínimo de informações sobre o evento passado como parâmetro;
-	  - Valor 1: apresentar na tela o máximo de informações (todas as possíveis) sobre o evento passado como parâmetro;
-	  -> Observação:
-	     Foram definidas duas constantes do tipo DEFINE para este parâmetro, em substituição ao valores numéricos 0 e 1.
+   -> Nï¿½mero inteiro que pode ser dois valores:
+      - Valor 0: apresentar na tela o mï¿½nimo de informaï¿½ï¿½es sobre o evento passado como parï¿½metro;
+	  - Valor 1: apresentar na tela o mï¿½ximo de informaï¿½ï¿½es (todas as possï¿½veis) sobre o evento passado como parï¿½metro;
+	  -> Observaï¿½ï¿½o:
+	     Foram definidas duas constantes do tipo DEFINE para este parï¿½metro, em substituiï¿½ï¿½o ao valores numï¿½ricos 0 e 1.
 		 Constantes MINIMO e MAXIMO, correspondente aos valores 0 e 1, respectivamente.
-  Retorno da função:
+  Retorno da funï¿½ï¿½o:
    -> Nenhum.
 
-  Observação:
-   -> Ver a declaração da estrutura EVENTO na seção anterior denominada "DECLARAÇÕES DE ESTRUTURAS E ENUMERAÇÕES".
+  Observaï¿½ï¿½o:
+   -> Ver a declaraï¿½ï¿½o da estrutura EVENTO na seï¿½ï¿½o anterior denominada "DECLARAï¿½ï¿½ES DE ESTRUTURAS E ENUMERAï¿½ï¿½ES".
  *****************************************************************************************************************/
  void IdentificarEvento(EVENTO, int);
 
@@ -500,32 +500,32 @@
 
 
  /*****************************************************************************************************************
-  Descrição: obter as dimensões máximas possíveis de uma janela na resolução atual
+  Descriï¿½ï¿½o: obter as dimensï¿½es mï¿½ximas possï¿½veis de uma janela na resoluï¿½ï¿½o atual
              do monitor em pixels.
-  Parâmetros de entrada:
+  Parï¿½metros de entrada:
    -> Nenhum.
-  Retorno da função:
+  Retorno da funï¿½ï¿½o:
    -> Estrutura COORD:
-     - Campo X representa o número de caracteres da largura
-     - Campo Y representa o número de caracteres da altura
+     - Campo X representa o nï¿½mero de caracteres da largura
+     - Campo Y representa o nï¿½mero de caracteres da altura
 
-  Observações:
-   a) A estrutura COORD é incluída por meio do arquivo cabeçalho "windows.h". Contudo, a sua declaração
-      pode ser consultada anteriormente neste mesmo arquivo, na linha em que é incluído o arquivo
-	  cabeçalho "windows.h".
-   b) Para poder utilizar esta função é necessário fazer uma correção no arquivo WINCON.H do gcc.
-      Isso porque esta função MaxDimensaoJanela(void) utiliza a função da API do Windows
-	  denominada GetCurrentConsoleFont() que somente está disponível no Windows XP em diante e
- 	  por isso o gcc não incluiu esse cabeçalho (embora exista sua implementação no ".lib" do gcc).
-      - CORREÇÃO A SER FEITA:
-	    Caso não exista, deve adicionar a seguinte linha no arquivo "wincon.h":
+  Observaï¿½ï¿½es:
+   a) A estrutura COORD ï¿½ incluï¿½da por meio do arquivo cabeï¿½alho "windows.h". Contudo, a sua declaraï¿½ï¿½o
+      pode ser consultada anteriormente neste mesmo arquivo, na linha em que ï¿½ incluï¿½do o arquivo
+	  cabeï¿½alho "windows.h".
+   b) Para poder utilizar esta funï¿½ï¿½o ï¿½ necessï¿½rio fazer uma correï¿½ï¿½o no arquivo WINCON.H do gcc.
+      Isso porque esta funï¿½ï¿½o MaxDimensaoJanela(void) utiliza a funï¿½ï¿½o da API do Windows
+	  denominada GetCurrentConsoleFont() que somente estï¿½ disponï¿½vel no Windows XP em diante e
+ 	  por isso o gcc nï¿½o incluiu esse cabeï¿½alho (embora exista sua implementaï¿½ï¿½o no ".lib" do gcc).
+      - CORREï¿½ï¿½O A SER FEITA:
+	    Caso nï¿½o exista, deve adicionar a seguinte linha no arquivo "wincon.h":
 	         BOOL WINAPI GetCurrentConsoleFont(HANDLE, BOOL, PCONSOLE_FONT_INFO);
 	  - ONDE DEVE SER ACRESCENTADA ESSA LINHA NO ARQUIVO "wincon.h":
-        1) No arquivo "wincon.h" que está localizado dentro do diretório "include" da sua instalação do gcc for Windows
-	    2) A linha indicada deve ser adicionada dentro do define (caso não exista, crie ele)
+        1) No arquivo "wincon.h" que estï¿½ localizado dentro do diretï¿½rio "include" da sua instalaï¿½ï¿½o do gcc for Windows
+	    2) A linha indicada deve ser adicionada dentro do define (caso nï¿½o exista, crie ele)
 		     #if (_WIN32_WINNT >= 0x0500)
 		          BOOL WINAPI GetCurrentConsoleFont(HANDLE, BOOL, PCONSOLE_FONT_INFO);
-		          ... -> mantenha tudo o que já existir anteriormente definido dentro do define
+		          ... -> mantenha tudo o que jï¿½ existir anteriormente definido dentro do define
 		     #endif
  *****************************************************************************************************************/
  COORD MaxDimensaoJanela(void);
@@ -534,17 +534,17 @@
 
 
  /*****************************************************************************************************************
-  Descrição: ligar ou desligar o cursor piscante na janela de console.
-  Parâmetros de entrada:
-   -> Uma string contendo o novo título da janela de console.
-  Retorno da função:
-   -> Enumeração STATUS:
+  Descriï¿½ï¿½o: ligar ou desligar o cursor piscante na janela de console.
+  Parï¿½metros de entrada:
+   -> Uma string contendo o novo tï¿½tulo da janela de console.
+  Retorno da funï¿½ï¿½o:
+   -> Enumeraï¿½ï¿½o STATUS:
       - Valor DESLIGAR: desligar o cursor piscante na janela de console;
 	  - Valor LIGAR: ligar o cursos piscante na janela de console.
 
-  Observação:
-   -> Ver a declaração da enumeração STATUS na seção anterior denominada
-      "DECLARAÇÕES DE ESTRUTURAS E ENUMERAÇÕES".
+  Observaï¿½ï¿½o:
+   -> Ver a declaraï¿½ï¿½o da enumeraï¿½ï¿½o STATUS na seï¿½ï¿½o anterior denominada
+      "DECLARAï¿½ï¿½ES DE ESTRUTURAS E ENUMERAï¿½ï¿½ES".
  *****************************************************************************************************************/
  void setCursorStatus(STATUS);
 
@@ -552,19 +552,19 @@
 
 
  /*****************************************************************************************************************
-  Descrição: função que permite redimensionar a janela de console.
-  Parâmetros de entrada:
+  Descriï¿½ï¿½o: funï¿½ï¿½o que permite redimensionar a janela de console.
+  Parï¿½metros de entrada:
    -> Estrutura COORD:
-      - Campo X representa o número de caracteres da nova largura da janela
-      - Campo Y representa o número de caracteres da nova altura da janela
-  Retorno da função:
+      - Campo X representa o nï¿½mero de caracteres da nova largura da janela
+      - Campo Y representa o nï¿½mero de caracteres da nova altura da janela
+  Retorno da funï¿½ï¿½o:
    -> Nenhum.
 
-  Observação:
-   - Recomenda-se que obtenha os valores máximos possíveis para o redimensionamento
-     da janela do console por meio de uma chamada à função MaxDimensaoJanela(). Desse
-     modo, conseguirá garantir que os valores passados como parâmetros para esta função
-     não ultrapassará os valores máximos possíveis de redimensionamento da janela do
+  Observaï¿½ï¿½o:
+   - Recomenda-se que obtenha os valores mï¿½ximos possï¿½veis para o redimensionamento
+     da janela do console por meio de uma chamada ï¿½ funï¿½ï¿½o MaxDimensaoJanela(). Desse
+     modo, conseguirï¿½ garantir que os valores passados como parï¿½metros para esta funï¿½ï¿½o
+     nï¿½o ultrapassarï¿½ os valores mï¿½ximos possï¿½veis de redimensionamento da janela do
      console.
  *****************************************************************************************************************/
  void setDimensaoJanela(int largura, int altura);
@@ -573,17 +573,17 @@
 
 
  /*****************************************************************************************************************
-  Descrição: esconder ou tornar visível a Barra de Tarefas da área de trabalho do Windows.
-  Parâmetros de entrada:
-   -> Enumeração VISIBILIDADE:
-      - Valor VISIVEL: tornar visível a Barra de Tarefas;
+  Descriï¿½ï¿½o: esconder ou tornar visï¿½vel a Barra de Tarefas da ï¿½rea de trabalho do Windows.
+  Parï¿½metros de entrada:
+   -> Enumeraï¿½ï¿½o VISIBILIDADE:
+      - Valor VISIVEL: tornar visï¿½vel a Barra de Tarefas;
       - Valor INVISIVEL: esconder a Barra de Tarefas.
-  Retorno da função:
+  Retorno da funï¿½ï¿½o:
    -> Nenhum.
 
-  Observação:
-   -> Ver a declaração da enumeração VISIBILIDADE na seção anterior denominada
-      "DECLARAÇÕES DE ESTRUTURAS E ENUMERAÇÕES".
+  Observaï¿½ï¿½o:
+   -> Ver a declaraï¿½ï¿½o da enumeraï¿½ï¿½o VISIBILIDADE na seï¿½ï¿½o anterior denominada
+      "DECLARAï¿½ï¿½ES DE ESTRUTURAS E ENUMERAï¿½ï¿½ES".
  *****************************************************************************************************************/
  void setEstadoBarraTarefas(VISIBILIDADE);
 
@@ -591,12 +591,12 @@
 
 
 /*****************************************************************************************************************
-  Descrição: posicionar a janela em uma determinada posição na tela.
-  Parâmetros de entrada:
+  Descriï¿½ï¿½o: posicionar a janela em uma determinada posiï¿½ï¿½o na tela.
+  Parï¿½metros de entrada:
    -> Estrutura COORD:
       - Campo X representa a linha do pixel da borda superior da janela de console.
       - Campo Y representa a coluna do pixel da borda esquerda da janela de console
-  Retorno da função:
+  Retorno da funï¿½ï¿½o:
    -> Nenhum.
  *****************************************************************************************************************/
  void setPosicaoJanela(int top, int left);
@@ -605,10 +605,10 @@
 
 
  /*****************************************************************************************************************
-  Descrição: definir um titulo para a janela de console.
-  Parâmetros de entrada:
-   -> Uma string contendo o novo título da janela de console.
-  Retorno da função:
+  Descriï¿½ï¿½o: definir um titulo para a janela de console.
+  Parï¿½metros de entrada:
+   -> Uma string contendo o novo tï¿½tulo da janela de console.
+  Retorno da funï¿½ï¿½o:
    -> Nenhum.
  *****************************************************************************************************************/
  void setTituloConsole(char *);
@@ -617,18 +617,18 @@
 
 
  /*****************************************************************************************************************
-  Descrição: obter o tamanho da janela de console atual em quantidade de caracteres.
-  Parâmetros de entrada:
+  Descriï¿½ï¿½o: obter o tamanho da janela de console atual em quantidade de caracteres.
+  Parï¿½metros de entrada:
    -> Nenhum.
-  Retorno da função:
+  Retorno da funï¿½ï¿½o:
    -> Estrutura COORD:
-      - Campo X representa a largura da janela de console em número de caracteres
-      - Campo Y representa a altura da janela de console em número de caracteres
+      - Campo X representa a largura da janela de console em nï¿½mero de caracteres
+      - Campo Y representa a altura da janela de console em nï¿½mero de caracteres
 
-  Observação:
-   -> A estrutura COORD é incluída por meio do arquivo cabeçalho "windows.h". Contudo, a sua declaração
-      pode ser consultada anteriormente neste mesmo arquivo, na linha em que é incluído o arquivo
-	  cabeçalho "windows.h".
+  Observaï¿½ï¿½o:
+   -> A estrutura COORD ï¿½ incluï¿½da por meio do arquivo cabeï¿½alho "windows.h". Contudo, a sua declaraï¿½ï¿½o
+      pode ser consultada anteriormente neste mesmo arquivo, na linha em que ï¿½ incluï¿½do o arquivo
+	  cabeï¿½alho "windows.h".
  *****************************************************************************************************************/
  COORD tamanhoJanelaConsole(void);
 
@@ -636,7 +636,7 @@
 
 
 /****************************************************************************************************************/
-/*                                  FIM DAS DECLARAÇÕES DOS PROTÓTIPOS DAS FUNÇÕES                              */
+/*                                  FIM DAS DECLARAï¿½ï¿½ES DOS PROTï¿½TIPOS DAS FUNï¿½ï¿½ES                              */
 /****************************************************************************************************************/
 
 #endif

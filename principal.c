@@ -10,6 +10,8 @@ gcc principal.c -o editor.exe -Wall -pedantic -Werror -Wextra console_v1.5.4.c c
 
 /*Bibliotecas*/
 # include <stdio.h> /*printf(), scanf()*/
+# include <stdlib.h>
+# include <string.h>
 # include <locale.h> /*setlocale()*/
 # include "console_v1.5.4.h"
 # include "conio_v3.2.4.h" /*clrscr*/
@@ -21,10 +23,19 @@ int main(int argc, char *argv[])
     /*Declarações*/
     STRINGS string;
     TAM_JANELA janela;
+    COORD coordenadas_Janela;
+    
+    /*Declaração das opções do menu*/
+    char *opcoes[QTD_STRING] = {"Opcao1", "Opcao2", "Opcao3", "Opcao4"};
 
     /*Definindo a altura e largura da janela*/
     janela.largura = 160;
     janela.altura = 40;
+
+    /*Coordenadas da Janela, x e y, para eu poder imprimi-la na tela*/
+    coordenadas_Janela.X = 1;
+    coordenadas_Janela.Y = 1;
+
 
     /*Silenciar warnings*/
     argc = argc;
@@ -33,12 +44,18 @@ int main(int argc, char *argv[])
     /*Mudança para o idioma português*/
     setlocale(LC_ALL, "Portuguese");
 
-    
     /*Loop infinito*/
     do
     {
+        /*Limpa a tela*/
+        clrscr();
+
         /*Chamada para desenhar minha janela para meu menu*/
-        Desenha_Janela_Menu(&janela);
+        Desenha_Janela_Menu(&janela, coordenadas_Janela);
+
+        /*Função que declara e colocar as opções do menu*/
+        Imprime_op_Menu(&janela, coordenadas_Janela, &string, opcoes);
+
         /*Chamada da função para realizar a abertura do arquivo*/
         Abre_Arquivo(&string);
         
