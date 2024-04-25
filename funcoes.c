@@ -88,9 +88,6 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
         /*Dividindo a largura e altura e, somando com a coordenadas_Janela.Y, tenho o lugar para imprimir a linha inferior a superior,
         somente é necessário incrementar o x, x + 1 pois ele 'come' a coluna da esquerda, para ajustar incrementei em +1 e decrementei a largura na condição de parada*/
         gotoxy(coordenadas_Janela.X + i + 1, coordenadas_Janela.Y + janela->largura/janela->altura);
-
-        /*LEMBRA-SE:
-        TENHO O LUGAR PARA PEDIR AO USUARIO JÁ, SOMENTE PEGAR A MESMA IDEIA DO GOTOXY ACIMA, POIS JA TENHO A LINHA REFERENTE AO INFERIOR DAS OPÇÕES NO MENU*/
         printf("=");
     }
     
@@ -98,7 +95,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
 
 
 /*Função que imprime as opções de menu na tela*/
-void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *string, char **opcoes)
+void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *string, char **opcoes, USUARIO *op)
 {
     int i;
     int tam_opcao_menu = 0;
@@ -113,25 +110,38 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
         snprintf(string->menu[i], TAM_STRING, "%s", opcoes[i]);
     }
 
-    /*Lugar de escrita das opções do menu*/
-    gotoxy(coordenadas_Janela.X + 1, coordenadas_Janela.Y + janela->largura/janela->altura/2);
+    /*Lugar de escrita das opções do menu
+    gotoxy(coordenadas_Janela.X + 1, coordenadas_Janela.Y + janela->largura/janela->altura/2);*/
+
+    /*Imprime na tela as opções do menu*/
     for(i = 0; i < QTD_STRING; i++)
     {   
         /*Seta o lugar aonde deve ser impresso*/
         gotoxy(coordenadas_Janela.X + tam_opcao_menu + 1, coordenadas_Janela.Y + janela->largura/janela->altura/2);
         
+        if(i == op->escolha_do_usuario)
+        {
+            textcolor(YELLOW);
+        }
+        else
+        {
+            textcolor(LIGHTGRAY);
+        }
+
         /*Imprime o menu por cada opção*/
         printf("%s", string->menu[i]);
         
         /*O tamanho da opcao armazena o tamanho da string do menu e o soma com a quantidade de espaçamento declarado fixo, isso faz com que haja um espaçamento
         independente do tamanho da string */
         tam_opcao_menu += strlen(string->menu[i]) + espacamento;
+
+        
     }
 
 }
 
 /*Função que le o teclado do usuario*/
-void Le_Teclado(LE_TECLADO *leitura)
+void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
 {
 
     /*Verificação para um 'hit' do teclado*/
@@ -153,23 +163,28 @@ void Le_Teclado(LE_TECLADO *leitura)
                     /*É necessaria primeiro a navegação do menu por meio das teclas, depois eu vejo o enter*/
                     case SETA_PARA_BAIXO:
                     {
-                        printf("baixo");
                         break;
                     }
                     case SETA_PARA_CIMA:
                     {
-                        printf("cima");
                         break;
                     }
+
+                    /*Caso a opção seja a seta direita, incremento a escolha do usuario, dentro do intervalo das strings*/
                     case SETA_PARA_DIREITA:
                     {
-                        printf("direita");
-                      
+                        if(op->escolha_do_usuario >= 0 && op->escolha_do_usuario < QTD_STRING - 1)
+                        {
+                            op->escolha_do_usuario += 1;
+                        }
                         break;
                     }
                     case SETA_PARA_ESQUERDA:
                     {
-                        printf("esquerda");
+                        if(op->escolha_do_usuario > 0 && op->escolha_do_usuario <= QTD_STRING - 1)
+                        {
+                            op->escolha_do_usuario -= 1;
+                        }
                         
                         break;
                     }
@@ -183,3 +198,5 @@ void Le_Teclado(LE_TECLADO *leitura)
         }
     }
 }
+
+/*Para o ENTER, pegar o indice da string, e verificar aonde foi apertado, posso fazer uma subtração com o valor do enter ou algo assim*/
