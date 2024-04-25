@@ -102,8 +102,9 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
 {
     int i;
     int tam_opcao_menu = 0;
+
+    /*Espaçamento fixo entre as opções*/
     int espacamento = 10;
-    
 
     /*Declaração por meio do snprintf, no 'opcoes' contem as opcoes definidas no inicio do programa, o menu, uma matriz de strings,
     contera todas as opções disponiveis, pois é feita a atribuição de opcoes a menu*/
@@ -116,15 +117,69 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
     gotoxy(coordenadas_Janela.X + 1, coordenadas_Janela.Y + janela->largura/janela->altura/2);
     for(i = 0; i < QTD_STRING; i++)
     {   
+        /*Seta o lugar aonde deve ser impresso*/
+        gotoxy(coordenadas_Janela.X + tam_opcao_menu + 1, coordenadas_Janela.Y + janela->largura/janela->altura/2);
+        
         /*Imprime o menu por cada opção*/
         printf("%s", string->menu[i]);
-
-        /*Seta o lugar aonde deve ser impresso*/
-        gotoxy(coordenadas_Janela.X + tam_opcao_menu + espacamento + 1, coordenadas_Janela.Y + janela->largura/janela->altura/2);
-
-        /*O tamanho da opcao armazena o tamanho da string do menu e o soma com a quantidade de espaçamento declarado, essa é uma forma de manter uma alinhamento adequado*/
+        
+        /*O tamanho da opcao armazena o tamanho da string do menu e o soma com a quantidade de espaçamento declarado fixo, isso faz com que haja um espaçamento
+        independente do tamanho da string */
         tam_opcao_menu += strlen(string->menu[i]) + espacamento;
     }
 
+}
 
+/*Função que le o teclado do usuario*/
+void Le_Teclado(LE_TECLADO *leitura)
+{
+
+    /*Verificação para um 'hit' do teclado*/
+    if(hit(KEYBOARD_HIT))
+    {
+        /*Atribuição do evento que ocorreu*/
+        leitura->tecla = Evento();
+
+        /*Verificação caso seja um evento originário do teclado*/
+        if(leitura->tecla.tipo_evento & KEY_EVENT)
+        {
+            /*Verificação da tecla se foi liberada ao pressionada*/
+            if(leitura->tecla.teclado.status_tecla == LIBERADA)
+            {
+                /*Casos para o menu*/
+                switch(leitura->tecla.teclado.codigo_tecla)
+                {
+
+                    /*É necessaria primeiro a navegação do menu por meio das teclas, depois eu vejo o enter*/
+                    case SETA_PARA_BAIXO:
+                    {
+                        printf("baixo");
+                        break;
+                    }
+                    case SETA_PARA_CIMA:
+                    {
+                        printf("cima");
+                        break;
+                    }
+                    case SETA_PARA_DIREITA:
+                    {
+                        printf("direita");
+                      
+                        break;
+                    }
+                    case SETA_PARA_ESQUERDA:
+                    {
+                        printf("esquerda");
+                        
+                        break;
+                    }
+                    default:
+                    {
+                        exit(0);
+                    }
+                }
+            }
+            
+        }
+    }
 }

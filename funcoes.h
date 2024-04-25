@@ -4,6 +4,7 @@
 # define TAM_NOME_ARQUIVO 50
 # define TAM_STRING 50
 # define QTD_STRING 4
+
 /*Estruturas*/
 
 /*Registro que armazena o tamanho da minha janela com base na altura e largura*/
@@ -25,6 +26,9 @@ typedef struct _STRINGS
     
 }STRINGS;
 
+typedef struct _LE_TECLADO{
+    EVENTO tecla;
+}LE_TECLADO;
 
 
 
@@ -38,3 +42,6 @@ void Desenha_Janela_Menu(TAM_JANELA *, COORD);
 
 /*Função que imprime as opções de menu disponíveis*/
 void Imprime_op_Menu(TAM_JANELA *, COORD, STRINGS *, char **);
+
+/*Vai ler as teclas do teclado e realizar as devidas chamadas para outras funções*/
+void Le_Teclado(LE_TECLADO *);

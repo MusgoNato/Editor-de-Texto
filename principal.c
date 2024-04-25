@@ -24,9 +24,10 @@ int main(int argc, char *argv[])
     STRINGS string;
     TAM_JANELA janela;
     COORD coordenadas_Janela;
-    
+    LE_TECLADO leitura;
+
     /*Declaração das opções do menu*/
-    char *opcoes[QTD_STRING] = {"Opcao1", "Opcao2", "Opcao3", "Opcao4"};
+    char *opcoes[QTD_STRING] = {"ARQUIVO", "ALINHAMENTO", "ALTERAR X", "ALTERAR COR"};
 
     /*Definindo a altura e largura da janela*/
     janela.largura = 160;
@@ -44,20 +45,24 @@ int main(int argc, char *argv[])
     /*Mudança para o idioma português*/
     setlocale(LC_ALL, "Portuguese");
 
+    /*Limpa a tela*/
+    clrscr();
     /*Loop infinito*/
     do
     {
-        /*Limpa a tela*/
-        clrscr();
+      
 
         /*Chamada para desenhar minha janela para meu menu*/
         Desenha_Janela_Menu(&janela, coordenadas_Janela);
-
+        
         /*Função que declara e colocar as opções do menu*/
         Imprime_op_Menu(&janela, coordenadas_Janela, &string, opcoes);
 
-        /*Chamada da função para realizar a abertura do arquivo*/
-        Abre_Arquivo(&string);
+        /*Função que faz a leitura das teclas do programa*/
+        Le_Teclado(&leitura);
+
+        /*Chamada da função para realizar a abertura do arquivo
+        Abre_Arquivo(&string);*/
         
 
     }while(1);
