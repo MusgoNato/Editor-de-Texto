@@ -30,8 +30,9 @@ int main(int argc, char *argv[])
     /*Declaração das opções do menu*/
     char *opcoes[QTD_STRING] = {"ARQUIVO", "ALINHAMENTO", "ALTERAR X", "ALTERAR COR"};
 
-    /*Declaração dos atalhos
-    char *letra[QTD_STRING] = {"A", "L", "T", "E"};*/
+
+    /*Declaração dos atalhos*/
+    char letras[QTD_LETRAS] = {'A', 'L', 'T', 'E'};
 
 
     /*Declaração da opção do usuário*/
@@ -58,6 +59,10 @@ int main(int argc, char *argv[])
 
     /*Limpa a tela*/
     clrscr();
+
+    /*Coloca a 'opções' em uma matriz de caractere 'menu' para ser usada em outra função adiante*/
+    Converte(&string, opcoes);
+
     /*Loop infinito*/
     do
     {
@@ -66,7 +71,7 @@ int main(int argc, char *argv[])
         Desenha_Janela_Menu(&janela, coordenadas_Janela);
         
         /*Função que declara e colocar as opções do menu*/
-        Imprime_op_Menu(&janela, coordenadas_Janela, &string, opcoes, &op);
+        Imprime_op_Menu(&janela, coordenadas_Janela, &string, &op, letras);
 
         /*Função que faz a leitura das teclas do programa*/
         Le_Teclado(&leitura, &op);

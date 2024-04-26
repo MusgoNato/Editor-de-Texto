@@ -1,10 +1,11 @@
 /*Protótipos de funções de declarações de registros (structs)*/
 
 /*Definições de constantes*/
+# define QTD_LETRAS 4
 # define TAM_NOME_ARQUIVO 50
 # define TAM_STRING 50
 # define QTD_STRING 4
-# define ALT_ESQUERDO 18
+# define ALT_ESQUERDO 0x2
 
 /*Estruturas*/
 
@@ -33,10 +34,11 @@ typedef struct _LE_TECLADO{
     EVENTO tecla;
 }LE_TECLADO;
 
-/*Registro para as escolhas do menu que o usuario irá fazer*/
+/*Registro para as escolhas do menu que o usuario irá fazer e as cores também*/
 typedef struct _USUARIO{
     int escolha_do_usuario;
     int controle_do_alt;
+    COLORS cor_atalho;
 }USUARIO;
 
 
@@ -46,11 +48,13 @@ Parametros: Uma string que conterá o nome do arquivo
 Retorno: Nenhum*/
 void Abre_Arquivo(STRINGS *);
 
+void Converte(STRINGS *, char **);
+
 /*Função que realiza a cração da minha janela para o menu*/
 void Desenha_Janela_Menu(TAM_JANELA *, COORD);
 
 /*Função que imprime as opções de menu disponíveis*/
-void Imprime_op_Menu(TAM_JANELA *, COORD, STRINGS *, char **, USUARIO *);
+void Imprime_op_Menu(TAM_JANELA *, COORD, STRINGS *, USUARIO *, char *);
 
 /*Vai ler as teclas do teclado e realizar as devidas chamadas para outras funções*/
 void Le_Teclado(LE_TECLADO *, USUARIO *);

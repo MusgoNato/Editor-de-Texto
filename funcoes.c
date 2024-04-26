@@ -2,7 +2,7 @@
 
 /*Bibliotecas/Constantes*/
 # include <stdio.h> /*FILE, fopen(), printf(), */
-# include <string.h>
+# include <string.h> /*strlen()*/
 # include "console_v1.5.4.h" /*SETAS_DE_DIREÇÃO*/
 # include "conio_v3.2.4.h" /*gotoxy()*/
 # include "funcoes.h"
@@ -44,10 +44,21 @@ void Abre_Arquivo(STRINGS *string)
     fclose(arquivo_origem);
 }
 
+/*Converete a string nas suas devidas posições*/
+void Converte(STRINGS *string, char **opcoes)
+{
+    int i;
+    /*Declaração por meio do snprintf, no 'opcoes' contem as opcoes definidas no inicio do programa, o menu, uma matriz de strings,
+    contera todas as opções disponiveis, pois é feita a atribuição de 'opcoes' a 'menu'*/
+    for(i = 0; i < QTD_STRING; i++)
+    {
+        snprintf(string->menu[i], TAM_STRING, "%s", opcoes[i]);
+    }
+}
+
 /*Desenha minha janela do menu*/
 void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
 {
-    /*PRECISA DESENHAR AS BORDAS DA JANELA QUE VAI TER AS OPÇÕES DO MENU*/
     int i;
 
     /*Desenha a linha superior do menu*/
@@ -96,20 +107,13 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
 
 
 /*Função que imprime as opções de menu na tela*/
-void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *string, char **opcoes, USUARIO *op)
+void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *string, USUARIO *op, char *letras)
 {
     int i, j;
     int tam_opcao_menu = 0;
     
     /*Espaçamento fixo entre as opções*/
     int espacamento = 10;
-
-    /*Declaração por meio do snprintf, no 'opcoes' contem as opcoes definidas no inicio do programa, o menu, uma matriz de strings,
-    contera todas as opções disponiveis, pois é feita a atribuição de opcoes a menu*/
-    for(i = 0; i < QTD_STRING; i++)
-    {
-        snprintf(string->menu[i], TAM_STRING, "%s", opcoes[i]);
-    }
 
     /*Imprime na tela as opções do menu*/
     for(i = 0; i < QTD_STRING; i++)
@@ -123,37 +127,30 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
             textcolor(YELLOW);
         }
         
+        /*Imprime o menu por cada opção*/
+        printf("%s", string->menu[i]);
+
         
-        /*VER AQUI UM POUCO DO ERRO PRA LEMBRAR*/
         /*Colore a letra quando apertado o ALT_ESQUERDO*/
+        /********TEM QUE COLORIR A POSIÇÃO DA LETRA*********/
         if(op->controle_do_alt)
         {
-            /*Retorna um ponteiro para a posição da 1° ocorrência da letra*/
-            string->pinta_letra = strchr(string->menu[i], 'A');
-            
-            /*Loop para percorrer a string caractere por caractere*/
+            /*Percorre a qtd de string*/
             for(j = 0; j < TAM_STRING; j++)
             {
-
-                /*Aqui é feita a verificação do que esta em pinta_letra, o seu valor, por isso o '*' antes de tudo, caso seja encontrada a letra do atalho correspondente a letra da string
-                é impresso na tela seu destaque*/
-                if(*string->pinta_letra == string->menu[i][j])
+                /*Verificação para encontrar a letra dentro da matriz que contem as opções de menus*/
+                if(letras[i] == string->menu[i][j])
                 {
-                    printf("%c", *string->pinta_letra);
-                    textcolor(BLUE);
-                }/*Falta ver o por que de nao estar dando certo quando aperto o alt, ele aparece a letra destacada, mas teria que ser em todas as opções,
-                e no lugar correto tbm, pois aparece uma casa a frente*/
+                    /*Muda a cor para destacar o atalho e imprime a letra*/
+                    textcolor(op->cor_atalho);
+                    printf("%c", string->menu[i][j]);
+                    break;
+                }
             }
+           
+        }
             
-        }
-        else
-        {
-            /*Imprime o menu por cada opção*/
-            printf("%s", string->menu[i]);
-        }
-        
-
-        /*Após imprimir na tela a opção com a cor de navegação padra do menu, volta-se a cor original do prompt pra nao colorir toda a tela*/
+        /*Após imprimir na tela a opção com a cor de navegação padrao do menu, volta-se a cor original do prompt pra nao colorir toda a tela*/
         textcolor(LIGHTGRAY);
 
         /*O tamanho da opcao armazena o tamanho da string do menu e o soma com a quantidade de espaçamento declarado fixo, isso faz com que haja um espaçamento
@@ -161,13 +158,11 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
         tam_opcao_menu += strlen(string->menu[i]) + espacamento;
 
     }
-
 }
 
 /*Função que le o teclado do usuario*/
 void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
 {
-
     /*Verificação para um 'hit' do teclado*/
     if(hit(KEYBOARD_HIT))
     {
@@ -180,9 +175,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
             /*Verificação da tecla se foi liberada ao pressionada*/
             if(leitura->tecla.teclado.status_tecla == LIBERADA)
             {
-                /*Setado o controle do alt pois aqui no bloco do if ele esta liberado, nao é mais necesario que as letras de atalho estejam pintadas*/
-                op->controle_do_alt = 0;
-
+                
                 /*Casos para o menu*/
                 switch(leitura->tecla.teclado.codigo_tecla)
                 {
@@ -231,15 +224,17 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
             }
             else
             {
-
                 /*Casos especificos para teclas de controle*/
                 if(leitura->tecla.teclado.status_teclas_controle & ALT_ESQUERDO)
                 {
+                    /*É definido o alt_esquerdo como 1 pois esta sendo pressionado, a cor muda para azul*/
                     op->controle_do_alt = 1;
+                    op->cor_atalho = BLUE;
 
                     /*switch para a outra tecla após o ALT_ESQUERDO*/
                     switch(leitura->tecla.teclado.codigo_tecla)
                     {
+                        
                         /*Teclas de atalho somente quando apertar que vou a algum lugar*/
                         case 'A':
                         {
@@ -252,5 +247,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
         }
     }
 }
+
+
 
 /*Para o ENTER, pegar o indice da string, e verificar aonde foi apertado, posso fazer uma subtração com o valor do enter ou algo assim*/
