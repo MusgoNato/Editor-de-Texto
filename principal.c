@@ -30,8 +30,15 @@ int main(int argc, char *argv[])
     /*Declaração das opções do menu*/
     char *opcoes[QTD_STRING] = {"ARQUIVO", "ALINHAMENTO", "ALTERAR X", "ALTERAR COR"};
 
+    /*Declaração dos atalhos
+    char *letra[QTD_STRING] = {"A", "L", "T", "E"};*/
+
+
     /*Declaração da opção do usuário*/
     op.escolha_do_usuario = 0;
+
+    /*Controle do alt*/
+    op.controle_do_alt = 0;
 
     /*Definindo a altura e largura da janela*/
     janela.largura = 160;
@@ -55,7 +62,6 @@ int main(int argc, char *argv[])
     do
     {
       
-
         /*Chamada para desenhar minha janela para meu menu*/
         Desenha_Janela_Menu(&janela, coordenadas_Janela);
         
@@ -70,8 +76,7 @@ int main(int argc, char *argv[])
         
 
     }while(1);
-    
-    
+
 
 
     /*Retorno para a main que encerrou com sucesso*/

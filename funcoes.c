@@ -2,7 +2,8 @@
 
 /*Bibliotecas/Constantes*/
 # include <stdio.h> /*FILE, fopen(), printf(), */
-# include "console_v1.5.4.h"
+# include <string.h>
+# include "console_v1.5.4.h" /*SETAS_DE_DIREÇÃO*/
 # include "conio_v3.2.4.h" /*gotoxy()*/
 # include "funcoes.h"
 
@@ -97,9 +98,9 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
 /*Função que imprime as opções de menu na tela*/
 void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *string, char **opcoes, USUARIO *op)
 {
-    int i;
+    int i, j;
     int tam_opcao_menu = 0;
-
+    
     /*Espaçamento fixo entre as opções*/
     int espacamento = 10;
 
@@ -110,32 +111,55 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
         snprintf(string->menu[i], TAM_STRING, "%s", opcoes[i]);
     }
 
-    /*Lugar de escrita das opções do menu
-    gotoxy(coordenadas_Janela.X + 1, coordenadas_Janela.Y + janela->largura/janela->altura/2);*/
-
     /*Imprime na tela as opções do menu*/
     for(i = 0; i < QTD_STRING; i++)
     {   
         /*Seta o lugar aonde deve ser impresso*/
         gotoxy(coordenadas_Janela.X + tam_opcao_menu + 1, coordenadas_Janela.Y + janela->largura/janela->altura/2);
         
+        /*Verificação da navegação do usuario*/
         if(i == op->escolha_do_usuario)
         {
             textcolor(YELLOW);
         }
+        
+        
+        /*VER AQUI UM POUCO DO ERRO PRA LEMBRAR*/
+        /*Colore a letra quando apertado o ALT_ESQUERDO*/
+        if(op->controle_do_alt)
+        {
+            /*Retorna um ponteiro para a posição da 1° ocorrência da letra*/
+            string->pinta_letra = strchr(string->menu[i], 'A');
+            
+            /*Loop para percorrer a string caractere por caractere*/
+            for(j = 0; j < TAM_STRING; j++)
+            {
+
+                /*Aqui é feita a verificação do que esta em pinta_letra, o seu valor, por isso o '*' antes de tudo, caso seja encontrada a letra do atalho correspondente a letra da string
+                é impresso na tela seu destaque*/
+                if(*string->pinta_letra == string->menu[i][j])
+                {
+                    printf("%c", *string->pinta_letra);
+                    textcolor(BLUE);
+                }/*Falta ver o por que de nao estar dando certo quando aperto o alt, ele aparece a letra destacada, mas teria que ser em todas as opções,
+                e no lugar correto tbm, pois aparece uma casa a frente*/
+            }
+            
+        }
         else
         {
-            textcolor(LIGHTGRAY);
+            /*Imprime o menu por cada opção*/
+            printf("%s", string->menu[i]);
         }
-
-        /*Imprime o menu por cada opção*/
-        printf("%s", string->menu[i]);
         
+
+        /*Após imprimir na tela a opção com a cor de navegação padra do menu, volta-se a cor original do prompt pra nao colorir toda a tela*/
+        textcolor(LIGHTGRAY);
+
         /*O tamanho da opcao armazena o tamanho da string do menu e o soma com a quantidade de espaçamento declarado fixo, isso faz com que haja um espaçamento
         independente do tamanho da string */
         tam_opcao_menu += strlen(string->menu[i]) + espacamento;
 
-        
     }
 
 }
@@ -156,11 +180,14 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
             /*Verificação da tecla se foi liberada ao pressionada*/
             if(leitura->tecla.teclado.status_tecla == LIBERADA)
             {
+                /*Setado o controle do alt pois aqui no bloco do if ele esta liberado, nao é mais necesario que as letras de atalho estejam pintadas*/
+                op->controle_do_alt = 0;
+
                 /*Casos para o menu*/
                 switch(leitura->tecla.teclado.codigo_tecla)
                 {
-
-                    /*É necessaria primeiro a navegação do menu por meio das teclas, depois eu vejo o enter*/
+                    
+                    /*Setas para navegação do menu*/
                     case SETA_PARA_BAIXO:
                     {
                         break;
@@ -170,27 +197,54 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                         break;
                     }
 
-                    /*Caso a opção seja a seta direita, incremento a escolha do usuario, dentro do intervalo das strings*/
                     case SETA_PARA_DIREITA:
                     {
+                        /*Foi criado uma variavel para a escolha do usuario para simular a navegação do menu, é necessario somente
+                        modificar o valor da própria variavel conforme o usuario aperta as teclas direcionais, a verificação é feita para a navegação
+                        ficar limitada entre o intervalo da 1° a ultima opção*/
                         if(op->escolha_do_usuario >= 0 && op->escolha_do_usuario < QTD_STRING - 1)
                         {
                             op->escolha_do_usuario += 1;
                         }
                         break;
                     }
+
+                   
                     case SETA_PARA_ESQUERDA:
                     {
-                        if(op->escolha_do_usuario > 0 && op->escolha_do_usuario <= QTD_STRING - 1)
+                        if(op->escolha_do_usuario > 0 && op->escolha_do_usuario <= QTD_STRING)
                         {
                             op->escolha_do_usuario -= 1;
                         }
                         
                         break;
                     }
-                    default:
+                    
+                    /*Saida do programa (TEMPORARIO)*/
+                    case ESC:
                     {
                         exit(0);
+                        break;
+                    }
+
+                }
+            }
+            else
+            {
+
+                /*Casos especificos para teclas de controle*/
+                if(leitura->tecla.teclado.status_teclas_controle & ALT_ESQUERDO)
+                {
+                    op->controle_do_alt = 1;
+
+                    /*switch para a outra tecla após o ALT_ESQUERDO*/
+                    switch(leitura->tecla.teclado.codigo_tecla)
+                    {
+                        /*Teclas de atalho somente quando apertar que vou a algum lugar*/
+                        case 'A':
+                        {
+                            break;
+                        }
                     }
                 }
             }

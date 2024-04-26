@@ -4,6 +4,7 @@
 # define TAM_NOME_ARQUIVO 50
 # define TAM_STRING 50
 # define QTD_STRING 4
+# define ALT_ESQUERDO 18
 
 /*Estruturas*/
 
@@ -23,6 +24,7 @@ typedef struct _STRINGS
 {
     char arquivo_txt[TAM_NOME_ARQUIVO];
     char menu[QTD_STRING][TAM_STRING];
+    char *pinta_letra;
     
 }STRINGS;
 
@@ -34,6 +36,7 @@ typedef struct _LE_TECLADO{
 /*Registro para as escolhas do menu que o usuario irá fazer*/
 typedef struct _USUARIO{
     int escolha_do_usuario;
+    int controle_do_alt;
 }USUARIO;
 
 

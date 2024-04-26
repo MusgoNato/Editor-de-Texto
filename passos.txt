@@ -5,7 +5,11 @@
 3° Navegar entre as opções
     -1 Reconhecer as teclas direcionais
     -1 Fazer elas navegarem entre as opções disponiveis
-4° Mexer em cada opção
+4° Destacar a palavra
+    -1 Verficar o alt se esta sendo lido
+    -2 Colorir somente um caractere das strings do menu
+    -3 Junção de alt + tecla colore o caractere
+5° Mexer em cada opção
     -1 Saber abrir, fechar e salvar arquivos
     -2 Centralizar a esquerda, justificar e centralizar a direita o texto
     -3 Trocar a cor do fundo do fundo do menu e a cor do texto
