@@ -111,16 +111,20 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
 {
     int i, j;
     int tam_opcao_menu = 0;
-    
+    COORD Ponto_destaque;
+
     /*Espaçamento fixo entre as opções*/
     int espacamento = 10;
 
     /*Imprime na tela as opções do menu*/
     for(i = 0; i < QTD_STRING; i++)
     {   
-        /*Seta o lugar aonde deve ser impresso*/
+        /*Seta o lugar aonde deve ser impresso o menu*/
         gotoxy(coordenadas_Janela.X + tam_opcao_menu + 1, coordenadas_Janela.Y + janela->largura/janela->altura/2);
-        
+
+        Ponto_destaque.X = wherex();
+        Ponto_destaque.Y = wherey();
+
         /*Verificação da navegação do usuario*/
         if(i == op->escolha_do_usuario)
         {
@@ -143,12 +147,16 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
                 {
                     /*Muda a cor para destacar o atalho e imprime a letra*/
                     textcolor(op->cor_atalho);
+                    gotoxy(Ponto_destaque.X + j, Ponto_destaque.Y);
                     printf("%c", string->menu[i][j]);
-                    break;
-                }
+
+                }     
             }
+            
            
         }
+        
+        
             
         /*Após imprimir na tela a opção com a cor de navegação padrao do menu, volta-se a cor original do prompt pra nao colorir toda a tela*/
         textcolor(LIGHTGRAY);
@@ -175,7 +183,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
             /*Verificação da tecla se foi liberada ao pressionada*/
             if(leitura->tecla.teclado.status_tecla == LIBERADA)
             {
-                
+                op->controle_do_alt = 0;
                 /*Casos para o menu*/
                 switch(leitura->tecla.teclado.codigo_tecla)
                 {
