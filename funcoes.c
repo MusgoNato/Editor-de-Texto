@@ -206,6 +206,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                     case ENTER:
                     {
                        
+                       /*PRECISO VERIFICAR E DAR UM JEITO DE PORQUE NAO LER E APARECER NA TELA A LEITURA DE ALGUM TIPO DE NUMERO OU STRING*/
                         /*De acordo com a escolha do usuario, uma das opções sera selecionada*/
                         switch(op->escolha_do_usuario)
                         {
