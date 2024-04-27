@@ -106,6 +106,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
 }
 
 
+
 /*Função que imprime as opções de menu na tela*/
 void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *string, USUARIO *op, char *letras)
 {
@@ -178,13 +179,16 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
 /*Função que le o teclado do usuario*/
 void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
 {
-
+    int pedido_user;
     /*Verificação para um 'hit' do teclado*/
     if(hit(KEYBOARD_HIT))
     {
         /*Atribuição do evento que ocorreu*/
         leitura->tecla = Evento();
 
+        /*Vai controlar o desenho da minha janela, para que eu possa controlar o cursor*/
+        op->controla_evento = 1;
+        
         /*Verificação caso seja um evento originário do teclado*/
         if(leitura->tecla.tipo_evento & KEY_EVENT)
         {
@@ -197,23 +201,25 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                 /*Casos para o menu*/
                 switch(leitura->tecla.teclado.codigo_tecla)
                 {
+                    
                     /*Seleciona a opção do menu*/
                     case ENTER:
                     {
-                        /*
+                       
+                        /*De acordo com a escolha do usuario, uma das opções sera selecionada*/
                         switch(op->escolha_do_usuario)
                         {
+                            
+                            /*Usuario escolheu modificar a quantidade de caracteres do x para o TAB*/
                             case 2:
                             {
-                                printf("TESTE PARA A FUNÇÃO MUDA X:");
-                                scanf("%d", &teste_pedido);
+                                gotoxy(2, 10);
+                                printf("Insira o numero: ");
+                                scanf("%d", &pedido_user);
+                                printf("%d", pedido_user);
                                 break;
                             }
-                            default:
-                            {
-                                break;
-                            }
-                        }*/
+                        }
 
                         break;
                     }
@@ -230,9 +236,10 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                     /*Navegação à direita*/
                     case SETA_PARA_DIREITA:
                     {
+                        
                         /*Foi criado uma variavel para a escolha do usuario para simular a navegação do menu, é necessario somente
                         modificar o valor da própria variavel conforme o usuario aperta as teclas direcionais, a verificação é feita para a navegação
-                        ficar limitada entre o intervalo da 1° a ultima opção*/
+                        ficar limitada entre o intervalo da 1° a ultima opção, o mesmo é feito nas outras setas de direção, porem com verificações distintas*/
                         if(op->escolha_do_usuario >= 0 && op->escolha_do_usuario < QTD_STRING - 1)
                         {
                             op->escolha_do_usuario += 1;

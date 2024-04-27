@@ -39,6 +39,10 @@ int main(int argc, char *argv[])
     /*Controle do alt*/
     op.controle_do_alt = 0;
 
+    /*Controla o desenho da janela, para que eu consiga mover o cursor,
+    é inicializado com 1 pois preciso que imprima na tela pela 1° vez a janela*/
+    op.controla_evento = 1;
+
     /*Definindo a altura e largura da janela*/
     janela.largura = 160;
     janela.altura = 40;
@@ -63,15 +67,20 @@ int main(int argc, char *argv[])
     /*Loop infinito*/
     do
     {
-        /*Chamada para desenhar minha janela para meu menu*/
-        Desenha_Janela_Menu(&janela, coordenadas_Janela);
-        
-        /*Função que declara e colocar as opções do menu*/
-        Imprime_op_Menu(&janela, coordenadas_Janela, &string, &op, letras);
-
+        if(op.controla_evento)
+        {   
+            /*Chamada para desenhar minha janela para meu menu*/
+            Desenha_Janela_Menu(&janela, coordenadas_Janela);
+            
+            /*Função que declara e colocar as opções do menu*/
+            Imprime_op_Menu(&janela, coordenadas_Janela, &string, &op, letras);
+            op.controla_evento = 0;
+            
+        }
+       
         /*Função que faz a leitura das teclas do programa*/
         Le_Teclado(&leitura, &op);
-
+        
         /*Chamada da função para realizar a abertura do arquivo
         Abre_Arquivo(&string);*/
 

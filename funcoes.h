@@ -22,6 +22,7 @@ typedef struct _STRINGS
 {
     char arquivo_txt[TAM_NOME_ARQUIVO];
     char menu[QTD_STRING][TAM_STRING];
+    char user_digitando[TAM_STRING];
     
 }STRINGS;
 
@@ -36,8 +37,10 @@ typedef struct _USUARIO
 {
     int escolha_do_usuario;
     int controle_do_alt;
+    int controla_evento;
     COLORS cor_atalho;
 }USUARIO;
+
 
 
 
@@ -46,10 +49,12 @@ Parametros: Uma string que conterá o nome do arquivo
 Retorno: Nenhum*/
 void Abre_Arquivo(STRINGS *);
 
+/*Coloca minhas 'opções', na matriz de caracteres 'menu'*/
 void Converte(STRINGS *, char **);
 
 /*Função que realiza a cração da minha janela para o menu*/
 void Desenha_Janela_Menu(TAM_JANELA *, COORD);
+
 
 /*Função que imprime as opções de menu disponíveis*/
 void Imprime_op_Menu(TAM_JANELA *, COORD, STRINGS *, USUARIO *, char *);
