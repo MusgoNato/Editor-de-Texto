@@ -20,7 +20,7 @@ gcc principal.c -o editor.exe -Wall -pedantic -Werror -Wextra console_v1.5.4.c c
 /*Programa principal*/
 int main(int argc, char *argv[])
 {
-    /*Declarações*/
+    /*Declarações das estruturas*/
     STRINGS string;
     TAM_JANELA janela;
     COORD coordenadas_Janela;
@@ -30,10 +30,8 @@ int main(int argc, char *argv[])
     /*Declaração das opções do menu*/
     char *opcoes[QTD_STRING] = {"ARQUIVO", "ALINHAMENTO", "ALTERAR X", "ALTERAR COR"};
 
-
     /*Declaração dos atalhos*/
     char letras[QTD_LETRAS] = {'A', 'L', 'T', 'E'};
-
 
     /*Declaração da opção do usuário*/
     op.escolha_do_usuario = 0;
@@ -48,7 +46,6 @@ int main(int argc, char *argv[])
     /*Coordenadas da Janela, x e y, para eu poder imprimi-la na tela*/
     coordenadas_Janela.X = 1;
     coordenadas_Janela.Y = 1;
-
 
     /*Silenciar warnings*/
     argc = argc;
@@ -66,7 +63,6 @@ int main(int argc, char *argv[])
     /*Loop infinito*/
     do
     {
-      
         /*Chamada para desenhar minha janela para meu menu*/
         Desenha_Janela_Menu(&janela, coordenadas_Janela);
         
@@ -78,11 +74,8 @@ int main(int argc, char *argv[])
 
         /*Chamada da função para realizar a abertura do arquivo
         Abre_Arquivo(&string);*/
-        
 
     }while(1);
-
-
 
     /*Retorno para a main que encerrou com sucesso*/
     return 0;

@@ -2,7 +2,7 @@
 
 /*Bibliotecas/Constantes*/
 # include <stdio.h> /*FILE, fopen(), printf(), */
-# include <string.h> /*strlen()*/
+# include <string.h> /*strlen(), strchr()*/
 # include "console_v1.5.4.h" /*SETAS_DE_DIREÇÃO*/
 # include "conio_v3.2.4.h" /*gotoxy()*/
 # include "funcoes.h"
@@ -109,8 +109,18 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
 /*Função que imprime as opções de menu na tela*/
 void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *string, USUARIO *op, char *letras)
 {
-    int i, j;
+    int i;
+
+    /*Armazenará o tamanho de cada string*/
     int tam_opcao_menu = 0;
+
+    /*Armazenará a posição da letra de atalho encontrada nas opções de menu*/
+    int pos;
+
+    /*Armazenará um ponteiro para a posição da letra encontrada nas strings*/
+    char *p_posicao_letra;
+
+    /*Armazenará a coordenada de onde devo destacar a tecla de atalho*/
     COORD Ponto_destaque;
 
     /*Espaçamento fixo entre as opções*/
@@ -122,47 +132,44 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
         /*Seta o lugar aonde deve ser impresso o menu*/
         gotoxy(coordenadas_Janela.X + tam_opcao_menu + 1, coordenadas_Janela.Y + janela->largura/janela->altura/2);
 
+        /*Foi criada outro tipo COORD para representar a coordenada do destaque da letra de atalho, poderia utilizar-se somente a coordenada atual da janela.
+        Mas o código ficaria um pouco confuso*/
         Ponto_destaque.X = wherex();
         Ponto_destaque.Y = wherey();
 
-        /*Verificação da navegação do usuario*/
+        /*Verificação da navegação do usuario por meio das teclas direcionais*/
         if(i == op->escolha_do_usuario)
         {
             textcolor(YELLOW);
         }
         
-        /*Imprime o menu por cada opção*/
+        /*Imprime a string referente a opção do menu*/
         printf("%s", string->menu[i]);
 
         
-        /*Colore a letra quando apertado o ALT_ESQUERDO*/
-        /********TEM QUE COLORIR A POSIÇÃO DA LETRA*********/
+        /*Colore a letra quando apertado o 'ALT_ESQUERDO'*/
         if(op->controle_do_alt)
         {
-            /*Percorre a qtd de string*/
-            for(j = 0; j < TAM_STRING; j++)
-            {
-                /*Verificação para encontrar a letra dentro da matriz que contem as opções de menus*/
-                if(letras[i] == string->menu[i][j])
-                {
-                    /*Muda a cor para destacar o atalho e imprime a letra*/
-                    textcolor(op->cor_atalho);
-                    gotoxy(Ponto_destaque.X + j, Ponto_destaque.Y);
-                    printf("%c", string->menu[i][j]);
+            /*A função strchr retorna um ponteiro com a posição da 1° ocorrência da letra dentro de uma string.*/
+            p_posicao_letra = strchr(string->menu[i], letras[i]);
 
-                }     
-            }
-            
+            /*É feito um calculo para pegar a posição inteira da letra na string*/
+            pos = p_posicao_letra - string->menu[i];
+
+            /*Com a posição da letra encontrada em mãos, esta é somada com a coordenada atual*/
+            gotoxy(Ponto_destaque.X + pos, Ponto_destaque.Y);
+
+            /*Modifica a cor do texto para demostrar o destaque da letra de atalho*/
+            textcolor(op->cor_atalho);
+            printf("%c", letras[i]);
            
         }
         
-        
-            
         /*Após imprimir na tela a opção com a cor de navegação padrao do menu, volta-se a cor original do prompt pra nao colorir toda a tela*/
         textcolor(LIGHTGRAY);
 
-        /*O tamanho da opcao armazena o tamanho da string do menu e o soma com a quantidade de espaçamento declarado fixo, isso faz com que haja um espaçamento
-        independente do tamanho da string */
+        /*O tamanho da opcao armazena o tamanho da string do menu e o soma com a quantidade de espaçamento declarado fixo,
+        isso faz com que haja um espaçamento entre as opções do menu independente do tamanho da string */
         tam_opcao_menu += strlen(string->menu[i]) + espacamento;
 
     }
@@ -171,6 +178,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
 /*Função que le o teclado do usuario*/
 void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
 {
+
     /*Verificação para um 'hit' do teclado*/
     if(hit(KEYBOARD_HIT))
     {
@@ -183,11 +191,32 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
             /*Verificação da tecla se foi liberada ao pressionada*/
             if(leitura->tecla.teclado.status_tecla == LIBERADA)
             {
+                /*O controle da tecla alt esquerda é atribuida em 0 pois a tecla esta solta*/
                 op->controle_do_alt = 0;
+
                 /*Casos para o menu*/
                 switch(leitura->tecla.teclado.codigo_tecla)
                 {
-                    
+                    /*Seleciona a opção do menu*/
+                    case ENTER:
+                    {
+                        /*
+                        switch(op->escolha_do_usuario)
+                        {
+                            case 2:
+                            {
+                                printf("TESTE PARA A FUNÇÃO MUDA X:");
+                                scanf("%d", &teste_pedido);
+                                break;
+                            }
+                            default:
+                            {
+                                break;
+                            }
+                        }*/
+
+                        break;
+                    }
                     /*Setas para navegação do menu*/
                     case SETA_PARA_BAIXO:
                     {
@@ -198,6 +227,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                         break;
                     }
 
+                    /*Navegação à direita*/
                     case SETA_PARA_DIREITA:
                     {
                         /*Foi criado uma variavel para a escolha do usuario para simular a navegação do menu, é necessario somente
@@ -210,7 +240,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                         break;
                     }
 
-                   
+                    /*Navegação à esquerda*/
                     case SETA_PARA_ESQUERDA:
                     {
                         if(op->escolha_do_usuario > 0 && op->escolha_do_usuario <= QTD_STRING)
