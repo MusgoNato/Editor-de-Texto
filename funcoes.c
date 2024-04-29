@@ -191,13 +191,13 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
     /*AO COLOCAR UMA LEITURA ANTES EU CONSIGO LER, MAS NAS OUTRAS VEZES JA NAO*/
     /*SOLUCIONAR O PROBLEMA DE LEITURA, O PROBLEMA É ESSE HIT, A CADA LEITURA DE EVENTOS NAO CONSIGO LER NADA DE DADOS DO TECLADO*/
     /*Atribuição do evento que ocorreu*/
-    
+
     /*Verificação para um 'hit' do teclado*/
     if(hit(KEYBOARD_HIT))
     {
-        
+       
         leitura->tecla = Evento();
-
+        
         /*Precisa ser aqui dentro o controle dos eventos, pois somente se for um evento do teclado, vai ser retornado se vai ou nao ser impresso o menu*/
         op->controla_evento = Mapeia_teclas_Entrada(leitura);
 
@@ -217,6 +217,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                     /*Seleciona a opção do menu*/
                     case ENTER:
                     {
+                        /*op->enter_pressionado = 1;*/
                         op->controla_evento = 0;
                         /*PRECISO VERIFICAR E DAR UM JEITO DE PORQUE NAO LE E APARECER NA TELA A LEITURA DE ALGUM TIPO DE NUMERO OU STRING*/
                         /*De acordo com a escolha do usuario, uma das opções sera selecionada*/
@@ -307,6 +308,8 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                         /*Teclas de atalho somente quando apertar que vou a algum lugar*/
                         case 'A':
                         {
+                            gotoxy(2, 30);
+                            printf("asd");
                             break;
                         }
                     }
@@ -315,14 +318,14 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
         }
             
     }
-    else
+    /*else
     {
-        if(leitura->tecla.tipo_evento)
+        if(op->enter_pressionado)
         {
-
+            scanf("%c", &teste_user);
+            
         }
-        
-    }
+    }*/        
 }
 
 
@@ -330,8 +333,8 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
 /*Controla os eventos para eu ter controle sobre as teclas de pedido de usurio, por isso é necessario mapear as teclas para imprimir novamente a janela de menu*/
 int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
 {
-    if(leitura->tecla.teclado.status_teclas_controle & SETA_PARA_DIREITA || leitura->tecla.teclado.status_teclas_controle & SETA_PARA_BAIXO ||
-    leitura->tecla.teclado.status_teclas_controle & SETA_PARA_CIMA || leitura->tecla.teclado.status_teclas_controle & SETA_PARA_ESQUERDA)
+    if((leitura->tecla.teclado.status_teclas_controle & SETA_PARA_DIREITA) | (leitura->tecla.teclado.status_teclas_controle & SETA_PARA_BAIXO) |
+    (leitura->tecla.teclado.status_teclas_controle & SETA_PARA_CIMA) | (leitura->tecla.teclado.status_teclas_controle & SETA_PARA_ESQUERDA))
     {
         return 1;   
     }

@@ -43,6 +43,8 @@ int main(int argc, char *argv[])
     é inicializado com 1 pois preciso que imprima na tela pela 1° vez a janela*/
     op.controla_evento = 1;
 
+    op.enter_pressionado = 1;
+
     /*Definindo a altura e largura da janela*/
     janela.largura = 160;
     janela.altura = 40;
@@ -78,6 +80,8 @@ int main(int argc, char *argv[])
             op.controla_evento = 0;
         }
 
+      
+        
         /*Função que faz a leitura das teclas do programa*/
         Le_Teclado(&leitura, &op);  
 
