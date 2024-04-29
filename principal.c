@@ -28,10 +28,10 @@ int main(int argc, char *argv[])
     USUARIO op;
 
     /*Declaração das opções do menu*/
-    char *opcoes[QTD_STRING] = {"ARQUIVO", "ALINHAMENTO", "ALTERAR X", "ALTERAR COR"};
+    char *opcoes[QTD_STRING] = {"ABRIR", "SALVAR", "ALTERAR X", "ALTERAR COR", "CENTRALIZAR", "JUSITIFICAR", "ALINHA ESQUERDA", "ALINHA DIREITA"};
 
     /*Declaração dos atalhos*/
-    char letras[QTD_LETRAS] = {'A', 'L', 'T', 'E'};
+    char letras[QTD_LETRAS] = {'A', 'S', 'X', 'L', 'C', 'J', 'Q', 'D'};
 
     /*Declaração da opção do usuário*/
     op.escolha_do_usuario = 0;
@@ -56,31 +56,31 @@ int main(int argc, char *argv[])
     argv = argv;
 
     /*Mudança para o idioma português*/
-    setlocale(LC_ALL, "Portuguese");
+    setlocale(LC_ALL, " ");
 
     /*Limpa a tela*/
     clrscr();
 
     /*Coloca a 'opções' em uma matriz de caractere 'menu' para ser usada em outra função adiante*/
     Converte(&string, opcoes);
-
+    
     /*Loop infinito*/
     do
     {
         if(op.controla_evento)
         {   
+            
             /*Chamada para desenhar minha janela para meu menu*/
             Desenha_Janela_Menu(&janela, coordenadas_Janela);
             
             /*Função que declara e colocar as opções do menu*/
             Imprime_op_Menu(&janela, coordenadas_Janela, &string, &op, letras);
             op.controla_evento = 0;
-            
         }
-       
+
         /*Função que faz a leitura das teclas do programa*/
-        Le_Teclado(&leitura, &op);
-        
+        Le_Teclado(&leitura, &op);  
+
         /*Chamada da função para realizar a abertura do arquivo
         Abre_Arquivo(&string);*/
 

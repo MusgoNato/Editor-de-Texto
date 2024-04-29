@@ -3,6 +3,7 @@
 /*Bibliotecas/Constantes*/
 # include <stdio.h> /*FILE, fopen(), printf(), */
 # include <string.h> /*strlen(), strchr()*/
+# include <ctype.h>
 # include "console_v1.5.4.h" /*SETAS_DE_DIREÇÃO*/
 # include "conio_v3.2.4.h" /*gotoxy()*/
 # include "funcoes.h"
@@ -179,16 +180,26 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
 /*Função que le o teclado do usuario*/
 void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
 {
-    int pedido_user;
+    char teste_user;
+    int numero = 0;
+
+    /*int pedido_usuario = 0;*/
+    
+    /*int verifica_buffer = 0;*/
+
+    /*AO COLOCAR UMA LEITURA ANTES EU CONSIGO LER, MAS NAS OUTRAS VEZES JA NAO*/
+    /*SOLUCIONAR O PROBLEMA DE LEITURA, O PROBLEMA É ESSE HIT, A CADA LEITURA DE EVENTOS NAO CONSIGO LER NADA DE DADOS DO TECLADO*/
+    /*Atribuição do evento que ocorreu*/
+    
     /*Verificação para um 'hit' do teclado*/
     if(hit(KEYBOARD_HIT))
     {
-        /*Atribuição do evento que ocorreu*/
+        
         leitura->tecla = Evento();
 
-        /*Vai controlar o desenho da minha janela, para que eu possa controlar o cursor*/
-        op->controla_evento = 1;
-        
+        /*Precisa ser aqui dentro o controle dos eventos, pois somente se for um evento do teclado, vai ser retornado se vai ou nao ser impresso o menu*/
+        op->controla_evento = Mapeia_teclas_Entrada(leitura);
+
         /*Verificação caso seja um evento originário do teclado*/
         if(leitura->tecla.tipo_evento & KEY_EVENT)
         {
@@ -205,25 +216,36 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                     /*Seleciona a opção do menu*/
                     case ENTER:
                     {
-                       
-                       /*PRECISO VERIFICAR E DAR UM JEITO DE PORQUE NAO LER E APARECER NA TELA A LEITURA DE ALGUM TIPO DE NUMERO OU STRING*/
+                        op->controla_evento = 0;
+                        /*PRECISO VERIFICAR E DAR UM JEITO DE PORQUE NAO LE E APARECER NA TELA A LEITURA DE ALGUM TIPO DE NUMERO OU STRING*/
                         /*De acordo com a escolha do usuario, uma das opções sera selecionada*/
                         switch(op->escolha_do_usuario)
                         {
-                            
+
                             /*Usuario escolheu modificar a quantidade de caracteres do x para o TAB*/
                             case 2:
                             {
-                                gotoxy(2, 10);
-                                printf("Insira o numero: ");
-                                scanf("%d", &pedido_user);
-                                printf("%d", pedido_user);
+                                gotoxy(2, 10); 
+                                /*O numero é pedido ao usuario por meio do getchar que pegara um caractere do teclado*/
+                                teste_user = getchar();
+                                /*Verificação se caso esse numero seja um digito no intervalo de [0, 9]*/
+                                if(isdigit(teste_user))
+                                {
+                                    /*Caso seja um numero valido, faz-se a conversão do caractere com base no seu valor da tabela ascii*/
+                                    numero = numero * 10 + (teste_user - '0');
+                                    printf("Numero : %d", numero);
+                                }
+                                else
+                                {
+                                    numero = 0;
+                                }
                                 break;
                             }
                         }
 
                         break;
                     }
+
                     /*Setas para navegação do menu*/
                     case SETA_PARA_BAIXO:
                     {
@@ -289,11 +311,33 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                     }
                 }
             }
-            
         }
+            
+    }
+    else
+    {
+        if(leitura->tecla.tipo_evento)
+        {
+
+        }
+        
     }
 }
 
 
 
-/*Para o ENTER, pegar o indice da string, e verificar aonde foi apertado, posso fazer uma subtração com o valor do enter ou algo assim*/
+/*Controla os eventos para eu ter controle sobre as teclas de pedido de usurio, por isso é necessario mapear as teclas para imprimir novamente a janela de menu*/
+int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
+{
+    if(leitura->tecla.teclado.status_teclas_controle & SETA_PARA_DIREITA || leitura->tecla.teclado.status_teclas_controle & SETA_PARA_BAIXO ||
+    leitura->tecla.teclado.status_teclas_controle & SETA_PARA_CIMA || leitura->tecla.teclado.status_teclas_controle & SETA_PARA_ESQUERDA)
+    {
+        return 1;   
+    }
+    else
+    {
+        return 0;
+    }
+
+    
+}

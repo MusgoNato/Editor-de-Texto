@@ -2,8 +2,8 @@
 
 /*Definições de constantes*/
 # define ALT_ESQUERDO 0x2
-# define QTD_LETRAS 4
-# define QTD_STRING 4
+# define QTD_LETRAS 8
+# define QTD_STRING 8
 # define TAM_NOME_ARQUIVO 50
 # define TAM_STRING 50
 
@@ -30,6 +30,7 @@ typedef struct _STRINGS
 typedef struct _LE_TECLADO
 {
     EVENTO tecla;
+    char pega_evento;
 }LE_TECLADO;
 
 /*Registro para as escolhas do menu que o usuario irá fazer e as cores também*/
@@ -55,9 +56,11 @@ void Converte(STRINGS *, char **);
 /*Função que realiza a cração da minha janela para o menu*/
 void Desenha_Janela_Menu(TAM_JANELA *, COORD);
 
-
 /*Função que imprime as opções de menu disponíveis*/
 void Imprime_op_Menu(TAM_JANELA *, COORD, STRINGS *, USUARIO *, char *);
 
 /*Vai ler as teclas do teclado e realizar as devidas chamadas para outras funções*/
 void Le_Teclado(LE_TECLADO *, USUARIO *);
+
+/*Função que mapeia as teclas de entrada para retornar para a verificação inicial da main*/
+int Mapeia_teclas_Entrada(LE_TECLADO *);
