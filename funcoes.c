@@ -187,6 +187,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
     
     /*int verifica_buffer = 0;*/
 
+    /*VERIFICAR ESSE IF***********************************/
     /*AO COLOCAR UMA LEITURA ANTES EU CONSIGO LER, MAS NAS OUTRAS VEZES JA NAO*/
     /*SOLUCIONAR O PROBLEMA DE LEITURA, O PROBLEMA É ESSE HIT, A CADA LEITURA DE EVENTOS NAO CONSIGO LER NADA DE DADOS DO TECLADO*/
     /*Atribuição do evento que ocorreu*/
