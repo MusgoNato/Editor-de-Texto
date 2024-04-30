@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     COORD coordenadas_Janela;
     LE_TECLADO leitura;
     USUARIO op;
+    int numero;
 
     /*Declaração das opções do menu*/
     char *opcoes[QTD_STRING] = {"ABRIR", "SALVAR", "ALTERAR X", "ALTERAR COR", "CENTRALIZAR", "JUSITIFICAR", "ALINHA ESQUERDA", "ALINHA DIREITA"};
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
             op.controla_evento = 0;
         }
 
-      
+        /*Tem que fazer algum tipo de verificação ou outro loop, nao posso ficar lendo toda hora essa le_teclado, pois preciso sair*/
         
         /*Função que faz a leitura das teclas do programa*/
         Le_Teclado(&leitura, &op);  

@@ -180,6 +180,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
 /*Função que le o teclado do usuario*/
 void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
 {
+    
     char teste_user;
     int numero = 0;
 
@@ -326,6 +327,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
             
         }
     }*/        
+
 }
 
 
