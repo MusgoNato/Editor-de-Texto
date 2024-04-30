@@ -180,17 +180,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
 /*Função que le o teclado do usuario*/
 void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
 {
-    
-    char teste_user;
-    int numero = 0;
 
-    /*int pedido_usuario = 0;*/
-    
-    /*int verifica_buffer = 0;*/
-
-    /*VERIFICAR ESSE IF***********************************/
-    /*AO COLOCAR UMA LEITURA ANTES EU CONSIGO LER, MAS NAS OUTRAS VEZES JA NAO*/
-    /*SOLUCIONAR O PROBLEMA DE LEITURA, O PROBLEMA É ESSE HIT, A CADA LEITURA DE EVENTOS NAO CONSIGO LER NADA DE DADOS DO TECLADO*/
     /*Atribuição do evento que ocorreu*/
 
     /*Verificação para um 'hit' do teclado*/
@@ -198,136 +188,120 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
     {
        
         leitura->tecla = Evento();
-        
-        /*Precisa ser aqui dentro o controle dos eventos, pois somente se for um evento do teclado, vai ser retornado se vai ou nao ser impresso o menu*/
-        op->controla_evento = Mapeia_teclas_Entrada(leitura);
 
         /*Verificação caso seja um evento originário do teclado*/
         if(leitura->tecla.tipo_evento & KEY_EVENT)
         {
-            /*Verificação da tecla se foi liberada ao pressionada*/
-            if(leitura->tecla.teclado.status_tecla == LIBERADA)
+            /*Precisa ser aqui dentro o controle dos eventos, pois somente se for um evento do teclado, vai ser retornado se vai ou nao ser impresso o menu*/
+            op->controla_evento = Mapeia_teclas_Entrada(leitura);
+
+            if(op->controla_evento)
             {
-                /*O controle da tecla alt esquerda é atribuida em 0 pois a tecla esta solta*/
-                op->controle_do_alt = 0;
-
-                /*Casos para o menu*/
-                switch(leitura->tecla.teclado.codigo_tecla)
+                /*Verificação da tecla se foi liberada ao pressionada*/
+                if(leitura->tecla.teclado.status_tecla == LIBERADA)
                 {
-                    
-                    /*Seleciona a opção do menu*/
-                    case ENTER:
-                    {
-                        /*op->enter_pressionado = 1;*/
-                        op->controla_evento = 0;
-                        /*PRECISO VERIFICAR E DAR UM JEITO DE PORQUE NAO LE E APARECER NA TELA A LEITURA DE ALGUM TIPO DE NUMERO OU STRING*/
-                        /*De acordo com a escolha do usuario, uma das opções sera selecionada*/
-                        switch(op->escolha_do_usuario)
-                        {
+                    /*O controle da tecla alt esquerda é atribuida em 0 pois a tecla esta solta*/
+                    op->controle_do_alt = 0;
 
-                            /*Usuario escolheu modificar a quantidade de caracteres do x para o TAB*/
-                            case 2:
-                            {
-                                gotoxy(2, 10); 
-                                /*O numero é pedido ao usuario por meio do getchar que pegara um caractere do teclado*/
-                                teste_user = getchar();
-                                /*Verificação se caso esse numero seja um digito no intervalo de [0, 9]*/
-                                if(isdigit(teste_user))
-                                {
-                                    /*Caso seja um numero valido, faz-se a conversão do caractere com base no seu valor da tabela ascii*/
-                                    numero = numero * 10 + (teste_user - '0');
-                                    printf("Numero : %d", numero);
-                                }
-                                else
-                                {
-                                    numero = 0;
-                                }
-                                break;
-                            }
-                        }
-
-                        break;
-                    }
-
-                    /*Setas para navegação do menu*/
-                    case SETA_PARA_BAIXO:
-                    {
-                        break;
-                    }
-                    case SETA_PARA_CIMA:
-                    {
-                        break;
-                    }
-
-                    /*Navegação à direita*/
-                    case SETA_PARA_DIREITA:
-                    {
-                        
-                        /*Foi criado uma variavel para a escolha do usuario para simular a navegação do menu, é necessario somente
-                        modificar o valor da própria variavel conforme o usuario aperta as teclas direcionais, a verificação é feita para a navegação
-                        ficar limitada entre o intervalo da 1° a ultima opção, o mesmo é feito nas outras setas de direção, porem com verificações distintas*/
-                        if(op->escolha_do_usuario >= 0 && op->escolha_do_usuario < QTD_STRING - 1)
-                        {
-                            op->escolha_do_usuario += 1;
-                        }
-                        break;
-                    }
-
-                    /*Navegação à esquerda*/
-                    case SETA_PARA_ESQUERDA:
-                    {
-                        if(op->escolha_do_usuario > 0 && op->escolha_do_usuario <= QTD_STRING)
-                        {
-                            op->escolha_do_usuario -= 1;
-                        }
-                        
-                        break;
-                    }
-                    
-                    /*Saida do programa (TEMPORARIO)*/
-                    case ESC:
-                    {
-                        exit(0);
-                        break;
-                    }
-
-                }
-            }
-            else
-            {
-                /*Casos especificos para teclas de controle*/
-                if(leitura->tecla.teclado.status_teclas_controle & ALT_ESQUERDO)
-                {
-                    /*É definido o alt_esquerdo como 1 pois esta sendo pressionado, a cor muda para azul*/
-                    op->controle_do_alt = 1;
-                    op->cor_atalho = BLUE;
-
-                    /*switch para a outra tecla após o ALT_ESQUERDO*/
+                    /*Casos para o menu*/
                     switch(leitura->tecla.teclado.codigo_tecla)
                     {
                         
-                        /*Teclas de atalho somente quando apertar que vou a algum lugar*/
-                        case 'A':
+                        /*Seleciona a opção do menu*/
+                        case ENTER:
                         {
-                            gotoxy(2, 30);
-                            printf("asd");
+                            op->controla_evento = 0;
+                           
+                            /*De acordo com a escolha do usuario, uma das opções sera selecionada*/
+                            switch(op->escolha_do_usuario)
+                            {
+
+                                /*Usuario escolheu modificar a quantidade de caracteres do x para o TAB*/
+                                case 2:
+                                {
+                                    gotoxy(2, 10); 
+                                    op->input_usuario = 1;
+                                    
+                                    break;
+                                }
+                            }
+
                             break;
+                        }
+
+                        /*Setas para navegação do menu*/
+                        case SETA_PARA_BAIXO:
+                        {
+                            break;
+                        }
+                        case SETA_PARA_CIMA:
+                        {
+                            break;
+                        }
+
+                        /*Navegação à direita*/
+                        case SETA_PARA_DIREITA:
+                        {
+                            
+                            /*Foi criado uma variavel para a escolha do usuario para simular a navegação do menu, é necessario somente
+                            modificar o valor da própria variavel conforme o usuario aperta as teclas direcionais, a verificação é feita para a navegação
+                            ficar limitada entre o intervalo da 1° a ultima opção, o mesmo é feito nas outras setas de direção, porem com verificações distintas*/
+                            if(op->escolha_do_usuario >= 0 && op->escolha_do_usuario < QTD_STRING - 1)
+                            {
+                                op->escolha_do_usuario += 1;
+                            }
+                            break;
+                        }
+
+                        /*Navegação à esquerda*/
+                        case SETA_PARA_ESQUERDA:
+                        {
+                            if(op->escolha_do_usuario > 0 && op->escolha_do_usuario <= QTD_STRING)
+                            {
+                                op->escolha_do_usuario -= 1;
+                            }
+                            
+                            break;
+                        }
+                        
+                        /*Saida do programa (TEMPORARIO)*/
+                        case ESC:
+                        {
+                            exit(0);
+                            break;
+                        }
+
+                    }
+                }
+                else
+                {
+                    /*Casos especificos para teclas de controle*/
+                    if(leitura->tecla.teclado.status_teclas_controle & ALT_ESQUERDO)
+                    {
+                        /*É definido o alt_esquerdo como 1 pois esta sendo pressionado, a cor muda para azul*/
+                        op->controle_do_alt = 1;
+                        op->cor_atalho = BLUE;
+
+                        /*switch para a outra tecla após o ALT_ESQUERDO*/
+                        switch(leitura->tecla.teclado.codigo_tecla)
+                        {
+                            
+                            /*Teclas de atalho somente quando apertar que vou a algum lugar*/
+                            case 'A':
+                            {
+                                gotoxy(2, 30);
+                                
+                                break;
+                            }
                         }
                     }
                 }
             }
-        }
             
-    }
-    /*else
-    {
-        if(op->enter_pressionado)
-        {
-            scanf("%c", &teste_user);
             
         }
-    }*/        
-
+    
+    }        
 }
 
 
@@ -335,15 +309,37 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
 /*Controla os eventos para eu ter controle sobre as teclas de pedido de usurio, por isso é necessario mapear as teclas para imprimir novamente a janela de menu*/
 int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
 {
-    if((leitura->tecla.teclado.status_teclas_controle & SETA_PARA_DIREITA) | (leitura->tecla.teclado.status_teclas_controle & SETA_PARA_BAIXO) |
-    (leitura->tecla.teclado.status_teclas_controle & SETA_PARA_CIMA) | (leitura->tecla.teclado.status_teclas_controle & SETA_PARA_ESQUERDA))
+    /*Mapeamento de cada tecla*/
+    if(leitura->tecla.teclado.status_teclas_controle & ALT_ESQUERDO)
+    {
+        return 1;
+    }
+    if(leitura->tecla.teclado.codigo_tecla == SETA_PARA_DIREITA)
     {
         return 1;   
     }
-    else
+    if(leitura->tecla.teclado.codigo_tecla == SETA_PARA_ESQUERDA)
     {
-        return 0;
+        return 1;
     }
+    if(leitura->tecla.teclado.codigo_tecla == SETA_PARA_BAIXO)
+    {   
+        return 1;
+    }
+    if(leitura->tecla.teclado.codigo_tecla == SETA_PARA_CIMA)
+    {   
+        return 1;
+    }
+    if(leitura->tecla.teclado.codigo_tecla == ESC)
+    {
+        return 1;
+    }
+    if(leitura->tecla.teclado.codigo_tecla == ENTER)
+    {
+        return 1;
+    }
+    
+    return 0;
 
     
 }

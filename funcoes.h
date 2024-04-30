@@ -40,6 +40,7 @@ typedef struct _USUARIO
     int controle_do_alt;
     int controla_evento;
     int enter_pressionado;
+    int input_usuario;
     COLORS cor_atalho;
 }USUARIO;
 

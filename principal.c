@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
     COORD coordenadas_Janela;
     LE_TECLADO leitura;
     USUARIO op;
-    int numero;
 
     /*Declaração das opções do menu*/
     char *opcoes[QTD_STRING] = {"ABRIR", "SALVAR", "ALTERAR X", "ALTERAR COR", "CENTRALIZAR", "JUSITIFICAR", "ALINHA ESQUERDA", "ALINHA DIREITA"};
@@ -44,7 +43,7 @@ int main(int argc, char *argv[])
     é inicializado com 1 pois preciso que imprima na tela pela 1° vez a janela*/
     op.controla_evento = 1;
 
-    op.enter_pressionado = 1;
+    op.input_usuario = 0;
 
     /*Definindo a altura e largura da janela*/
     janela.largura = 160;
@@ -68,8 +67,9 @@ int main(int argc, char *argv[])
     Converte(&string, opcoes);
     
     /*Loop infinito*/
-    do
+    while(1)
     {
+        
         if(op.controla_evento)
         {   
             
@@ -81,15 +81,17 @@ int main(int argc, char *argv[])
             op.controla_evento = 0;
         }
 
-        /*Tem que fazer algum tipo de verificação ou outro loop, nao posso ficar lendo toda hora essa le_teclado, pois preciso sair*/
-        
+        /*Tem que fazer algum tipo de verificação ou outro loop, nao posso ficar lendo toda hora essa le_teclado, pois preciso sair*/   
         /*Função que faz a leitura das teclas do programa*/
-        Le_Teclado(&leitura, &op);  
-
+        Le_Teclado(&leitura, &op);
+ 
+        
+    }      
+          
+        
         /*Chamada da função para realizar a abertura do arquivo
         Abre_Arquivo(&string);*/
 
-    }while(1);
 
     /*Retorno para a main que encerrou com sucesso*/
     return 0;
