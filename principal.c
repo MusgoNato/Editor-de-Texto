@@ -66,27 +66,26 @@ int main(int argc, char *argv[])
     /*Coloca a 'opções' em uma matriz de caractere 'menu' para ser usada em outra função adiante*/
     Converte(&string, opcoes);
     
+    /*Chamada para desenhar minha janela para meu menu*/
+    Desenha_Janela_Menu(&janela, coordenadas_Janela);
+
     /*Loop infinito*/
-    while(1)
-    {
-        
+    do
+    {   
         if(op.controla_evento)
         {   
-            
-            /*Chamada para desenhar minha janela para meu menu*/
-            Desenha_Janela_Menu(&janela, coordenadas_Janela);
             
             /*Função que declara e colocar as opções do menu*/
             Imprime_op_Menu(&janela, coordenadas_Janela, &string, &op, letras);
             op.controla_evento = 0;
         }
-
+        
         /*Tem que fazer algum tipo de verificação ou outro loop, nao posso ficar lendo toda hora essa le_teclado, pois preciso sair*/   
         /*Função que faz a leitura das teclas do programa*/
         Le_Teclado(&leitura, &op);
- 
         
-    }      
+        
+    }while(1);   
           
         
         /*Chamada da função para realizar a abertura do arquivo

@@ -310,35 +310,40 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
 int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
 {
     /*Mapeamento de cada tecla*/
+
+    /*Verificação do alt esquerdo pois é uma tecla de controle*/
     if(leitura->tecla.teclado.status_teclas_controle & ALT_ESQUERDO)
     {
         return 1;
     }
-    if(leitura->tecla.teclado.codigo_tecla == SETA_PARA_DIREITA)
+
+    /*Switch para cases de teclas que nao sao de controle*/
+    switch(leitura->tecla.teclado.codigo_tecla)
     {
-        return 1;   
-    }
-    if(leitura->tecla.teclado.codigo_tecla == SETA_PARA_ESQUERDA)
-    {
-        return 1;
-    }
-    if(leitura->tecla.teclado.codigo_tecla == SETA_PARA_BAIXO)
-    {   
-        return 1;
-    }
-    if(leitura->tecla.teclado.codigo_tecla == SETA_PARA_CIMA)
-    {   
-        return 1;
-    }
-    if(leitura->tecla.teclado.codigo_tecla == ESC)
-    {
-        return 1;
-    }
-    if(leitura->tecla.teclado.codigo_tecla == ENTER)
-    {
-        return 1;
+        case SETA_PARA_BAIXO:
+        {
+            return 1;
+        }
+        case SETA_PARA_CIMA:
+        {
+            return 1;
+        }
+        case SETA_PARA_DIREITA:
+        {
+            return 1;
+        }
+        case SETA_PARA_ESQUERDA:
+        {
+            return 1;
+        }
+        case ESC:
+        {
+            return 1;
+        }
+
     }
     
+    /*Caso seja qualquer outro tipo de tecla retorna 0, para nao imprimir de novo o menu*/
     return 0;
 
     
