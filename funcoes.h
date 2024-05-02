@@ -2,8 +2,8 @@
 
 /*Definições de constantes*/
 # define ALT_ESQUERDO 0x2
-# define QTD_LETRAS 8
-# define QTD_STRING 8
+# define QTD_LETRAS 5
+# define QTD_STRING 5
 # define TAM_NOME_ARQUIVO 50
 # define TAM_STRING 50
 
@@ -30,7 +30,7 @@ typedef struct _STRINGS
 typedef struct _LE_TECLADO
 {
     EVENTO tecla;
-    char pega_evento;
+    EVENTO dados_Usuario;
 }LE_TECLADO;
 
 /*Registro para as escolhas do menu que o usuario irá fazer e as cores também*/
@@ -40,7 +40,8 @@ typedef struct _USUARIO
     int controle_do_alt;
     int controla_evento;
     int enter_pressionado;
-    int input_usuario;
+    int modo_teclas_especiais;
+    int modo_leitura_dados;
     COLORS cor_atalho;
 }USUARIO;
 
@@ -66,3 +67,5 @@ void Le_Teclado(LE_TECLADO *, USUARIO *);
 
 /*Função que mapeia as teclas de entrada para retornar para a verificação inicial da main*/
 int Mapeia_teclas_Entrada(LE_TECLADO *);
+
+

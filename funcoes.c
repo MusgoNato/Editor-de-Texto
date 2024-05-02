@@ -180,15 +180,12 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
 /*Função que le o teclado do usuario*/
 void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
 {
-
-    /*Atribuição do evento que ocorreu*/
-
-    /*Verificação para um 'hit' do teclado*/
+    
     if(hit(KEYBOARD_HIT))
     {
-       
+        /*Atribuição do evento que ocorreu*/
         leitura->tecla = Evento();
-
+        
         /*Verificação caso seja um evento originário do teclado*/
         if(leitura->tecla.tipo_evento & KEY_EVENT)
         {
@@ -220,13 +217,10 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                                 case 2:
                                 {
                                     gotoxy(2, 10); 
-                                    op->input_usuario = 1;
-                                    
                                     break;
                                 }
                             }
 
-                            break;
                         }
 
                         /*Setas para navegação do menu*/
@@ -290,7 +284,6 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                             case 'A':
                             {
                                 gotoxy(2, 30);
-                                
                                 break;
                             }
                         }
@@ -298,11 +291,11 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                 }
             }
             
-            
         }
-    
-    }        
+      
+    }
 }
+    
 
 
 
@@ -336,15 +329,16 @@ int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
         {
             return 1;
         }
+        case ENTER:
+        {
+            return 1;
+        }
         case ESC:
         {
             return 1;
         }
 
     }
-    
     /*Caso seja qualquer outro tipo de tecla retorna 0, para nao imprimir de novo o menu*/
     return 0;
-
-    
 }

@@ -28,10 +28,10 @@ int main(int argc, char *argv[])
     USUARIO op;
 
     /*Declaração das opções do menu*/
-    char *opcoes[QTD_STRING] = {"ABRIR", "SALVAR", "ALTERAR X", "ALTERAR COR", "CENTRALIZAR", "JUSITIFICAR", "ALINHA ESQUERDA", "ALINHA DIREITA"};
+    char *opcoes[QTD_STRING] = {"ARQUIVO", "ALINHAMENTO", "ALTERAR X", "COR FUNDO", "COR TEXTO", };
 
     /*Declaração dos atalhos*/
-    char letras[QTD_LETRAS] = {'A', 'S', 'X', 'L', 'C', 'J', 'Q', 'D'};
+    char letras[QTD_LETRAS] = {'A', 'L', 'X', 'F', 'T'};
 
     /*Declaração da opção do usuário*/
     op.escolha_do_usuario = 0;
@@ -43,7 +43,9 @@ int main(int argc, char *argv[])
     é inicializado com 1 pois preciso que imprima na tela pela 1° vez a janela*/
     op.controla_evento = 1;
 
-    op.input_usuario = 0;
+    op.modo_leitura_dados = 0;
+
+    op.modo_teclas_especiais = 1;
 
     /*Definindo a altura e largura da janela*/
     janela.largura = 160;
@@ -80,16 +82,14 @@ int main(int argc, char *argv[])
             op.controla_evento = 0;
         }
         
+       
         /*Tem que fazer algum tipo de verificação ou outro loop, nao posso ficar lendo toda hora essa le_teclado, pois preciso sair*/   
         /*Função que faz a leitura das teclas do programa*/
+
         Le_Teclado(&leitura, &op);
-        
+
         
     }while(1);   
-          
-        
-        /*Chamada da função para realizar a abertura do arquivo
-        Abre_Arquivo(&string);*/
 
 
     /*Retorno para a main que encerrou com sucesso*/
