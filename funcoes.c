@@ -16,7 +16,7 @@ void Abre_Arquivo(STRINGS *string)
     char letra_arquivo;
 
     /*Insirir o arquivo desejado para abertura*/
-    printf("\nInsira o arquivo que deseja abrir: ");
+    puts("\nInsira o arquivo que deseja abrir: ");
     scanf("%s", string->arquivo_txt);
 
     /*Verificação do arquivo para o modo leitura*/
@@ -31,14 +31,14 @@ void Abre_Arquivo(STRINGS *string)
         while(letra_arquivo != EOF)
         {
             /*Pega cada letra do meu arquivo de origem para impressão na tela*/
-            printf("%c", letra_arquivo);
+            putchar(letra_arquivo);
             letra_arquivo = fgetc(arquivo_origem);
         }
         
     }
     else
     {
-        printf("Abertura do arquivo deu errado!");
+        puts("Abertura do arquivo deu errado!");
     }
 
     /*Fecha o arquivo*/
@@ -66,14 +66,14 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
     for(i = 0; i < janela->largura; i++)
     {
         gotoxy(coordenadas_Janela.X + i, coordenadas_Janela.Y);
-        printf("=");
+        putchar('=');
     }
 
     /*Coluna esquerda*/
     for(i = 0; i < janela->altura; i++)
     {
         gotoxy(coordenadas_Janela.X, coordenadas_Janela.Y + i);
-        printf("|");
+        putchar('|');
     }
 
     /*Linha inferior*/
@@ -82,7 +82,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
         /*Necessário o incremento do i em 1, para nao borrar o '|' da coluna esquerda,
         há de se decrementar a janela->altura pois o printf da um quebra linha, para isso imprimir o caractere '=' uma linha depois, se decrementa o y*/
         gotoxy(coordenadas_Janela.X + i + 1, coordenadas_Janela.Y + janela->altura - 1);
-        printf("=");
+        putchar('=');
     }
 
     /*Coluna Direita*/
@@ -91,7 +91,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
         /*X recebe o valor da largura, assim eu tenho a coordenada do fim da linha superior, feito isso, somente incrementar o y até a altura
         definida*/
         gotoxy(coordenadas_Janela.X + janela->largura, coordenadas_Janela.Y + i);
-        printf("|");
+        putchar('|');
     }
 
     /*Linha inferior a linha superior*/
@@ -101,7 +101,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
         /*Dividindo a largura e altura e, somando com a coordenadas_Janela.Y, tenho o lugar para imprimir a linha inferior a superior,
         somente é necessário incrementar o x, x + 1 pois ele 'come' a coluna da esquerda, para ajustar incrementei em +1 e decrementei a largura na condição de parada*/
         gotoxy(coordenadas_Janela.X + i + 1, coordenadas_Janela.Y + janela->largura/janela->altura);
-        printf("=");
+        putchar('=');
     }
     
 }
@@ -144,8 +144,10 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
             textcolor(YELLOW);
         }
         
+        /*Pegar a posição da onde esta a opção ARQUIVO, depois criar um submenu pra escolha*/
+
         /*Imprime a string referente a opção do menu*/
-        printf("%s", string->menu[i]);
+        puts(string->menu[i]);
 
         
         /*Colore a letra quando apertado o 'ALT_ESQUERDO'*/
@@ -162,7 +164,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
 
             /*Modifica a cor do texto para demostrar o destaque da letra de atalho*/
             textcolor(op->cor_atalho);
-            printf("%c", letras[i]);
+            putchar(letras[i]);
            
         }
         
@@ -360,7 +362,7 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
         /*Quando sair da função le teclado, o ENTER estara no buffer, o que ocasiona que entre nessa verificação*/
         if(leitura->tecla.teclado.codigo_tecla == ENTER)
         {
-            printf("Caractere X:");
+            printf("Caractere X: ");
             /*Loop para pegar os numeros inseridos pelo usuario*/
             while(1)
             {
