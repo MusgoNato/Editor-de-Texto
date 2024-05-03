@@ -33,6 +33,8 @@ int main(int argc, char *argv[])
     /*Declaração dos atalhos*/
     char letras[QTD_LETRAS] = {'A', 'L', 'X', 'F', 'T'};
 
+    op.enter_pressionado = -1;
+
     /*Declaração da opção do usuário*/
     op.escolha_do_usuario = 0;
 
@@ -46,6 +48,8 @@ int main(int argc, char *argv[])
     op.modo_leitura_dados = 0;
 
     op.modo_teclas_especiais = 1;
+
+    op.esc_apertado = 1;
 
     /*Definindo a altura e largura da janela*/
     janela.largura = 160;
@@ -72,8 +76,8 @@ int main(int argc, char *argv[])
     Desenha_Janela_Menu(&janela, coordenadas_Janela);
 
     /*Loop infinito*/
-    do
-    {   
+    while(op.esc_apertado)
+    {  
         if(op.controla_evento)
         {   
             
@@ -82,15 +86,10 @@ int main(int argc, char *argv[])
             op.controla_evento = 0;
         }
         
-       
-        /*Tem que fazer algum tipo de verificação ou outro loop, nao posso ficar lendo toda hora essa le_teclado, pois preciso sair*/   
         /*Função que faz a leitura das teclas do programa*/
-
         Le_Teclado(&leitura, &op);
 
-        
-    }while(1);   
-
+    }  
 
     /*Retorno para a main que encerrou com sucesso*/
     return 0;

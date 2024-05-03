@@ -125,8 +125,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
     /*Armazenará a coordenada de onde devo destacar a tecla de atalho*/
     COORD Ponto_destaque;
 
-    /*Espaçamento fixo entre as opções*/
-    int espacamento = 10;
+
 
     /*Imprime na tela as opções do menu*/
     for(i = 0; i < QTD_STRING; i++)
@@ -172,7 +171,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
 
         /*O tamanho da opcao armazena o tamanho da string do menu e o soma com a quantidade de espaçamento declarado fixo,
         isso faz com que haja um espaçamento entre as opções do menu independente do tamanho da string */
-        tam_opcao_menu += strlen(string->menu[i]) + espacamento;
+        tam_opcao_menu += strlen(string->menu[i]) + ESPACAMENTO;
 
     }
 }
@@ -216,7 +215,9 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                                 /*Usuario escolheu modificar a quantidade de caracteres do x para o TAB*/
                                 case 2:
                                 {
-                                    gotoxy(2, 10); 
+
+                                    /*Chama a função para pegar o numero dado pelo usuario*/
+                                    Caractere_X(leitura, op);
                                     break;
                                 }
                             }
@@ -261,7 +262,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                         /*Saida do programa (TEMPORARIO)*/
                         case ESC:
                         {
-                            exit(0);
+                            op->esc_apertado -= 1;
                             break;
                         }
 
@@ -341,4 +342,63 @@ int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
     }
     /*Caso seja qualquer outro tipo de tecla retorna 0, para nao imprimir de novo o menu*/
     return 0;
+}
+
+
+/*Quando a função le teclado for desabilitada, esta função entra para ler os dados do usuario*/
+void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
+{
+    /*Numeros de 2 unidades somente*/
+    char numero[2];
+    int saida = 1;
+    int i = 0;
+    op->numero_convertido = 0;
+    
+    /*Loop ate a conversao ser feita corretamente*/
+    while(saida)
+    {
+        /*Quando sair da função le teclado, o ENTER estara no buffer, o que ocasiona que entre nessa verificação*/
+        if(leitura->tecla.teclado.codigo_tecla == ENTER)
+        {
+            printf("Caractere X:");
+            /*Loop para pegar os numeros inseridos pelo usuario*/
+            while(1)
+            {
+                /*Pega o caractere digitado*/
+                leitura->tecla.teclado.codigo_tecla = getchar();
+
+                /*Se este caractere é um dígito*/
+                if(leitura->tecla.teclado.codigo_tecla >= 48 && leitura->tecla.teclado.codigo_tecla <= 57)
+                {
+                    /*A cada incremento é colocado o caractere na string numero*/
+                    numero[i] = leitura->tecla.teclado.codigo_tecla;
+
+                    /*Impresso na tela para o usuário*/
+                    printf("%c", numero[i]);
+                    i++;
+
+                    /*Ao chegar no fim da string, é colocado o '\0'*/
+                    if(i == 2)
+                    {
+                        numero[i] = '\0';
+
+                        /*O numero da string é convertido em um numero inteiro para ser usado no TAB*/
+                        op->numero_convertido = atoi(numero);
+                        
+                        break;
+                    }
+                    
+                }
+                else
+                {
+                    /*Caso nao seja um numero o caractere digitado anteriormente*/
+                    printf("Numero invalido!");
+                }
+            }
+
+            /*Ao passar pela conversao sai do loop interno*/
+            saida = 0;
+           
+        }
+    }   
 }

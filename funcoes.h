@@ -6,6 +6,7 @@
 # define QTD_STRING 5
 # define TAM_NOME_ARQUIVO 50
 # define TAM_STRING 50
+# define ESPACAMENTO 10
 
 /*Estruturas*/
 
@@ -30,7 +31,7 @@ typedef struct _STRINGS
 typedef struct _LE_TECLADO
 {
     EVENTO tecla;
-    EVENTO dados_Usuario;
+    
 }LE_TECLADO;
 
 /*Registro para as escolhas do menu que o usuario irá fazer e as cores também*/
@@ -38,12 +39,15 @@ typedef struct _USUARIO
 {
     int escolha_do_usuario;
     int controle_do_alt;
+    int esc_apertado;
     int controla_evento;
     int enter_pressionado;
     int modo_teclas_especiais;
     int modo_leitura_dados;
+    int numero_convertido;
     COLORS cor_atalho;
 }USUARIO;
+
 
 
 
@@ -67,5 +71,11 @@ void Le_Teclado(LE_TECLADO *, USUARIO *);
 
 /*Função que mapeia as teclas de entrada para retornar para a verificação inicial da main*/
 int Mapeia_teclas_Entrada(LE_TECLADO *);
+
+/*Pede o caractere para o TAB*/
+void Caractere_X(LE_TECLADO *leitura, USUARIO *op);
+
+/*Faz os submenus
+void Submenu_Arquivo(COORD, USUARIO *);*/
 
 
