@@ -24,7 +24,7 @@ typedef struct _STRINGS
     char arquivo_txt[TAM_NOME_ARQUIVO];
     char menu[QTD_STRING][TAM_STRING];
     char user_digitando[TAM_STRING];
-    char submenu_arquivo[1];
+    char submenu_arquivo[1][TAM_STRING];
     
 }STRINGS;
 
@@ -59,7 +59,7 @@ Retorno: Nenhum*/
 void Abre_Arquivo(STRINGS *);
 
 /*Coloca minhas 'opções', na matriz de caracteres 'menu'*/
-void Converte(STRINGS *, char **);
+void Converte(STRINGS *, char **, char **);
 
 /*Função que realiza a cração da minha janela para o menu*/
 void Desenha_Janela_Menu(TAM_JANELA *, COORD);
@@ -68,7 +68,7 @@ void Desenha_Janela_Menu(TAM_JANELA *, COORD);
 void Imprime_op_Menu(TAM_JANELA *, COORD, STRINGS *, USUARIO *, char *);
 
 /*Vai ler as teclas do teclado e realizar as devidas chamadas para outras funções*/
-void Le_Teclado(LE_TECLADO *, USUARIO *);
+void Le_Teclado(LE_TECLADO *, USUARIO *, STRINGS *);
 
 /*Função que mapeia as teclas de entrada para retornar para a verificação inicial da main*/
 int Mapeia_teclas_Entrada(LE_TECLADO *);
@@ -77,7 +77,7 @@ int Mapeia_teclas_Entrada(LE_TECLADO *);
 void Caractere_X(LE_TECLADO *leitura, USUARIO *op);
 
 /*Mostra o submenu arquivo para o usuario escolher*/
-void Submenu_Arquivo();
+void Submenu_Arquivo(STRINGS *);
 
 /*Faz os submenus
 void Submenu_Arquivo(COORD, USUARIO *);*/

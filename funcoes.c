@@ -46,7 +46,7 @@ void Abre_Arquivo(STRINGS *string)
 }
 
 /*Converete a string nas suas devidas posições*/
-void Converte(STRINGS *string, char **opcoes)
+void Converte(STRINGS *string, char **opcoes, char **submenu)
 {
     int i;
     /*Declaração por meio do snprintf, no 'opcoes' contem as opcoes definidas no inicio do programa, o menu, uma matriz de strings,
@@ -54,6 +54,12 @@ void Converte(STRINGS *string, char **opcoes)
     for(i = 0; i < QTD_STRING; i++)
     {
         snprintf(string->menu[i], TAM_STRING, "%s", opcoes[i]);
+    }
+
+    /*Conversão para o submenu arquivo de acordo com o seu tamanho*/
+    for(i = 0; i <= 1; i++)
+    {
+        snprintf(string->submenu_arquivo[i], TAM_STRING, "%s", submenu[i]);
     }
 }
 
@@ -125,8 +131,6 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
     /*Armazenará a coordenada de onde devo destacar a tecla de atalho*/
     COORD Ponto_destaque;
 
-
-
     /*Imprime na tela as opções do menu*/
     for(i = 0; i < QTD_STRING; i++)
     {   
@@ -137,6 +141,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
         Mas o código ficaria um pouco confuso*/
         Ponto_destaque.X = wherex();
         Ponto_destaque.Y = wherey();
+
 
         /*Verificação da navegação do usuario por meio das teclas direcionais*/
         if(i == op->escolha_do_usuario)
@@ -179,7 +184,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
 }
 
 /*Função que le o teclado do usuario*/
-void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
+void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
 {
 
     /*Identifica um 'hit' do teclado*/   
@@ -206,7 +211,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                     switch(leitura->tecla.teclado.codigo_tecla)
                     {
                         
-                        /*Seleciona a opção do menu*/
+                        /*Seleciona a opção do menu principal*/
                         case ENTER:
                         {
                             op->controla_evento = 0;
@@ -218,7 +223,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                                 case 0:
                                 {
                                     /*Chama função para abrir o submenu arquivo*/
-                                    Submenu_Arquivo();
+                                    Submenu_Arquivo(string);
                                     break;
                                 }
                                 /*Usuario escolheu modificar a quantidade de caracteres do x para o TAB*/
@@ -410,34 +415,75 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
 
 
 /*Função para apresentar o submenu quando for apertado na opção arquivo*/
-void Submenu_Arquivo()
+void Submenu_Arquivo(STRINGS *string)
 {
+    /*É criado outro tipo EVENTO para armazenar as teclas da navegação e escolha do submenu arquivo*/
     EVENTO sub_arquivo;
+    COORD Submenu;
+    int controla_sub = 1;
+    int i;
     int saida = 1;
 
+    /*O cursor ja esta localizado abaixo da linha onde é impressa as opções do menu principal, entao pegamos a localização dele para conseguir colocar nossas subopções*/
+    Submenu.X = wherex();
+    Submenu.Y = wherey();
+
+
+    /*FAZER ALGUM JEITO DE CONTROLAR AS OPÇÕES DO SUBMENU*************/
     /*Loop pra pegar somente as teclas necessarias*/
     do
     {
-        if(hit(KEYBOARD_HIT))
+        /*Controla a impressao do submenu*/
+        if(controla_sub)
         {
-            sub_arquivo = Evento();
+            /*Imprime as opções de arquivo*/
+            for(i = 0; i <= 1; i++)
+            {
+                gotoxy(Submenu.X + 1, Submenu.Y + i);
+                puts(string->submenu_arquivo[i]);
+            }    
+        }
+        
+        /*Armazena os eventos do teclado*/
+        sub_arquivo = Evento();
 
-            if(sub_arquivo.tipo_evento & KEY_EVENT)
-            {   
-                if(sub_arquivo.teclado.status_tecla == LIBERADA)
+        /*Verifica se é um evento do teclado*/
+        if(sub_arquivo.tipo_evento & KEY_EVENT)
+        {   
+            /*Verifica se foi liberada a tecla*/
+            if(sub_arquivo.teclado.status_tecla == LIBERADA)
+            {
+                /*Qual tecla foi apertada*/
+                switch(sub_arquivo.teclado.codigo_tecla)
                 {
-                    switch(sub_arquivo.teclado.codigo_tecla)
+                    /*Navegação do submenu arquivo*/
+                    case SETA_PARA_BAIXO:
                     {
-                        case SETA_PARA_CIMA:
-                        {
-                            printf("deu certoooooooooooooooo!");
-                            saida = 0;
-                            break;
-                        }
+                        break;
+                    }
+                    
+                    case SETA_PARA_CIMA:
+                    {
+                        
+                        break;
+                    }
+                    
+                    /*Saida do loop somente quando ele pressione ESC ou ENTER*/
+                    case ESC:
+                    {
+                        saida = 0;
+                        break;
+                    }
+
+                    /*Meio de saida do loop e entrada em outra função*/
+                    case ENTER:
+                    {
+                        saida = 0;
+                        break;
                     }
                 }
             }
         }
-
     }while(saida);
+
 }

@@ -28,11 +28,13 @@ int main(int argc, char *argv[])
     USUARIO op;
 
     /*Declaração das opções do menu*/
-    char *opcoes[QTD_STRING] = {"ARQUIVO", "ALINHAMENTO", "ALTERAR X", "COR FUNDO", "COR TEXTO", };
-
+    char *opcoes[QTD_STRING] = {"ARQUIVO", "ALINHAMENTO", "ALTERAR X", "COR FUNDO", "COR TEXTO"};
 
     /*Declaração dos atalhos*/
     char letras[QTD_LETRAS] = {'A', 'L', 'X', 'F', 'T'};
+
+    /*Declaração das opções do submenu arquivo*/
+    char *submenu[2] = {"ABRIR", "SALVAR"};
 
     op.enter_pressionado = -1;
 
@@ -71,7 +73,7 @@ int main(int argc, char *argv[])
     clrscr();
 
     /*Coloca a 'opções' em uma matriz de caractere 'menu' para ser usada em outra função adiante*/
-    Converte(&string, opcoes);
+    Converte(&string, opcoes, submenu);
     
     /*Chamada para desenhar minha janela para meu menu*/
     Desenha_Janela_Menu(&janela, coordenadas_Janela);
@@ -88,7 +90,7 @@ int main(int argc, char *argv[])
         }
         
         /*Função que faz a leitura das teclas do programa*/
-        Le_Teclado(&leitura, &op);
+        Le_Teclado(&leitura, &op, &string);
 
     }  
 
