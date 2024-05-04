@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     /*Declaração das opções do menu*/
     char *opcoes[QTD_STRING] = {"ARQUIVO", "ALINHAMENTO", "ALTERAR X", "COR FUNDO", "COR TEXTO", };
 
+
     /*Declaração dos atalhos*/
     char letras[QTD_LETRAS] = {'A', 'L', 'X', 'F', 'T'};
 

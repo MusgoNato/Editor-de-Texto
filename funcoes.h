@@ -24,6 +24,7 @@ typedef struct _STRINGS
     char arquivo_txt[TAM_NOME_ARQUIVO];
     char menu[QTD_STRING][TAM_STRING];
     char user_digitando[TAM_STRING];
+    char submenu_arquivo[1];
     
 }STRINGS;
 
@@ -74,6 +75,9 @@ int Mapeia_teclas_Entrada(LE_TECLADO *);
 
 /*Pede o caractere para o TAB*/
 void Caractere_X(LE_TECLADO *leitura, USUARIO *op);
+
+/*Mostra o submenu arquivo para o usuario escolher*/
+void Submenu_Arquivo();
 
 /*Faz os submenus
 void Submenu_Arquivo(COORD, USUARIO *);*/

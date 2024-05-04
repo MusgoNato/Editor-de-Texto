@@ -181,7 +181,8 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
 /*Função que le o teclado do usuario*/
 void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
 {
-    
+
+    /*Identifica um 'hit' do teclado*/   
     if(hit(KEYBOARD_HIT))
     {
         /*Atribuição do evento que ocorreu*/
@@ -213,7 +214,13 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op)
                             /*De acordo com a escolha do usuario, uma das opções sera selecionada*/
                             switch(op->escolha_do_usuario)
                             {
-
+                                /*Caso quando o usuario escolher o submenu arquivo*/
+                                case 0:
+                                {
+                                    /*Chama função para abrir o submenu arquivo*/
+                                    Submenu_Arquivo();
+                                    break;
+                                }
                                 /*Usuario escolheu modificar a quantidade de caracteres do x para o TAB*/
                                 case 2:
                                 {
@@ -359,15 +366,12 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
     /*Loop ate a conversao ser feita corretamente*/
     while(saida)
     {
-        /*Quando sair da função le teclado, o ENTER estara no buffer, o que ocasiona que entre nessa verificação*/
-        if(leitura->tecla.teclado.codigo_tecla == ENTER)
-        {
-            printf("Caractere X: ");
+            puts("Caractere X: ");
             /*Loop para pegar os numeros inseridos pelo usuario*/
             while(1)
             {
                 /*Pega o caractere digitado*/
-                leitura->tecla.teclado.codigo_tecla = getchar();
+                leitura->tecla.teclado.codigo_tecla = getch();
 
                 /*Se este caractere é um dígito*/
                 if(leitura->tecla.teclado.codigo_tecla >= 48 && leitura->tecla.teclado.codigo_tecla <= 57)
@@ -376,7 +380,7 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
                     numero[i] = leitura->tecla.teclado.codigo_tecla;
 
                     /*Impresso na tela para o usuário*/
-                    printf("%c", numero[i]);
+                    putchar(numero[i]);
                     i++;
 
                     /*Ao chegar no fim da string, é colocado o '\0'*/
@@ -394,7 +398,7 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
                 else
                 {
                     /*Caso nao seja um numero o caractere digitado anteriormente*/
-                    printf("Numero invalido!");
+                    puts("Numero invalido!");
                 }
             }
 
@@ -403,4 +407,37 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
            
         }
     }   
+
+
+/*Função para apresentar o submenu quando for apertado na opção arquivo*/
+void Submenu_Arquivo()
+{
+    EVENTO sub_arquivo;
+    int saida = 1;
+
+    /*Loop pra pegar somente as teclas necessarias*/
+    do
+    {
+        if(hit(KEYBOARD_HIT))
+        {
+            sub_arquivo = Evento();
+
+            if(sub_arquivo.tipo_evento & KEY_EVENT)
+            {   
+                if(sub_arquivo.teclado.status_tecla == LIBERADA)
+                {
+                    switch(sub_arquivo.teclado.codigo_tecla)
+                    {
+                        case SETA_PARA_CIMA:
+                        {
+                            printf("deu certoooooooooooooooo!");
+                            saida = 0;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+    }while(saida);
 }
