@@ -14,10 +14,38 @@ void Abre_Arquivo(STRINGS *string)
     /*Cria uma variavel do tipo FILE que sera um ponteiro para o arquivo de origem*/
     FILE *arquivo_origem;
     char letra_arquivo;
+    char arquivo;
+    int i = 0;
 
     /*Insirir o arquivo desejado para abertura*/
-    puts("\nInsira o arquivo que deseja abrir: ");
-    scanf("%s", string->arquivo_txt);
+    puts("Insira o arquivo que deseja abrir: ");
+    while(1)
+    {
+        if(kbhit())
+        {
+            arquivo = getche();
+            if(arquivo == ESC)
+            {
+                /*Caso se arrependa de digitar volta as opções*/
+                break;
+            }
+            if(arquivo == ENTER)
+            {
+                string->arquivo_txt[i] = '\0';
+                break;
+            }
+            else
+            {
+                if(arquivo >= 33 && arquivo <= 126)
+                {
+                    string->arquivo_txt[i] = arquivo;
+                    i++;
+                }
+            }
+        }
+        
+        
+    }
 
     /*Verificação do arquivo para o modo leitura*/
     arquivo_origem = fopen(string->arquivo_txt, "r");
@@ -238,16 +266,6 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
 
                         }
 
-                        /*Setas para navegação do menu*/
-                        case SETA_PARA_BAIXO:
-                        {
-                            break;
-                        }
-                        case SETA_PARA_CIMA:
-                        {
-                            break;
-                        }
-
                         /*Navegação à direita*/
                         case SETA_PARA_DIREITA:
                         {
@@ -420,18 +438,17 @@ void Submenu_Arquivo(STRINGS *string)
     /*É criado outro tipo EVENTO para armazenar as teclas da navegação e escolha do submenu arquivo*/
     EVENTO sub_arquivo;
     COORD Submenu;
-    int controla_sub = 1;
     int i;
     int saida = 1;
+    int controla_sub = 1;
+    int escolha_setas_submenu = 0;
 
     /*O cursor ja esta localizado abaixo da linha onde é impressa as opções do menu principal, entao pegamos a localização dele para conseguir colocar nossas subopções*/
     Submenu.X = wherex();
     Submenu.Y = wherey();
 
-
-    /*FAZER ALGUM JEITO DE CONTROLAR AS OPÇÕES DO SUBMENU*************/
     /*Loop pra pegar somente as teclas necessarias*/
-    do
+    while(saida)
     {
         /*Controla a impressao do submenu*/
         if(controla_sub)
@@ -439,9 +456,16 @@ void Submenu_Arquivo(STRINGS *string)
             /*Imprime as opções de arquivo*/
             for(i = 0; i <= 1; i++)
             {
+                if(i == escolha_setas_submenu)
+                {
+                    textcolor(YELLOW);
+                }
                 gotoxy(Submenu.X + 1, Submenu.Y + i);
                 puts(string->submenu_arquivo[i]);
+                textcolor(LIGHTGRAY);
             }    
+            /*Só é necessario imprimir uma 1° vez, caso o usuario pressione as teclas de navegação, ai a variavel volta com seu valor 1, caso nao continua zerado*/
+            controla_sub = 0;
         }
         
         /*Armazena os eventos do teclado*/
@@ -459,12 +483,22 @@ void Submenu_Arquivo(STRINGS *string)
                     /*Navegação do submenu arquivo*/
                     case SETA_PARA_BAIXO:
                     {
+                        /*Navegação do submenu na opção arquivo*/
+                        if(escolha_setas_submenu >= 0 && escolha_setas_submenu < 1)
+                        {
+                            escolha_setas_submenu += 1;
+                            controla_sub = 1;
+                        }
                         break;
                     }
                     
                     case SETA_PARA_CIMA:
                     {
-                        
+                        if(escolha_setas_submenu > 0 && escolha_setas_submenu <= 1)
+                        {
+                            escolha_setas_submenu -= 1;
+                            controla_sub = 1;
+                        }
                         break;
                     }
                     
@@ -478,12 +512,28 @@ void Submenu_Arquivo(STRINGS *string)
                     /*Meio de saida do loop e entrada em outra função*/
                     case ENTER:
                     {
-                        saida = 0;
+                        /*Ao apertar o enter, é aonde a posição 'escolha_estas_submenu' vai estar, entao eu tenho controle de qual opção sera selecionada somente
+                        com uma variavel*/
+                        switch(escolha_setas_submenu)
+                        {
+
+                            /*Usuario optou por abrir um arquivo*/
+                            case 0:
+                            {
+                                /*Chama a função para abrir o arquivo*/
+                                Abre_Arquivo(string);
+                                saida = 0;
+                                controla_sub = 0;
+                                break;
+                            }
+                        }
                         break;
                     }
                 }
             }
         }
-    }while(saida);
+    }
 
 }
+
+/*Fazer os outros submenus, focar nos submenus de CORES*/

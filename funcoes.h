@@ -25,7 +25,7 @@ typedef struct _STRINGS
     char menu[QTD_STRING][TAM_STRING];
     char user_digitando[TAM_STRING];
     char submenu_arquivo[1][TAM_STRING];
-    
+    int controla_sub;
 }STRINGS;
 
 /*Registro para os eventos do teclado*/
@@ -39,6 +39,7 @@ typedef struct _LE_TECLADO
 typedef struct _USUARIO
 {
     int escolha_do_usuario;
+    
     int controle_do_alt;
     int esc_apertado;
     int controla_evento;
@@ -79,7 +80,5 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op);
 /*Mostra o submenu arquivo para o usuario escolher*/
 void Submenu_Arquivo(STRINGS *);
 
-/*Faz os submenus
-void Submenu_Arquivo(COORD, USUARIO *);*/
 
 
