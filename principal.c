@@ -23,7 +23,6 @@ int main(int argc, char *argv[])
     /*Declarações das estruturas*/
     STRINGS string;
     TAM_JANELA janela;
-    COORD coordenadas_Janela;
     LE_TECLADO leitura;
     USUARIO op;
 
@@ -34,7 +33,10 @@ int main(int argc, char *argv[])
     char letras[QTD_LETRAS] = {'A', 'L', 'X', 'F', 'T'};
 
     /*Declaração das opções do submenu arquivo*/
-    char *submenu[2] = {"ABRIR", "SALVAR"};
+    char *submenu_op_arquivo[2] = {"ABRIR", "SALVAR"};
+
+    /*Declaração das opções do submenu troca cores do texto*/
+    char *submenu_op_cor[16] = {"BLACK", "BLUE", "GREEN", "CYAN", "RED", "MAGENTA", "BROWN", "LIGHTGRAY", "DARKGRAY", "LIGHTBLUE", "LIGHTGREEN", "LIGHTCYAN", "LIGHTRED", "LIGHTMAGENTA", "YELLOW", "WHITE"};
 
     op.enter_pressionado = -1;
 
@@ -59,8 +61,11 @@ int main(int argc, char *argv[])
     janela.altura = 40;
 
     /*Coordenadas da Janela, x e y, para eu poder imprimi-la na tela*/
-    coordenadas_Janela.X = 1;
-    coordenadas_Janela.Y = 1;
+    janela.coordenadas_janela.X = 1;
+    janela.coordenadas_janela.Y = 1;
+
+    /*A cor de fundo ja começa com preto por definição*/
+    string.cores_background = 0;
 
     /*Silenciar warnings*/
     argc = argc;
@@ -73,19 +78,22 @@ int main(int argc, char *argv[])
     clrscr();
 
     /*Coloca a 'opções' em uma matriz de caractere 'menu' para ser usada em outra função adiante*/
-    Converte(&string, opcoes, submenu);
+    Copiar_caracteres_pra_matrizes(&string, opcoes, submenu_op_arquivo, submenu_op_cor);
     
     /*Chamada para desenhar minha janela para meu menu*/
-    Desenha_Janela_Menu(&janela, coordenadas_Janela);
+    Desenha_Janela_Menu(&janela);
 
     /*Loop infinito*/
     while(op.esc_apertado)
     {  
         if(op.controla_evento)
         {   
-            
+            /*Tenho que dar algum jeito para aparecer as cores de forma correta ao apertar o ENTER*******/
+            textbackground(string.cores_background);
+
             /*Função que declara e colocar as opções do menu*/
-            Imprime_op_Menu(&janela, coordenadas_Janela, &string, &op, letras);
+            Imprime_op_Menu(&janela, &string, &op, letras);
+
             op.controla_evento = 0;
         }
         
@@ -93,6 +101,10 @@ int main(int argc, char *argv[])
         Le_Teclado(&leitura, &op, &string);
 
     }  
+
+    /*Devolve as cores de fundo e de texto para as originais*/
+    textbackground(BLACK);
+    textcolor(LIGHTGRAY);
 
     /*Retorno para a main que encerrou com sucesso*/
     return 0;

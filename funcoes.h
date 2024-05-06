@@ -13,6 +13,9 @@
 /*Registro que armazena o tamanho da minha janela com base na altura e largura*/
 typedef struct _TAM_JANELA
 {
+    /*Coordenadas da janela*/
+    COORD coordenadas_janela;
+
     /*Largura e altura da janela*/
     int largura, altura;
 
@@ -24,8 +27,11 @@ typedef struct _STRINGS
     char arquivo_txt[TAM_NOME_ARQUIVO];
     char menu[QTD_STRING][TAM_STRING];
     char user_digitando[TAM_STRING];
-    char submenu_arquivo[1][TAM_STRING];
+    char submenu_arquivo[2][TAM_STRING];
+    char submenu_cores[16][TAM_STRING];
     int controla_sub;
+    COLORS cores_background;
+    COLORS cores_texto;
 }STRINGS;
 
 /*Registro para os eventos do teclado*/
@@ -39,7 +45,6 @@ typedef struct _LE_TECLADO
 typedef struct _USUARIO
 {
     int escolha_do_usuario;
-    
     int controle_do_alt;
     int esc_apertado;
     int controla_evento;
@@ -48,6 +53,7 @@ typedef struct _USUARIO
     int modo_leitura_dados;
     int numero_convertido;
     COLORS cor_atalho;
+    COORD coordenadas_submenus;
 }USUARIO;
 
 
@@ -60,13 +66,13 @@ Retorno: Nenhum*/
 void Abre_Arquivo(STRINGS *);
 
 /*Coloca minhas 'opções', na matriz de caracteres 'menu'*/
-void Converte(STRINGS *, char **, char **);
+void Copiar_caracteres_pra_matrizes(STRINGS *, char **, char **, char **);
 
 /*Função que realiza a cração da minha janela para o menu*/
-void Desenha_Janela_Menu(TAM_JANELA *, COORD);
+void Desenha_Janela_Menu(TAM_JANELA *);
 
 /*Função que imprime as opções de menu disponíveis*/
-void Imprime_op_Menu(TAM_JANELA *, COORD, STRINGS *, USUARIO *, char *);
+void Imprime_op_Menu(TAM_JANELA *, STRINGS *, USUARIO *, char *);
 
 /*Vai ler as teclas do teclado e realizar as devidas chamadas para outras funções*/
 void Le_Teclado(LE_TECLADO *, USUARIO *, STRINGS *);
@@ -75,10 +81,16 @@ void Le_Teclado(LE_TECLADO *, USUARIO *, STRINGS *);
 int Mapeia_teclas_Entrada(LE_TECLADO *);
 
 /*Pede o caractere para o TAB*/
-void Caractere_X(LE_TECLADO *leitura, USUARIO *op);
+void Caractere_X(LE_TECLADO *, USUARIO *);
 
 /*Mostra o submenu arquivo para o usuario escolher*/
-void Submenu_Arquivo(STRINGS *);
+void Submenu_Arquivo(STRINGS *, USUARIO *);
+
+/*Função que imprime as subopções da opção 'COR FUNDO' no menu principal*/
+void Submenu_background(STRINGS *, USUARIO *);
+
+/*Função que muda a cor de texto*/
+void Submenu_cor_texto(STRINGS *, USUARIO *);
 
 
 

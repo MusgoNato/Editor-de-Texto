@@ -18,7 +18,7 @@ void Abre_Arquivo(STRINGS *string)
     int i = 0;
 
     /*Insirir o arquivo desejado para abertura*/
-    puts("Insira o arquivo que deseja abrir: ");
+    printf("Insira o arquivo que deseja abrir: ");
     while(1)
     {
         if(kbhit())
@@ -74,39 +74,45 @@ void Abre_Arquivo(STRINGS *string)
 }
 
 /*Converete a string nas suas devidas posições*/
-void Converte(STRINGS *string, char **opcoes, char **submenu)
+void Copiar_caracteres_pra_matrizes(STRINGS *string, char **opcoes, char **submenu_op_arquivo, char **submenu_op_cor)
 {
     int i;
-    /*Declaração por meio do snprintf, no 'opcoes' contem as opcoes definidas no inicio do programa, o menu, uma matriz de strings,
-    contera todas as opções disponiveis, pois é feita a atribuição de 'opcoes' a 'menu'*/
+    /*Copio os caracteres de uma string para usar em uma matriz de caractere,
+    assim eu posso imprimir uma string inteira somente com a sua posição na matriz e não caractere por caractere*/
     for(i = 0; i < QTD_STRING; i++)
     {
-        snprintf(string->menu[i], TAM_STRING, "%s", opcoes[i]);
+        strcpy(string->menu[i], opcoes[i]);
     }
 
-    /*Conversão para o submenu arquivo de acordo com o seu tamanho*/
+    /*Loop para as 2 opções do submenu 'ARQUIVO'*/
     for(i = 0; i <= 1; i++)
     {
-        snprintf(string->submenu_arquivo[i], TAM_STRING, "%s", submenu[i]);
+        strcpy(string->submenu_arquivo[i], submenu_op_arquivo[i]);
+    }
+
+    /*Loop para as 16 cores do submenu 'COR FUNDO'*/
+    for(i = 0; i <= 16; i++)
+    {
+        strcpy(string->submenu_cores[i], submenu_op_cor[i]);
     }
 }
 
 /*Desenha minha janela do menu*/
-void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
+void Desenha_Janela_Menu(TAM_JANELA *janela)
 {
     int i;
-
+    
     /*Desenha a linha superior do menu*/
     for(i = 0; i < janela->largura; i++)
     {
-        gotoxy(coordenadas_Janela.X + i, coordenadas_Janela.Y);
+        gotoxy(janela->coordenadas_janela.X + i, janela->coordenadas_janela.Y);
         putchar('=');
     }
 
     /*Coluna esquerda*/
     for(i = 0; i < janela->altura; i++)
     {
-        gotoxy(coordenadas_Janela.X, coordenadas_Janela.Y + i);
+        gotoxy(janela->coordenadas_janela.X, janela->coordenadas_janela.Y + i);
         putchar('|');
     }
 
@@ -115,7 +121,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
     {
         /*Necessário o incremento do i em 1, para nao borrar o '|' da coluna esquerda,
         há de se decrementar a janela->altura pois o printf da um quebra linha, para isso imprimir o caractere '=' uma linha depois, se decrementa o y*/
-        gotoxy(coordenadas_Janela.X + i + 1, coordenadas_Janela.Y + janela->altura - 1);
+        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + janela->altura - 1);
         putchar('=');
     }
 
@@ -124,7 +130,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
     {
         /*X recebe o valor da largura, assim eu tenho a coordenada do fim da linha superior, feito isso, somente incrementar o y até a altura
         definida*/
-        gotoxy(coordenadas_Janela.X + janela->largura, coordenadas_Janela.Y + i);
+        gotoxy(janela->coordenadas_janela.X + janela->largura, janela->coordenadas_janela.Y + i);
         putchar('|');
     }
 
@@ -134,7 +140,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
     {
         /*Dividindo a largura e altura e, somando com a coordenadas_Janela.Y, tenho o lugar para imprimir a linha inferior a superior,
         somente é necessário incrementar o x, x + 1 pois ele 'come' a coluna da esquerda, para ajustar incrementei em +1 e decrementei a largura na condição de parada*/
-        gotoxy(coordenadas_Janela.X + i + 1, coordenadas_Janela.Y + janela->largura/janela->altura);
+        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + janela->largura/janela->altura);
         putchar('=');
     }
     
@@ -143,7 +149,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela, COORD coordenadas_Janela)
 
 
 /*Função que imprime as opções de menu na tela*/
-void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *string, USUARIO *op, char *letras)
+void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *letras)
 {
     int i;
 
@@ -163,7 +169,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
     for(i = 0; i < QTD_STRING; i++)
     {   
         /*Seta o lugar aonde deve ser impresso o menu*/
-        gotoxy(coordenadas_Janela.X + tam_opcao_menu + 1, coordenadas_Janela.Y + janela->largura/janela->altura/2);
+        gotoxy(janela->coordenadas_janela.X + tam_opcao_menu + 1, janela->coordenadas_janela.Y + janela->largura/janela->altura/2);
 
         /*Foi criada outro tipo COORD para representar a coordenada do destaque da letra de atalho, poderia utilizar-se somente a coordenada atual da janela.
         Mas o código ficaria um pouco confuso*/
@@ -174,10 +180,13 @@ void Imprime_op_Menu(TAM_JANELA *janela, COORD coordenadas_Janela, STRINGS *stri
         /*Verificação da navegação do usuario por meio das teclas direcionais*/
         if(i == op->escolha_do_usuario)
         {
+            /*Quando uma opção for selecionada, eu tenho a coordenada dela para imprimir o submenu dessa opção, caso precise*/
+            op->coordenadas_submenus.X = wherex();
+            op->coordenadas_submenus.Y = wherey();
+
+            /*Cor para somente para simular uma navegação entre as opções*/
             textcolor(YELLOW);
         }
-        
-        /*Pegar a posição da onde esta a opção ARQUIVO, depois criar um submenu pra escolha*/
 
         /*Imprime a string referente a opção do menu*/
         puts(string->menu[i]);
@@ -251,15 +260,36 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                                 case 0:
                                 {
                                     /*Chama função para abrir o submenu arquivo*/
-                                    Submenu_Arquivo(string);
+                                    Submenu_Arquivo(string, op);
                                     break;
                                 }
+
+                                /*Caso para alinhar o texto*/
+                                case 1:
+                                {
+                                    break;
+                                }
+
                                 /*Usuario escolheu modificar a quantidade de caracteres do x para o TAB*/
                                 case 2:
                                 {
 
                                     /*Chama a função para pegar o numero dado pelo usuario*/
                                     Caractere_X(leitura, op);
+                                    break;
+                                }
+
+                                /*Caso para trocar a cor de fundo*/
+                                case 3:
+                                {
+                                    Submenu_background(string, op);
+                                    break;
+                                }
+
+                                /*Caso para trocar a cor de texto*/
+                                case 4:
+                                {
+                                    Submenu_cor_texto(string, op);
                                     break;
                                 }
                             }
@@ -291,7 +321,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                             break;
                         }
                         
-                        /*Saida do programa (TEMPORARIO)*/
+                        /*Saida do programa*/
                         case ESC:
                         {
                             op->esc_apertado -= 1;
@@ -346,14 +376,6 @@ int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
     /*Switch para cases de teclas que nao sao de controle*/
     switch(leitura->tecla.teclado.codigo_tecla)
     {
-        case SETA_PARA_BAIXO:
-        {
-            return 1;
-        }
-        case SETA_PARA_CIMA:
-        {
-            return 1;
-        }
         case SETA_PARA_DIREITA:
         {
             return 1;
@@ -386,14 +408,17 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
     int i = 0;
     op->numero_convertido = 0;
     
+    /*Coloca a coordenada da onde deve ser impresso, o caso abaixo da opção do menu principal 'CARACTERE X'*/
+    gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + 1);
+
     /*Loop ate a conversao ser feita corretamente*/
     while(saida)
     {
-            puts("Caractere X: ");
+            printf("Caractere X: ");
             /*Loop para pegar os numeros inseridos pelo usuario*/
             while(1)
             {
-                /*Pega o caractere digitado*/
+                /*Pega o caractere digitado sem aparecer na tela*/
                 leitura->tecla.teclado.codigo_tecla = getch();
 
                 /*Se este caractere é um dígito*/
@@ -421,7 +446,7 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
                 else
                 {
                     /*Caso nao seja um numero o caractere digitado anteriormente*/
-                    puts("Numero invalido!");
+                    printf("Numero invalido!");
                 }
             }
 
@@ -433,19 +458,14 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
 
 
 /*Função para apresentar o submenu quando for apertado na opção arquivo*/
-void Submenu_Arquivo(STRINGS *string)
+void Submenu_Arquivo(STRINGS *string, USUARIO *op)
 {
     /*É criado outro tipo EVENTO para armazenar as teclas da navegação e escolha do submenu arquivo*/
     EVENTO sub_arquivo;
-    COORD Submenu;
     int i;
     int saida = 1;
     int controla_sub = 1;
     int escolha_setas_submenu = 0;
-
-    /*O cursor ja esta localizado abaixo da linha onde é impressa as opções do menu principal, entao pegamos a localização dele para conseguir colocar nossas subopções*/
-    Submenu.X = wherex();
-    Submenu.Y = wherey();
 
     /*Loop pra pegar somente as teclas necessarias*/
     while(saida)
@@ -460,7 +480,7 @@ void Submenu_Arquivo(STRINGS *string)
                 {
                     textcolor(YELLOW);
                 }
-                gotoxy(Submenu.X + 1, Submenu.Y + i);
+                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + i + 1);
                 puts(string->submenu_arquivo[i]);
                 textcolor(LIGHTGRAY);
             }    
@@ -536,4 +556,156 @@ void Submenu_Arquivo(STRINGS *string)
 
 }
 
-/*Fazer os outros submenus, focar nos submenus de CORES*/
+/*Função para imprimir os submenus da opção 'COR FUNDO'*/
+void Submenu_background(STRINGS *string, USUARIO *op)
+{
+    EVENTO sub_cor_fundo;
+    int i = 0;
+    int saida = 1;
+    int controla_sub_cor = 1;
+    int escolhas_setas_background = 0;
+
+    /*Pega os eventos do teclado para navegar entre as opções do menu*/
+    while(saida)
+    {  
+        if(controla_sub_cor)
+        {
+            /*Imprime as 16 cores do submenu*/
+            for(i = 0; i <= 16; i++)
+            {
+                if(i == escolhas_setas_background)
+                {
+                    textcolor(YELLOW);
+                }
+                /*Imprime as opções do submenu no devido lugar graças a coordenada que foi pega na função onde imprime as opções principais do menu*/
+                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + i + 1);
+                puts(string->submenu_cores[i]);
+                textcolor(LIGHTGRAY);
+            }
+            controla_sub_cor = 0;
+        }
+
+        /*Pega os eventos do teclado*/
+        sub_cor_fundo = Evento();
+        
+        if(sub_cor_fundo.tipo_evento & KEY_EVENT)
+        {
+            if(sub_cor_fundo.teclado.status_tecla == LIBERADA)
+            {
+                switch(sub_cor_fundo.teclado.codigo_tecla)
+                {
+                    /*Navegação no menu cores*/
+                    case SETA_PARA_CIMA:
+                    {
+                        if(escolhas_setas_background > 0 && escolhas_setas_background <= 16)
+                        {
+                            escolhas_setas_background -= 1;
+                            controla_sub_cor = 1;
+                        }
+                        break;
+                    }
+
+                    case SETA_PARA_BAIXO:
+                    {
+                        if(escolhas_setas_background >= 0 && escolhas_setas_background < 16)
+                        {
+                            escolhas_setas_background += 1;
+                            controla_sub_cor = 1;
+                        }
+                        break;
+                    }
+
+                    case ESC:
+                    {
+                        saida = 0;
+                        break;
+                    }
+
+                    /*Ao apertar enter ele sai do loop e volta a ler o teclado novamente*/
+                    case ENTER:
+                    {
+                        string->cores_background = escolhas_setas_background;
+                        saida = 0;
+                        break;
+                    }
+                }
+            }   
+        }
+    }
+}
+
+
+/*Muda a cor do texto de fundo*/
+void Submenu_cor_texto(STRINGS *string, USUARIO *op)
+{
+    EVENTO cor_texto;
+    int i = 0;
+    int saida = 1;
+    int controla_sub_cor_texto = 1;
+    int escolhas_setas_cor_texto = 0;
+
+    /*Loop*/
+    while(saida)
+    {
+        if(controla_sub_cor_texto)
+        {
+            for(i = 0; i <= 16; i++)
+            {
+                if(i == escolhas_setas_cor_texto)
+                {
+                    textcolor(YELLOW);
+                }
+                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + i + 1);
+                puts(string->submenu_cores[i]);
+                textcolor(LIGHTGRAY);
+            }
+            controla_sub_cor_texto = 0;
+        }
+
+        /*Pega os eventos da teclado*/
+        cor_texto = Evento();
+        if(cor_texto.tipo_evento & KEY_EVENT)
+        {
+            /*verifica a liberação da tecla*/
+            if(cor_texto.teclado.status_tecla == LIBERADA)
+            {
+                switch(cor_texto.teclado.codigo_tecla)
+                {
+                    case SETA_PARA_CIMA:
+                    {
+                        if(escolhas_setas_cor_texto > 0 && escolhas_setas_cor_texto <= 16)
+                        {
+                            escolhas_setas_cor_texto -= 1;
+                            controla_sub_cor_texto = 1;
+                        }
+                        break;
+                    }
+
+                    case SETA_PARA_BAIXO:
+                    {
+                        if(escolhas_setas_cor_texto >= 0 && escolhas_setas_cor_texto < 16)
+                        {
+                            escolhas_setas_cor_texto += 1;
+                            controla_sub_cor_texto = 1;
+                        }
+                        break;
+                    }
+                    
+                    /*Saida do programa*/
+                    case ESC:
+                    {
+                        saida = 0;
+                        break;
+                    }
+
+                    /*Escolheu tal cor*/
+                    case ENTER:
+                    {
+                        saida = 0;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
