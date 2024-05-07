@@ -571,7 +571,7 @@ void Submenu_background(STRINGS *string, USUARIO *op)
         if(controla_sub_cor)
         {
             /*Imprime as 16 cores do submenu*/
-            for(i = 0; i <= 16; i++)
+            for(i = 0; i < 16; i++)
             {
                 if(i == escolhas_setas_background)
                 {
@@ -597,7 +597,7 @@ void Submenu_background(STRINGS *string, USUARIO *op)
                     /*Navegação no menu cores*/
                     case SETA_PARA_CIMA:
                     {
-                        if(escolhas_setas_background > 0 && escolhas_setas_background <= 16)
+                        if(escolhas_setas_background > 0 && escolhas_setas_background < 16)
                         {
                             escolhas_setas_background -= 1;
                             controla_sub_cor = 1;
@@ -649,7 +649,7 @@ void Submenu_cor_texto(STRINGS *string, USUARIO *op)
     {
         if(controla_sub_cor_texto)
         {
-            for(i = 0; i <= 16; i++)
+            for(i = 0; i < 16; i++)
             {
                 if(i == escolhas_setas_cor_texto)
                 {
@@ -673,7 +673,7 @@ void Submenu_cor_texto(STRINGS *string, USUARIO *op)
                 {
                     case SETA_PARA_CIMA:
                     {
-                        if(escolhas_setas_cor_texto > 0 && escolhas_setas_cor_texto <= 16)
+                        if(escolhas_setas_cor_texto > 0 && escolhas_setas_cor_texto < 16)
                         {
                             escolhas_setas_cor_texto -= 1;
                             controla_sub_cor_texto = 1;
