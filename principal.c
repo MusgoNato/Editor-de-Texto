@@ -64,8 +64,9 @@ int main(int argc, char *argv[])
     janela.coordenadas_janela.X = 1;
     janela.coordenadas_janela.Y = 1;
 
-    /*A cor de fundo ja começa com preto por definição*/
-    string.cores_background = 0;
+    /*A cor de fundo ja começa com preto por definição e a cor de texto padrão para os caracteres*/
+    string.cores_background = BLACK;
+    string.cores_texto = LIGHTGRAY;
 
     /*Silenciar warnings*/
     argc = argc;
@@ -88,8 +89,11 @@ int main(int argc, char *argv[])
     {  
         if(op.controla_evento)
         {   
-            /*Tenho que dar algum jeito para aparecer as cores de forma correta ao apertar o ENTER*******/
+            /*Trocar a cor do fundo*/
             textbackground(string.cores_background);
+
+            /*Trocar a cor do texto*/            
+            textcolor(string.cores_texto);
 
             /*Função que declara e colocar as opções do menu*/
             Imprime_op_Menu(&janela, &string, &op, letras);

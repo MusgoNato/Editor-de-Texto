@@ -211,7 +211,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *let
         }
         
         /*Após imprimir na tela a opção com a cor de navegação padrao do menu, volta-se a cor original do prompt pra nao colorir toda a tela*/
-        textcolor(LIGHTGRAY);
+        textcolor(string->cores_texto);
 
         /*O tamanho da opcao armazena o tamanho da string do menu e o soma com a quantidade de espaçamento declarado fixo,
         isso faz com que haja um espaçamento entre as opções do menu independente do tamanho da string */
@@ -482,7 +482,7 @@ void Submenu_Arquivo(STRINGS *string, USUARIO *op)
                 }
                 gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + i + 1);
                 puts(string->submenu_arquivo[i]);
-                textcolor(LIGHTGRAY);
+                textcolor(string->cores_texto);
             }    
             /*Só é necessario imprimir uma 1° vez, caso o usuario pressione as teclas de navegação, ai a variavel volta com seu valor 1, caso nao continua zerado*/
             controla_sub = 0;
@@ -546,6 +546,12 @@ void Submenu_Arquivo(STRINGS *string, USUARIO *op)
                                 controla_sub = 0;
                                 break;
                             }
+
+                            /*Usuario optou pra salvar o arquivo aberto*/
+                            case 1:
+                            {
+                                break;
+                            }
                         }
                         break;
                     }
@@ -580,7 +586,7 @@ void Submenu_background(STRINGS *string, USUARIO *op)
                 /*Imprime as opções do submenu no devido lugar graças a coordenada que foi pega na função onde imprime as opções principais do menu*/
                 gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + i + 1);
                 puts(string->submenu_cores[i]);
-                textcolor(LIGHTGRAY);
+                textcolor(string->cores_texto);
             }
             controla_sub_cor = 0;
         }
@@ -607,7 +613,7 @@ void Submenu_background(STRINGS *string, USUARIO *op)
 
                     case SETA_PARA_BAIXO:
                     {
-                        if(escolhas_setas_background >= 0 && escolhas_setas_background < 16)
+                        if(escolhas_setas_background >= 0 && escolhas_setas_background < 15)
                         {
                             escolhas_setas_background += 1;
                             controla_sub_cor = 1;
@@ -657,7 +663,7 @@ void Submenu_cor_texto(STRINGS *string, USUARIO *op)
                 }
                 gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + i + 1);
                 puts(string->submenu_cores[i]);
-                textcolor(LIGHTGRAY);
+                textcolor(string->cores_texto);
             }
             controla_sub_cor_texto = 0;
         }
@@ -671,6 +677,7 @@ void Submenu_cor_texto(STRINGS *string, USUARIO *op)
             {
                 switch(cor_texto.teclado.codigo_tecla)
                 {
+                    /*Navegação do submenu de troca de cor do texto*/
                     case SETA_PARA_CIMA:
                     {
                         if(escolhas_setas_cor_texto > 0 && escolhas_setas_cor_texto < 16)
@@ -683,7 +690,7 @@ void Submenu_cor_texto(STRINGS *string, USUARIO *op)
 
                     case SETA_PARA_BAIXO:
                     {
-                        if(escolhas_setas_cor_texto >= 0 && escolhas_setas_cor_texto < 16)
+                        if(escolhas_setas_cor_texto >= 0 && escolhas_setas_cor_texto < 15)
                         {
                             escolhas_setas_cor_texto += 1;
                             controla_sub_cor_texto = 1;
@@ -701,6 +708,7 @@ void Submenu_cor_texto(STRINGS *string, USUARIO *op)
                     /*Escolheu tal cor*/
                     case ENTER:
                     {
+                        string->cores_texto = escolhas_setas_cor_texto;
                         saida = 0;
                         break;
                     }
