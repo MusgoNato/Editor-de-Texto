@@ -52,6 +52,7 @@ typedef struct _USUARIO
     int modo_teclas_especiais;
     int modo_leitura_dados;
     int numero_convertido;
+    int imprime_janela_cor_diferente;
     COLORS cor_atalho;
     COORD coordenadas_submenus;
 }USUARIO;

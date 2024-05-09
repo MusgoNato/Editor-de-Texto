@@ -106,14 +106,14 @@ void Desenha_Janela_Menu(TAM_JANELA *janela)
     for(i = 0; i < janela->largura; i++)
     {
         gotoxy(janela->coordenadas_janela.X + i, janela->coordenadas_janela.Y);
-        putchar('=');
+        printf("=");
     }
 
     /*Coluna esquerda*/
     for(i = 0; i < janela->altura; i++)
     {
         gotoxy(janela->coordenadas_janela.X, janela->coordenadas_janela.Y + i);
-        putchar('|');
+        printf("|");
     }
 
     /*Linha inferior*/
@@ -122,7 +122,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela)
         /*Necessário o incremento do i em 1, para nao borrar o '|' da coluna esquerda,
         há de se decrementar a janela->altura pois o printf da um quebra linha, para isso imprimir o caractere '=' uma linha depois, se decrementa o y*/
         gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + janela->altura - 1);
-        putchar('=');
+        printf("=");
     }
 
     /*Coluna Direita*/
@@ -131,7 +131,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela)
         /*X recebe o valor da largura, assim eu tenho a coordenada do fim da linha superior, feito isso, somente incrementar o y até a altura
         definida*/
         gotoxy(janela->coordenadas_janela.X + janela->largura, janela->coordenadas_janela.Y + i);
-        putchar('|');
+        printf("|");
     }
 
     /*Linha inferior a linha superior*/
@@ -141,7 +141,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela)
         /*Dividindo a largura e altura e, somando com a coordenadas_Janela.Y, tenho o lugar para imprimir a linha inferior a superior,
         somente é necessário incrementar o x, x + 1 pois ele 'come' a coluna da esquerda, para ajustar incrementei em +1 e decrementei a largura na condição de parada*/
         gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + janela->largura/janela->altura);
-        putchar('=');
+        printf("=");
     }
     
 }
@@ -184,7 +184,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *let
             op->coordenadas_submenus.X = wherex();
             op->coordenadas_submenus.Y = wherey();
 
-            /*Cor para somente para simular uma navegação entre as opções*/
+            /*Cor para somente simular uma navegação entre as opções*/
             textcolor(YELLOW);
         }
 
@@ -251,7 +251,6 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                         /*Seleciona a opção do menu principal*/
                         case ENTER:
                         {
-                            op->controla_evento = 0;
                            
                             /*De acordo com a escolha do usuario, uma das opções sera selecionada*/
                             switch(op->escolha_do_usuario)
@@ -267,6 +266,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                                 /*Caso para alinhar o texto*/
                                 case 1:
                                 {
+                                    
                                     break;
                                 }
 
@@ -282,6 +282,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                                 /*Caso para trocar a cor de fundo*/
                                 case 3:
                                 {
+                                    /*Chama a função para o submenu de cor de fundo*/
                                     Submenu_background(string, op);
                                     break;
                                 }
@@ -289,6 +290,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                                 /*Caso para trocar a cor de texto*/
                                 case 4:
                                 {
+                                    /*Chama a função para o submenu de cor de texto*/
                                     Submenu_cor_texto(string, op);
                                     break;
                                 }
@@ -342,11 +344,51 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                         /*switch para a outra tecla após o ALT_ESQUERDO*/
                         switch(leitura->tecla.teclado.codigo_tecla)
                         {
-                            
-                            /*Teclas de atalho somente quando apertar que vou a algum lugar*/
+                            /*Os gotoxy() são para setar a coordenada correspondente ao lugar aonde será impresso o submenu de cada opção do menu principal*/
+                            /*Teclas de atalho para chamada das opções do menu principal*/
+                            /*Atalho para opção 'ARQUIVO'*/
                             case 'A':
                             {
-                                gotoxy(2, 30);
+                                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y);
+
+                                /*Chama a função para a abertura do arquivo*/
+                                Submenu_Arquivo(string, op);
+                                break;
+                            }
+                            
+                            /*Atalho para opção 'ALINHAMENTO'*/
+                            case 'L':
+                            {
+                                break;
+                            }
+
+                            /*Atalho para opção 'ALTERAR X'*/
+                            case 'X':
+                            {
+                                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y);
+
+                                /*Chama a função para o caractere TAB*/
+                                Caractere_X(leitura, op);
+                                break;
+                            }
+
+                            /*Atalho para opção 'COR FUNDO'*/
+                            case 'F':
+                            {
+                                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y);
+
+                                /*Chamada da função para trocar a cor de fundo*/
+                                Submenu_background(string, op);
+                                break;
+                            }
+
+                            /*Atalho para opção 'COR TEXTO'*/
+                            case 'T':
+                            {
+                                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y);
+
+                                /*Chamada para a função que troca a cor de texto*/
+                                Submenu_cor_texto(string, op);
                                 break;
                             }
                         }
@@ -570,7 +612,7 @@ void Submenu_background(STRINGS *string, USUARIO *op)
     int saida = 1;
     int controla_sub_cor = 1;
     int escolhas_setas_background = 0;
-
+    
     /*Pega os eventos do teclado para navegar entre as opções do menu*/
     while(saida)
     {  
@@ -600,7 +642,7 @@ void Submenu_background(STRINGS *string, USUARIO *op)
             {
                 switch(sub_cor_fundo.teclado.codigo_tecla)
                 {
-                    /*Navegação no menu cores*/
+                    /*Navegação no menu cores de fundo*/
                     case SETA_PARA_CIMA:
                     {
                         if(escolhas_setas_background > 0 && escolhas_setas_background < 16)
@@ -631,6 +673,7 @@ void Submenu_background(STRINGS *string, USUARIO *op)
                     case ENTER:
                     {
                         string->cores_background = escolhas_setas_background;
+                        op->imprime_janela_cor_diferente = 1;
                         saida = 0;
                         break;
                     }
@@ -709,6 +752,7 @@ void Submenu_cor_texto(STRINGS *string, USUARIO *op)
                     case ENTER:
                     {
                         string->cores_texto = escolhas_setas_cor_texto;
+                        op->imprime_janela_cor_diferente = 1;
                         saida = 0;
                         break;
                     }

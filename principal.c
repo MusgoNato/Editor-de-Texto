@@ -56,6 +56,9 @@ int main(int argc, char *argv[])
 
     op.esc_apertado = 1;
 
+    /*Precisa imprimir ao menos 1 vez*/
+    op.imprime_janela_cor_diferente = 1;
+
     /*Definindo a altura e largura da janela*/
     janela.largura = 160;
     janela.altura = 40;
@@ -81,20 +84,29 @@ int main(int argc, char *argv[])
     /*Coloca a 'opções' em uma matriz de caractere 'menu' para ser usada em outra função adiante*/
     Copiar_caracteres_pra_matrizes(&string, opcoes, submenu_op_arquivo, submenu_op_cor);
     
-    /*Chamada para desenhar minha janela para meu menu*/
-    Desenha_Janela_Menu(&janela);
+    
 
     /*Loop infinito*/
     while(op.esc_apertado)
-    {  
-        if(op.controla_evento)
-        {   
+    {
+        /*Imprime as janelas e as cores de fundo e de texto respectiva a qual foi escolhida*/
+        if(op.imprime_janela_cor_diferente)
+        {
+
             /*Trocar a cor do fundo*/
             textbackground(string.cores_background);
 
             /*Trocar a cor do texto*/            
             textcolor(string.cores_texto);
 
+            /*Chamada para desenhar minha janela para meu menu principal*/
+            Desenha_Janela_Menu(&janela);
+            
+            op.imprime_janela_cor_diferente = 0;
+        }
+
+        if(op.controla_evento || op.imprime_janela_cor_diferente)
+        {   
             /*Função que declara e colocar as opções do menu*/
             Imprime_op_Menu(&janela, &string, &op, letras);
 
