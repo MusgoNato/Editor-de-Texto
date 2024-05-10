@@ -17,12 +17,14 @@ void Abre_Arquivo(STRINGS *string)
     char arquivo;
     int i = 0;
 
-    /*Insirir o arquivo desejado para abertura*/
+    /*Inserir o arquivo desejado para abertura*/
     printf("Insira o arquivo que deseja abrir: ");
     while(1)
     {
+        /*Verifica se foi um pressionamento do teclado*/
         if(kbhit())
         {
+            /*Imprime na tela o caractere digitado*/
             arquivo = getche();
             if(arquivo == ESC)
             {
@@ -36,6 +38,7 @@ void Abre_Arquivo(STRINGS *string)
             }
             else
             {
+                /*Caracteres imprimiveis na tela*/
                 if(arquivo >= 33 && arquivo <= 126)
                 {
                     string->arquivo_txt[i] = arquivo;

@@ -5,6 +5,7 @@
         "string.h": "c",
         "funcoes.h": "c",
         "stdlib.h": "c",
-        "console_v1.5.4.h": "c"
+        "console_v1.5.4.h": "c",
+        "console_v1.5.5.h": "c"
     }
 }

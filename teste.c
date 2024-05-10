@@ -74,3 +74,30 @@ int main(int argc, char *argv[]) {
 
 
 
+/*Referente a função Abre arquivo*/
+
+/*Verificação do arquivo para o modo leitura*/
+    arquivo_origem = fopen(string->arquivo_txt, "r");
+
+    /*Validação da abertura*/
+    if(arquivo_origem != NULL)
+    {
+        letra_arquivo = fgetc(arquivo_origem);
+
+        /*Loop até o fim do arquivo aberto*/
+        while(letra_arquivo != EOF)
+        {
+            /*Pega cada letra do meu arquivo de origem para impressão na tela*/
+            putchar(letra_arquivo);
+            letra_arquivo = fgetc(arquivo_origem);
+        }
+        
+    }
+    else
+    {
+        puts("Abertura do arquivo deu errado!");
+    }
+
+    /*Fecha o arquivo*/
+    fclose(arquivo_origem);
+

@@ -92,7 +92,6 @@ int main(int argc, char *argv[])
         /*Imprime as janelas e as cores de fundo e de texto respectiva a qual foi escolhida*/
         if(op.imprime_janela_cor_diferente)
         {
-
             /*Trocar a cor do fundo*/
             textbackground(string.cores_background);
 
@@ -105,6 +104,7 @@ int main(int argc, char *argv[])
             op.imprime_janela_cor_diferente = 0;
         }
 
+        /*Caso a janela tenha que ser impressa ou tenha uma mudança de cor*/
         if(op.controla_evento || op.imprime_janela_cor_diferente)
         {   
             /*Função que declara e colocar as opções do menu*/
