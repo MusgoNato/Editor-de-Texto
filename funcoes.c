@@ -43,6 +43,7 @@ void Abre_Arquivo(STRINGS *string)
                     if(arquivo.teclado.key_code == ENTER)
                     {
                         string->arquivo_txt[i] = '\0';
+                        printf("\n");
                         break;
                     }
 
@@ -63,7 +64,7 @@ void Abre_Arquivo(STRINGS *string)
                     else
                     {
                         /*Intervalo de caracteres imprimíveis na tela*/
-                        if(arquivo.teclado.key_code >= 33 && arquivo.teclado.key_code <= 254)
+                        if(arquivo.teclado.key_code >= 32 && arquivo.teclado.key_code <= 254)
                         {
                             string->arquivo_txt[i] = arquivo.teclado.ascii_code;
                             printf("%c", string->arquivo_txt[i]);
@@ -78,7 +79,7 @@ void Abre_Arquivo(STRINGS *string)
     }
 
     /*Verificação do arquivo para o modo leitura*/
-    arquivo_origem = fopen(string->arquivo_txt, "r");
+    arquivo_origem = fopen(string->arquivo_txt, "r+");
 
     /*Validação da abertura*/
     if(arquivo_origem != NULL)
@@ -89,19 +90,19 @@ void Abre_Arquivo(STRINGS *string)
         while(letra_arquivo != EOF)
         {
             /*Pega cada letra do meu arquivo de origem para impressão na tela*/
-            putchar(letra_arquivo);
+            printf("%c", letra_arquivo);
             letra_arquivo = fgetc(arquivo_origem);
         }
-        
+
     }
     else
     {
-        puts("Abertura do arquivo deu errado!");
+        printf("Abertura do arquivo deu errado!");
     }
 
-
-    /*Aqui eu tenho que criar alguma lógica para mexer no arquivo, enquanto ele esta aberto, criar alguma função que entra no modo de 
-    inserção e edição, fazer tipo a função de leitura de teclado, mas somente pra mexer no arquivo*/
+    /*Aqui quero chamar uma função para escrever dentro do arquivo, porem que isso apareça na tela do prompt eu escrevendo e modificando o texto
+    pois vou ter uma função que irá salvar o arquivo depois*/
+    
 
     /*Fecha o arquivo*/
     fclose(arquivo_origem);
@@ -182,6 +183,7 @@ void Desenha_Janela_Menu(TAM_JANELA *janela)
 
 
 
+
 /*Função que imprime as opções de menu na tela*/
 void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *letras)
 {
@@ -223,7 +225,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *let
         }
 
         /*Imprime a string referente a opção do menu*/
-        puts(string->menu[i]);
+        printf("%s", string->menu[i]);
 
         
         /*Colore a letra quando apertado o 'ALT_ESQUERDO'*/
@@ -240,7 +242,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *let
 
             /*Modifica a cor do texto para demostrar o destaque da letra de atalho*/
             textcolor(op->cor_atalho);
-            putchar(letras[i]);
+            printf("%c", letras[i]);
            
         }
         
@@ -508,7 +510,7 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
                     numero[i] = leitura->tecla.teclado.key_code;
 
                     /*Impresso na tela para o usuário*/
-                    putchar(numero[i]);
+                    printf("%c", numero[i]);
                     i++;
 
                     /*Ao chegar no fim da string, é colocado o '\0'*/
@@ -561,7 +563,7 @@ void Submenu_Arquivo(STRINGS *string, USUARIO *op)
                     textcolor(YELLOW);
                 }
                 gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + i + 1);
-                puts(string->submenu_arquivo[i]);
+                printf("%s", string->submenu_arquivo[i]);
                 textcolor(string->cores_texto);
             }    
             /*Só é necessario imprimir uma 1° vez, caso o usuario pressione as teclas de navegação, ai a variavel volta com seu valor 1, caso nao continua zerado*/
@@ -665,7 +667,7 @@ void Submenu_background(STRINGS *string, USUARIO *op)
                 }
                 /*Imprime as opções do submenu no devido lugar graças a coordenada que foi pega na função onde imprime as opções principais do menu*/
                 gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + i + 1);
-                puts(string->submenu_cores[i]);
+                printf("%s", string->submenu_cores[i]);
                 textcolor(string->cores_texto);
             }
             controla_sub_cor = 0;
@@ -743,7 +745,7 @@ void Submenu_cor_texto(STRINGS *string, USUARIO *op)
                     textcolor(YELLOW);
                 }
                 gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + i + 1);
-                puts(string->submenu_cores[i]);
+                printf("%s", string->submenu_cores[i]);
                 textcolor(string->cores_texto);
             }
             controla_sub_cor_texto = 0;

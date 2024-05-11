@@ -25,7 +25,7 @@ int main(int argc, char*argv[])
     int shift_pressed = 0;
     argc = argc;
     argv = argv;
-    SystemParametersInfoA(SPI_SETKEYBOARDSPEED, 0, 0, 0);
+   
     setlocale(LC_ALL, "Portuguese");
     do
     {
@@ -46,29 +46,6 @@ int main(int argc, char*argv[])
                     break;
                 }
 
-                /*Foi pressionado o shift*/
-                if(shift_pressed)
-                {
-                    /*Verifca se liberou o shift*/
-                    if(e.teclado.status_tecla == LIBERADA)
-                    {
-                        arquivo[i] = e.teclado.ascii_code;
-                        
-                        shift_pressed = 0;
-                    }
-    
-                    
-                }
-                else
-                {
-                    
-                    if(e.teclado.key_code >= 33 && e.teclado.key_code <= 254)
-                    {
-                        arquivo[i] = e.teclado.ascii_code;
-                        
-                    }
-                    
-                }
                 
             }
             else
