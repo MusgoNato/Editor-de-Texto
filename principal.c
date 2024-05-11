@@ -6,14 +6,14 @@ RGM: 47159
 Data da última modificação: 23/04/2024*/
 
 /*Copiar e colar no prompt de comando
-gcc principal.c -o editor.exe -Wall -pedantic -Werror -Wextra console_v1.5.4.c conio_v3.2.4.c funcoes.c*/
+gcc principal.c -o editor.exe -Wall -pedantic -Werror -Wextra console_v1.5.5.c conio_v3.2.4.c funcoes.c*/
 
 /*Bibliotecas*/
 # include <stdio.h> /*printf(), scanf()*/
 # include <stdlib.h>
 # include <string.h>
 # include <locale.h> /*setlocale()*/
-# include "console_v1.5.4.h"
+# include "console_v1.5.5.h"
 # include "conio_v3.2.4.h" /*clrscr*/
 # include "funcoes.h" /*Abre_Arquivo(), TAM_NOME_ARQUIVO */
 
@@ -50,10 +50,6 @@ int main(int argc, char *argv[])
     é inicializado com 1 pois preciso que imprima na tela pela 1° vez a janela*/
     op.controla_evento = 1;
 
-    op.modo_leitura_dados = 0;
-
-    op.modo_teclas_especiais = 1;
-
     op.esc_apertado = 1;
 
     /*Precisa imprimir ao menos 1 vez*/
@@ -84,8 +80,6 @@ int main(int argc, char *argv[])
     /*Coloca a 'opções' em uma matriz de caractere 'menu' para ser usada em outra função adiante*/
     Copiar_caracteres_pra_matrizes(&string, opcoes, submenu_op_arquivo, submenu_op_cor);
     
-    
-
     /*Loop infinito*/
     while(op.esc_apertado)
     {

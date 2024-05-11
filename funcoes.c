@@ -4,7 +4,7 @@
 # include <stdio.h> /*FILE, fopen(), printf(), */
 # include <string.h> /*strlen(), strchr()*/
 # include <ctype.h>
-# include "console_v1.5.4.h" /*SETAS_DE_DIREÇÃO*/
+# include "console_v1.5.5.h" /*SETAS_DE_DIREÇÃO*/
 # include "conio_v3.2.4.h" /*gotoxy()*/
 # include "funcoes.h"
 
@@ -13,8 +13,9 @@ void Abre_Arquivo(STRINGS *string)
 {
     /*Cria uma variavel do tipo FILE que sera um ponteiro para o arquivo de origem*/
     FILE *arquivo_origem;
+    EVENTO arquivo;
+    int shift_pressionado = 0;
     char letra_arquivo;
-    char arquivo;
     int i = 0;
 
     /*Inserir o arquivo desejado para abertura*/
@@ -22,32 +23,58 @@ void Abre_Arquivo(STRINGS *string)
     while(1)
     {
         /*Verifica se foi um pressionamento do teclado*/
-        if(kbhit())
+        if(hit(KEYBOARD_HIT))
         {
             /*Imprime na tela o caractere digitado*/
-            arquivo = getche();
-            if(arquivo == ESC)
+            arquivo = Evento();
+            if(arquivo.tipo_evento & KEY_EVENT)
             {
-                /*Caso se arrependa de digitar volta as opções*/
-                break;
-            }
-            if(arquivo == ENTER)
-            {
-                string->arquivo_txt[i] = '\0';
-                break;
-            }
-            else
-            {
-                /*Caracteres imprimiveis na tela*/
-                if(arquivo >= 33 && arquivo <= 126)
+                /*Verifica se a tecla foi liberada*/
+                if(arquivo.teclado.status_tecla == LIBERADA)
                 {
-                    string->arquivo_txt[i] = arquivo;
-                    i++;
+                    /*Caso for um ESC sai do loop e volta ao menu padrão*/
+                    if(arquivo.teclado.key_code == ESC)
+                    {
+                        /*Caso se arrependa de digitar volta as opções*/
+                        break;
+                    }
+
+                    /*Se for um ENTER sai do loop e tente abrir o arquivo*/
+                    if(arquivo.teclado.key_code == ENTER)
+                    {
+                        string->arquivo_txt[i] = '\0';
+                        break;
+                    }
+
+                    /*Quando for pressionado o shift, entra nessa condição pra conseguir colocar o caractere correto dentro da string 'arquivo_txt'*/
+                    if(shift_pressionado)
+                    {
+                        /*Verifca se liberou o shift*/
+                        if(arquivo.teclado.status_tecla == LIBERADA)
+                        {
+                            string->arquivo_txt[i] = arquivo.teclado.ascii_code;
+                            printf("%c", string->arquivo_txt[i]);
+                            i++;
+                            shift_pressionado = 0;
+                        }
+        
+                    }
+                    /*Caso normais de teclas diferentes dos shifts*/
+                    else
+                    {
+                        /*Intervalo de caracteres imprimíveis na tela*/
+                        if(arquivo.teclado.key_code >= 33 && arquivo.teclado.key_code <= 254)
+                        {
+                            string->arquivo_txt[i] = arquivo.teclado.ascii_code;
+                            printf("%c", string->arquivo_txt[i]);
+                            i++;
+                        }
+                        
+                    }
                 }
             }
         }
-        
-        
+                
     }
 
     /*Verificação do arquivo para o modo leitura*/
@@ -71,6 +98,10 @@ void Abre_Arquivo(STRINGS *string)
     {
         puts("Abertura do arquivo deu errado!");
     }
+
+
+    /*Aqui eu tenho que criar alguma lógica para mexer no arquivo, enquanto ele esta aberto, criar alguma função que entra no modo de 
+    inserção e edição, fazer tipo a função de leitura de teclado, mas somente pra mexer no arquivo*/
 
     /*Fecha o arquivo*/
     fclose(arquivo_origem);
@@ -248,7 +279,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                     op->controle_do_alt = 0;
 
                     /*Casos para o menu*/
-                    switch(leitura->tecla.teclado.codigo_tecla)
+                    switch(leitura->tecla.teclado.key_code)
                     {
                         
                         /*Seleciona a opção do menu principal*/
@@ -345,8 +376,12 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                         op->cor_atalho = BLUE;
 
                         /*switch para a outra tecla após o ALT_ESQUERDO*/
-                        switch(leitura->tecla.teclado.codigo_tecla)
+                        switch(leitura->tecla.teclado.key_code)
                         {
+                            /*Uma ideia aqui é criar um vetor de coordenadas, há o erro de ao estar em uma opção, ele nao me redireciona aquela opção,
+                            ao chamar arquivo, estando em altera x, o submenu aparece abaixo de altera x e não abaixo do arquivo, onde é o submenu correspondente*/
+
+
                             /*Os gotoxy() são para setar a coordenada correspondente ao lugar aonde será impresso o submenu de cada opção do menu principal*/
                             /*Teclas de atalho para chamada das opções do menu principal*/
                             /*Atalho para opção 'ARQUIVO'*/
@@ -419,7 +454,7 @@ int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
     }
 
     /*Switch para cases de teclas que nao sao de controle*/
-    switch(leitura->tecla.teclado.codigo_tecla)
+    switch(leitura->tecla.teclado.key_code)
     {
         case SETA_PARA_DIREITA:
         {
@@ -464,13 +499,13 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
             while(1)
             {
                 /*Pega o caractere digitado sem aparecer na tela*/
-                leitura->tecla.teclado.codigo_tecla = getch();
+                leitura->tecla.teclado.key_code = getch();
 
                 /*Se este caractere é um dígito*/
-                if(leitura->tecla.teclado.codigo_tecla >= 48 && leitura->tecla.teclado.codigo_tecla <= 57)
+                if(leitura->tecla.teclado.key_code >= 48 && leitura->tecla.teclado.key_code <= 57)
                 {
                     /*A cada incremento é colocado o caractere na string numero*/
-                    numero[i] = leitura->tecla.teclado.codigo_tecla;
+                    numero[i] = leitura->tecla.teclado.key_code;
 
                     /*Impresso na tela para o usuário*/
                     putchar(numero[i]);
@@ -543,7 +578,7 @@ void Submenu_Arquivo(STRINGS *string, USUARIO *op)
             if(sub_arquivo.teclado.status_tecla == LIBERADA)
             {
                 /*Qual tecla foi apertada*/
-                switch(sub_arquivo.teclado.codigo_tecla)
+                switch(sub_arquivo.teclado.key_code)
                 {
                     /*Navegação do submenu arquivo*/
                     case SETA_PARA_BAIXO:
@@ -643,7 +678,7 @@ void Submenu_background(STRINGS *string, USUARIO *op)
         {
             if(sub_cor_fundo.teclado.status_tecla == LIBERADA)
             {
-                switch(sub_cor_fundo.teclado.codigo_tecla)
+                switch(sub_cor_fundo.teclado.key_code)
                 {
                     /*Navegação no menu cores de fundo*/
                     case SETA_PARA_CIMA:
@@ -721,7 +756,7 @@ void Submenu_cor_texto(STRINGS *string, USUARIO *op)
             /*verifica a liberação da tecla*/
             if(cor_texto.teclado.status_tecla == LIBERADA)
             {
-                switch(cor_texto.teclado.codigo_tecla)
+                switch(cor_texto.teclado.key_code)
                 {
                     /*Navegação do submenu de troca de cor do texto*/
                     case SETA_PARA_CIMA:

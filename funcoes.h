@@ -49,8 +49,6 @@ typedef struct _USUARIO
     int esc_apertado;
     int controla_evento;
     int enter_pressionado;
-    int modo_teclas_especiais;
-    int modo_leitura_dados;
     int numero_convertido;
     int imprime_janela_cor_diferente;
     COLORS cor_atalho;
