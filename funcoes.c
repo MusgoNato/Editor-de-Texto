@@ -39,7 +39,7 @@ void Abre_Arquivo(STRINGS *string)
                         break;
                     }
 
-                    /*Se for um ENTER sai do loop e tente abrir o arquivo*/
+                    /*Se for um ENTER sai do loop e tenta abrir o arquivo*/
                     if(arquivo.teclado.key_code == ENTER)
                     {
                         string->arquivo_txt[i] = '\0';
@@ -94,18 +94,18 @@ void Abre_Arquivo(STRINGS *string)
             letra_arquivo = fgetc(arquivo_origem);
         }
 
+        /*Acima, de acordo com a largura da minha janela que é 160, tenho que fazer um jeito de armazenar as linhas em indices diferentes.
+        assim consigo manipular e escrever dentro*/
+        
     }
     else
     {
         printf("Abertura do arquivo deu errado!");
     }
 
-    /*Aqui quero chamar uma função para escrever dentro do arquivo, porem que isso apareça na tela do prompt eu escrevendo e modificando o texto
-    pois vou ter uma função que irá salvar o arquivo depois*/
-    
-
-    /*Fecha o arquivo*/
+    /*Fecha me arquivo*/
     fclose(arquivo_origem);
+    
 }
 
 /*Converete a string nas suas devidas posições*/

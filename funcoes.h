@@ -26,7 +26,6 @@ typedef struct _STRINGS
 {
     char arquivo_txt[TAM_NOME_ARQUIVO];
     char menu[QTD_STRING][TAM_STRING];
-    char user_digitando[TAM_STRING];
     char submenu_arquivo[2][TAM_STRING];
     char submenu_cores[16][TAM_STRING];
     int controla_sub;
@@ -41,7 +40,7 @@ typedef struct _LE_TECLADO
     
 }LE_TECLADO;
 
-/*Registro para as escolhas do menu que o usuario irá fazer e as cores também*/
+/*Registro para as escolhas do menu que o usuario irá fazer e as cores do atalho também*/
 typedef struct _USUARIO
 {
     int escolha_do_usuario;

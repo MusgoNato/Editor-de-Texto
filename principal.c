@@ -63,10 +63,6 @@ int main(int argc, char *argv[])
     janela.coordenadas_janela.X = 1;
     janela.coordenadas_janela.Y = 1;
 
-    /*A cor de fundo ja começa com preto por definição e a cor de texto padrão para os caracteres*/
-    string.cores_background = BLACK;
-    string.cores_texto = LIGHTGRAY;
-
     /*Silenciar warnings*/
     argc = argc;
     argv = argv;
@@ -79,7 +75,11 @@ int main(int argc, char *argv[])
 
     /*Coloca a 'opções' em uma matriz de caractere 'menu' para ser usada em outra função adiante*/
     Copiar_caracteres_pra_matrizes(&string, opcoes, submenu_op_arquivo, submenu_op_cor);
-    
+
+    /*A cor de fundo ja começa com preto por definição e a cor de texto padrão para os caracteres*/
+    string.cores_texto = LIGHTGRAY;
+    string.cores_background = BLACK;
+        
     /*Loop infinito*/
     while(op.esc_apertado)
     {
