@@ -93,7 +93,7 @@ void Abre_Arquivo(STRINGS *string)
         /*Percorre a quantidade de linhas do meu arquivo*/
         for(string->index_linha_matriz = 0; string->index_linha_matriz < ALTURA; string->index_linha_matriz++)
         {
-            /*Pega cada linha do meu arquivo e coloca*/
+            /*Pega cada linha do meu arquivo*/
             retorno = fgets(string->matriz_de_linhas[string->index_linha_matriz], LARGURA, arquivo_origem);
             
             /*Quando o retorno da string for NULL, significa que chegou no fim do arquivo e sai do loop*/
@@ -109,6 +109,7 @@ void Abre_Arquivo(STRINGS *string)
     }
     else
     {
+        /*Erro na abertura do arquivo*/
         printf("Abertura do arquivo deu errado!");
     }
     
@@ -124,31 +125,19 @@ void Escreve_no_Arquivo(STRINGS *string)
 {
     EVENTO evento_para_escrita;
     int esc_pressionado = 1;
-    int cont_linha, cont_caractere;
-    int tam_string = 0;
-
+    int coloca_caracter_arquivo = 1; 
+    
+    /*Variaveis para imprimir os caracteres na tela*/
+    int i, j;
+    
     /*Variaveis para mover o cursor ao abrir o arquivo*/
     int move_cursor_linha = 0;
     int move_cursor_coluna = 0;
 
-    
     /*Inicio da escrita do arquivo, ou seja, é aqui que obtenho a posição do inicio do arquivo quando é impresso na tela*/
     string->posicao_cursor_escrita.X = wherex();
     string->posicao_cursor_escrita.Y = wherey();
 
-    /*Loop para cada linha do arquivo*/
-    for(cont_linha = 0; cont_linha < string->index_linha_matriz; cont_linha++)
-    {
-        /*A cada iteração pega o tamanho de cada linha da matriz de linhas*/
-        tam_string = strlen(string->matriz_de_linhas[cont_linha]);
-
-        /*Loop para imprimir cada caractere da linha com seu devido tamanho*/
-        for(cont_caractere = 0; cont_caractere < tam_string; cont_caractere++)
-        {
-            /*Imprime cada caractere*/
-            putchar(string->matriz_de_linhas[cont_linha][cont_caractere]);
-        }
-    }
 
     /*Coloca a coordenada no inicio de onde sera impresso o arquivo*/
     gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y);
@@ -156,6 +145,25 @@ void Escreve_no_Arquivo(STRINGS *string)
     /*Loop para pegar os eventos do teclado, no caso os caracteres imprimivei para serem colocado no arquivo*/
     do
     {
+        /*Caso coloque algum tipo de caractere seja colocado no arquivo, entra nessa verificação, ela é verdade somente uma vez para impresão na tela*/
+        if(coloca_caracter_arquivo)
+        {
+            /*Loop para cada linha do arquivo*/
+            for(i = 0; i < string->index_linha_matriz; i++)
+            {
+                /*Guarda em um vetor o tamanho de cada linha lida no arquivo*/
+                string->tamanho_das_linhas[i] = strlen(string->matriz_de_linhas[i]);
+
+                /*Loop para imprimir cada caractere da linha com seu devido tamanho*/
+                for(j = 0; j < string->tamanho_das_linhas[i]; j++)
+                {
+                    /*Imprime cada caractere*/
+                    putchar(string->matriz_de_linhas[i][j]);
+                }
+            }
+            coloca_caracter_arquivo = 0;
+        }
+
         /*Pega uma ação do teclado*/
         if(hit(KEYBOARD_HIT))
         {
@@ -174,12 +182,13 @@ void Escreve_no_Arquivo(STRINGS *string)
                         /*Navegação no arquivo usando o cursor*/
                         case SETA_PARA_DIREITA:
                         {
-                            /*Verificação para não ultrapassar o fim da linha, ao estar dentro do intervalo é incrementado o cursor*/
-                            if(string->matriz_de_linhas[move_cursor_coluna][move_cursor_linha] != '\n')
+                            /*Verificação para não ultrapassar o fim da linha, ao estar dentro do intervalo é incrementado o cursor, o '\0' é justamente para o fim da ultima linha, ja que ela nao contem '\n'*/
+                            if(string->matriz_de_linhas[move_cursor_coluna][move_cursor_linha] != '\n' && string->matriz_de_linhas[move_cursor_coluna][move_cursor_linha] != '\0')
                             {
                                 /*Posiciona o cursor*/
                                 move_cursor_linha += 1;
-                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_linha, string->posicao_cursor_escrita.Y);
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_linha, string->posicao_cursor_escrita.Y + move_cursor_coluna);
+                                
                             }
                             break;
                         }
@@ -191,17 +200,18 @@ void Escreve_no_Arquivo(STRINGS *string)
                             {
                                 /*Posiciona o meu cursor quando ando para atrás*/
                                 move_cursor_linha -= 1;
-                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_linha, string->posicao_cursor_escrita.Y);
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_linha, string->posicao_cursor_escrita.Y + move_cursor_coluna);
                             }
                             break;
                         }
-
-
-                        /*Corrigir o erro de nao estar dando quando vou para baixo a seta e depois vou a direita, deve ir normalmente*/
+                        
                         case SETA_PARA_BAIXO:
                         {
+                            /*Verifica o tamanho das linhas do meu arquivo, caso chegue na linha final não consigo ultrapassa-la*/
                             if(move_cursor_coluna < string->index_linha_matriz - 1)
                             {
+                                /*A linha zera para que eu possa andar pelas linhas até o '\n' dela*/
+                                move_cursor_linha = 0;
                                 move_cursor_coluna += 1;
                                 gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y + move_cursor_coluna);
                             }
@@ -209,7 +219,33 @@ void Escreve_no_Arquivo(STRINGS *string)
                             break;
                         }
 
+                        case SETA_PARA_CIMA:
+                        {
+                            /*Ao subir com o cursor nao pode ultrapassar a 1° linha*/
+                            if(move_cursor_coluna >= string->posicao_cursor_escrita.X)
+                            {
+                                /*Zera o 'move_cursor_linha' para que eu possa andar pela outra linha normalmente*/
+                                move_cursor_linha = 0;
+                                move_cursor_coluna -= 1;
+                                gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y + move_cursor_coluna);
+                            }
+                    
+                            break;
+                        }
 
+                        /*Sobrescreve caracteres*/
+                        case INSERT:
+                        {
+                            
+                            break;
+                        }
+
+
+                        case SHIFT_PRESSED:
+                        {
+                        
+                            break;
+                        }
 
                         /*Sai do loop*/
                         case ESC:

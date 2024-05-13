@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
     /*Inicialização da quantidade de linhas no arquivo*/
     string.index_linha_matriz = 0;
 
+
     /*Silenciar warnings*/
     argc = argc;
     argv = argv;

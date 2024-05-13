@@ -30,8 +30,10 @@ typedef struct _STRINGS
     char matriz_de_linhas[ALTURA][LARGURA];
     char submenu_arquivo[2][TAM_STRING];
     char submenu_cores[16][TAM_STRING];
+    int modo_insercao;
     int controla_sub;
     int index_linha_matriz;
+    int tamanho_das_linhas[LARGURA];
     COORD posicao_cursor_escrita;
     COLORS cores_background;
     COLORS cores_texto;
