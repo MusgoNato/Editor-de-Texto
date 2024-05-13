@@ -38,8 +38,6 @@ int main(int argc, char *argv[])
     /*Declaração das opções do submenu troca cores do texto*/
     char *submenu_op_cor[16] = {"BLACK", "BLUE", "GREEN", "CYAN", "RED", "MAGENTA", "BROWN", "LIGHTGRAY", "DARKGRAY", "LIGHTBLUE", "LIGHTGREEN", "LIGHTCYAN", "LIGHTRED", "LIGHTMAGENTA", "YELLOW", "WHITE"};
 
-    op.enter_pressionado = -1;
-
     /*Declaração da opção do usuário*/
     op.escolha_do_usuario = 0;
 
@@ -50,24 +48,25 @@ int main(int argc, char *argv[])
     é inicializado com 1 pois preciso que imprima na tela pela 1° vez a janela*/
     op.controla_evento = 1;
 
+    /*Variavel para saida do loop principal da main*/
     op.esc_apertado = 1;
 
     /*Precisa imprimir ao menos 1 vez*/
     op.imprime_janela_cor_diferente = 1;
 
-    /*Definindo a altura e largura da janela*/
-    janela.largura = 160;
-    janela.altura = 40;
-
     /*Coordenadas da Janela, x e y, para eu poder imprimi-la na tela*/
     janela.coordenadas_janela.X = 1;
     janela.coordenadas_janela.Y = 1;
+
+    /*Inicialização da quantidade de linhas no arquivo*/
+    string.index_linha_matriz = 0;
 
     /*Silenciar warnings*/
     argc = argc;
     argv = argv;
 
-    /*Mudança para o idioma português*/
+    /*Mudança para o idioma nativo do Sistema operacional, devido a compatibilidade, manteve-se " " pois pode mudar de sistema para sistema,
+    o "Portuguese" pode ser "PT-BR", etc*/
     setlocale(LC_ALL, " ");
 
     /*Limpa a tela*/
@@ -104,6 +103,7 @@ int main(int argc, char *argv[])
             /*Função que declara e colocar as opções do menu*/
             Imprime_op_Menu(&janela, &string, &op, letras);
 
+            /*Reseta a variavel a 0 para controle do menu principal*/
             op.controla_evento = 0;
         }
         

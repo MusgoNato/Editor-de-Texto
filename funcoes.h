@@ -8,16 +8,17 @@
 # define TAM_STRING 50
 # define ESPACAMENTO 10
 
+/*Tamanho da minha janela*/
+# define LARGURA 160
+# define ALTURA 40
+
 /*Estruturas*/
 
-/*Registro que armazena o tamanho da minha janela com base na altura e largura*/
+/*Registro que armazena a coordenada da minha janela*/
 typedef struct _TAM_JANELA
 {
     /*Coordenadas da janela*/
     COORD coordenadas_janela;
-
-    /*Largura e altura da janela*/
-    int largura, altura;
 
 }TAM_JANELA;
 
@@ -26,9 +27,12 @@ typedef struct _STRINGS
 {
     char arquivo_txt[TAM_NOME_ARQUIVO];
     char menu[QTD_STRING][TAM_STRING];
+    char matriz_de_linhas[ALTURA][LARGURA];
     char submenu_arquivo[2][TAM_STRING];
     char submenu_cores[16][TAM_STRING];
     int controla_sub;
+    int index_linha_matriz;
+    COORD posicao_cursor_escrita;
     COLORS cores_background;
     COLORS cores_texto;
 }STRINGS;
@@ -90,5 +94,7 @@ void Submenu_background(STRINGS *, USUARIO *);
 /*Função que muda a cor de texto*/
 void Submenu_cor_texto(STRINGS *, USUARIO *);
 
+/*Função que escreve caracteres do usuario no arquivo*/
+void Escreve_no_Arquivo(STRINGS *);
 
 

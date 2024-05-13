@@ -15,8 +15,9 @@ void Abre_Arquivo(STRINGS *string)
     FILE *arquivo_origem;
     EVENTO arquivo;
     int shift_pressionado = 0;
-    char letra_arquivo;
     int i = 0;
+    char *retorno;
+
 
     /*Inserir o arquivo desejado para abertura*/
     printf("Insira o arquivo que deseja abrir: ");
@@ -53,9 +54,12 @@ void Abre_Arquivo(STRINGS *string)
                         /*Verifca se liberou o shift*/
                         if(arquivo.teclado.status_tecla == LIBERADA)
                         {
+                            /*A string que representa meu arquivo recebe o caractere proveniente do teclado e o imprime na tela*/
                             string->arquivo_txt[i] = arquivo.teclado.ascii_code;
                             printf("%c", string->arquivo_txt[i]);
                             i++;
+
+                            /*Reseta a variavel para controle do shift se esta ou nao pressionado*/
                             shift_pressionado = 0;
                         }
         
@@ -66,6 +70,8 @@ void Abre_Arquivo(STRINGS *string)
                         /*Intervalo de caracteres imprimíveis na tela*/
                         if(arquivo.teclado.key_code >= 32 && arquivo.teclado.key_code <= 254)
                         {
+                            /*A string que representa o arquivo que sera aberto recebe o caractere dentro do intervalo da condição
+                            e imprime-o na tela*/
                             string->arquivo_txt[i] = arquivo.teclado.ascii_code;
                             printf("%c", string->arquivo_txt[i]);
                             i++;
@@ -84,29 +90,141 @@ void Abre_Arquivo(STRINGS *string)
     /*Validação da abertura*/
     if(arquivo_origem != NULL)
     {
-        letra_arquivo = fgetc(arquivo_origem);
-
-        /*Loop até o fim do arquivo aberto*/
-        while(letra_arquivo != EOF)
+        /*Percorre a quantidade de linhas do meu arquivo*/
+        for(string->index_linha_matriz = 0; string->index_linha_matriz < ALTURA; string->index_linha_matriz++)
         {
-            /*Pega cada letra do meu arquivo de origem para impressão na tela*/
-            printf("%c", letra_arquivo);
-            letra_arquivo = fgetc(arquivo_origem);
-        }
+            /*Pega cada linha do meu arquivo e coloca*/
+            retorno = fgets(string->matriz_de_linhas[string->index_linha_matriz], LARGURA, arquivo_origem);
+            
+            /*Quando o retorno da string for NULL, significa que chegou no fim do arquivo e sai do loop*/
+            if(retorno == NULL)
+            {
+                break;
+            }
 
-        /*Acima, de acordo com a largura da minha janela que é 160, tenho que fazer um jeito de armazenar as linhas em indices diferentes.
-        assim consigo manipular e escrever dentro*/
+        }
         
+        /*Função para escrita no arquivo*/
+        Escreve_no_Arquivo(string);
     }
     else
     {
         printf("Abertura do arquivo deu errado!");
     }
+    
+    
 
     /*Fecha me arquivo*/
     fclose(arquivo_origem);
     
 }
+
+/*Função para escrita no arquivo*/
+void Escreve_no_Arquivo(STRINGS *string)
+{
+    EVENTO evento_para_escrita;
+    int esc_pressionado = 1;
+    int cont_linha, cont_caractere;
+    int tam_string = 0;
+
+    /*Variaveis para mover o cursor ao abrir o arquivo*/
+    int move_cursor_linha = 0;
+    int move_cursor_coluna = 0;
+
+    
+    /*Inicio da escrita do arquivo, ou seja, é aqui que obtenho a posição do inicio do arquivo quando é impresso na tela*/
+    string->posicao_cursor_escrita.X = wherex();
+    string->posicao_cursor_escrita.Y = wherey();
+
+    /*Loop para cada linha do arquivo*/
+    for(cont_linha = 0; cont_linha < string->index_linha_matriz; cont_linha++)
+    {
+        /*A cada iteração pega o tamanho de cada linha da matriz de linhas*/
+        tam_string = strlen(string->matriz_de_linhas[cont_linha]);
+
+        /*Loop para imprimir cada caractere da linha com seu devido tamanho*/
+        for(cont_caractere = 0; cont_caractere < tam_string; cont_caractere++)
+        {
+            /*Imprime cada caractere*/
+            putchar(string->matriz_de_linhas[cont_linha][cont_caractere]);
+        }
+    }
+
+    /*Coloca a coordenada no inicio de onde sera impresso o arquivo*/
+    gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y);
+
+    /*Loop para pegar os eventos do teclado, no caso os caracteres imprimivei para serem colocado no arquivo*/
+    do
+    {
+        /*Pega uma ação do teclado*/
+        if(hit(KEYBOARD_HIT))
+        {
+            /*Pega o evento de origem do teclado*/
+            evento_para_escrita = Evento();
+
+            /*Verifica se é um evento do teclado*/
+            if(evento_para_escrita.tipo_evento & KEY_EVENT)
+            {
+                /*tecla pressionada ounão */
+                if(evento_para_escrita.teclado.status_tecla == LIBERADA)
+                {
+                    /*Casos para cada tecla*/
+                    switch(evento_para_escrita.teclado.key_code)
+                    {
+                        /*Navegação no arquivo usando o cursor*/
+                        case SETA_PARA_DIREITA:
+                        {
+                            /*Verificação para não ultrapassar o fim da linha, ao estar dentro do intervalo é incrementado o cursor*/
+                            if(string->matriz_de_linhas[move_cursor_coluna][move_cursor_linha] != '\n')
+                            {
+                                /*Posiciona o cursor*/
+                                move_cursor_linha += 1;
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_linha, string->posicao_cursor_escrita.Y);
+                            }
+                            break;
+                        }
+
+                        case SETA_PARA_ESQUERDA:
+                        {
+                            /*Verificação para a movimentação do cursor não ser menor do que o inicio da coordenada do meu arquivo*/
+                            if(move_cursor_linha >= string->posicao_cursor_escrita.X)
+                            {
+                                /*Posiciona o meu cursor quando ando para atrás*/
+                                move_cursor_linha -= 1;
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_linha, string->posicao_cursor_escrita.Y);
+                            }
+                            break;
+                        }
+
+
+                        /*Corrigir o erro de nao estar dando quando vou para baixo a seta e depois vou a direita, deve ir normalmente*/
+                        case SETA_PARA_BAIXO:
+                        {
+                            if(move_cursor_coluna < string->index_linha_matriz - 1)
+                            {
+                                move_cursor_coluna += 1;
+                                gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y + move_cursor_coluna);
+                            }
+                            
+                            break;
+                        }
+
+
+
+                        /*Sai do loop*/
+                        case ESC:
+                        {
+                            esc_pressionado = 0;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }while(esc_pressionado);
+    
+}
+
 
 /*Converete a string nas suas devidas posições*/
 void Copiar_caracteres_pra_matrizes(STRINGS *string, char **opcoes, char **submenu_op_arquivo, char **submenu_op_cor)
@@ -138,50 +256,48 @@ void Desenha_Janela_Menu(TAM_JANELA *janela)
     int i;
     
     /*Desenha a linha superior do menu*/
-    for(i = 0; i < janela->largura; i++)
+    for(i = 0; i < LARGURA; i++)
     {
         gotoxy(janela->coordenadas_janela.X + i, janela->coordenadas_janela.Y);
         printf("=");
     }
 
     /*Coluna esquerda*/
-    for(i = 0; i < janela->altura; i++)
+    for(i = 0; i < ALTURA; i++)
     {
         gotoxy(janela->coordenadas_janela.X, janela->coordenadas_janela.Y + i);
         printf("|");
     }
 
     /*Linha inferior*/
-    for(i = 0; i < janela->largura; i++)
+    for(i = 0; i < LARGURA; i++)
     {
         /*Necessário o incremento do i em 1, para nao borrar o '|' da coluna esquerda,
         há de se decrementar a janela->altura pois o printf da um quebra linha, para isso imprimir o caractere '=' uma linha depois, se decrementa o y*/
-        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + janela->altura - 1);
+        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + LARGURA - 1);
         printf("=");
     }
 
     /*Coluna Direita*/
-    for(i = 0; i < janela->altura; i++)
+    for(i = 0; i < ALTURA; i++)
     {
         /*X recebe o valor da largura, assim eu tenho a coordenada do fim da linha superior, feito isso, somente incrementar o y até a altura
         definida*/
-        gotoxy(janela->coordenadas_janela.X + janela->largura, janela->coordenadas_janela.Y + i);
+        gotoxy(janela->coordenadas_janela.X + LARGURA, janela->coordenadas_janela.Y + i);
         printf("|");
     }
 
     /*Linha inferior a linha superior*/
     /*A largura é decrementada pois passa do limite da coluna direita*/
-    for(i = 0; i < janela->largura - 1; i++)
+    for(i = 0; i < LARGURA - 1; i++)
     {
         /*Dividindo a largura e altura e, somando com a coordenadas_Janela.Y, tenho o lugar para imprimir a linha inferior a superior,
         somente é necessário incrementar o x, x + 1 pois ele 'come' a coluna da esquerda, para ajustar incrementei em +1 e decrementei a largura na condição de parada*/
-        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + janela->largura/janela->altura);
+        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + LARGURA/ALTURA);
         printf("=");
     }
     
 }
-
-
 
 
 /*Função que imprime as opções de menu na tela*/
@@ -205,7 +321,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *let
     for(i = 0; i < QTD_STRING; i++)
     {   
         /*Seta o lugar aonde deve ser impresso o menu*/
-        gotoxy(janela->coordenadas_janela.X + tam_opcao_menu + 1, janela->coordenadas_janela.Y + janela->largura/janela->altura/2);
+        gotoxy(janela->coordenadas_janela.X + tam_opcao_menu + 1, janela->coordenadas_janela.Y + LARGURA/ALTURA/2);
 
         /*Foi criada outro tipo COORD para representar a coordenada do destaque da letra de atalho, poderia utilizar-se somente a coordenada atual da janela.
         Mas o código ficaria um pouco confuso*/
@@ -801,3 +917,4 @@ void Submenu_cor_texto(STRINGS *string, USUARIO *op)
         }
     }
 }
+    
