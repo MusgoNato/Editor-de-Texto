@@ -90,6 +90,8 @@ void Abre_Arquivo(STRINGS *string)
     /*Validação da abertura*/
     if(arquivo_origem != NULL)
     {
+        /*Modificar a quantidade de linhas e colunas (Fazer por blocos a leitura do arquivo e depois imprimir por partes), talvez
+        ir caractere por caractere*/
         /*Percorre a quantidade de linhas do meu arquivo*/
         for(string->index_linha_matriz = 0; string->index_linha_matriz < ALTURA; string->index_linha_matriz++)
         {
