@@ -7,6 +7,7 @@
 # define TAM_NOME_ARQUIVO 50
 # define TAM_STRING 50
 # define ESPACAMENTO 10
+# define BLOCO_DE_IMPRESSAO 1024
 
 /*Tamanho da minha janela*/
 # define LARGURA 160
@@ -33,7 +34,9 @@ typedef struct _STRINGS
     int modo_insercao;
     int controla_sub;
     int index_linha_matriz;
+    int tamanho_maximo_das_linhas;
     int tamanho_das_linhas[LARGURA];
+    COORD limite_maximo_Janela;
     COORD posicao_cursor_escrita;
     COLORS cores_background;
     COLORS cores_texto;
@@ -99,4 +102,6 @@ void Submenu_cor_texto(STRINGS *, USUARIO *);
 /*Função que escreve caracteres do usuario no arquivo*/
 void Escreve_no_Arquivo(STRINGS *);
 
+/*
+int Quant_Linhas_Arquivo(STRINGS *string);*/
 
