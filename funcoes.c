@@ -11,13 +11,12 @@
 /*Função que abre o arquivo*/
 void Abre_Arquivo(STRINGS *string)
 {
-    /*Cria uma variavel do tipo FILE que sera um ponteiro para o arquivo de origem*/
-    FILE *arquivo_origem;
     EVENTO arquivo;
+    int conta_linhas = 0;
     int shift_pressionado = 0;
-    int i = 0;
     char *retorno;
-
+    char tam_inicial_linha[BLOCO_DE_IMPRESSAO];
+    int i = 0;
 
     /*Inserir o arquivo desejado para abertura*/
     printf("Insira o arquivo que deseja abrir: ");
@@ -85,29 +84,51 @@ void Abre_Arquivo(STRINGS *string)
     }
 
     /*Verificação do arquivo para o modo leitura*/
-    arquivo_origem = fopen(string->arquivo_txt, "r+");
+    string->arquivo_origem = fopen(string->arquivo_txt, "a+");
+    
 
     /*Validação da abertura*/
-    if(arquivo_origem != NULL)
+    if(string->arquivo_origem != NULL)
     {
+        /*Chamada para a função que conta as linhas do arquivo*/
+        string->conta_linhas = Conta_Linhas_Arquivo(string->arquivo_origem);
+
+        /*Volta o cursor na posição inicial do arquivo*/
+        fseek(string->arquivo_origem, 0, SEEK_SET);
+
+        /*Aloca memória para minha matriz de linhas*/
+        string->matriz_de_linhas = (char **)malloc(string->conta_linhas * sizeof(char *));
+        
+
         /*Modificar a quantidade de linhas e colunas (Fazer por blocos a leitura do arquivo e depois imprimir por partes), talvez
         ir caractere por caractere*/
         /*Percorre a quantidade de linhas do meu arquivo*/
-        for(string->index_linha_matriz = 0; string->index_linha_matriz < ALTURA; string->index_linha_matriz++)
+        while(1)
         {
-            /*Pega cada linha do meu arquivo*/
-            retorno = fgets(string->matriz_de_linhas[string->index_linha_matriz], LARGURA, arquivo_origem);
-            
-            /*Quando o retorno da string for NULL, significa que chegou no fim do arquivo e sai do loop*/
+            /*Retorno do ponteiro para o arquivo*/
+            retorno = fgets(tam_inicial_linha, BLOCO_DE_IMPRESSAO, string->arquivo_origem);
+
+            /*Aloca memoria para cada linha da minha matriz de strings*/
+            string->matriz_de_linhas[string->index_linha_matriz] = (char *)malloc((strlen(tam_inicial_linha)) * sizeof(char));
+
+            /*Copia o que esta em tam inicial e coloca dentro da lina onde minha matriz teve a sua alocação de memoria*/
+            strcpy(string->matriz_de_linhas[string->index_linha_matriz], tam_inicial_linha);
+
+            /*Se for final do arquivo, sai do loop*/
             if(retorno == NULL)
             {
-                break;
+                break;  
             }
 
+            string->index_linha_matriz++;
         }
+        
+        /*Ja foi lido o arquivo e armazenado em matrizes suas linhas*/
+        fclose(string->arquivo_origem);
         
         /*Função para escrita no arquivo*/
         Escreve_no_Arquivo(string);
+        
     }
     else
     {
@@ -116,10 +137,36 @@ void Abre_Arquivo(STRINGS *string)
     }
     
     
+        /*Libera 1° a memoria alocada para as linhas*/  
+        for(i = 0; i < conta_linhas; i++)
+        {
+            free(string->matriz_de_linhas[i]);
+        }
 
-    /*Fecha me arquivo*/
-    fclose(arquivo_origem);
+
+        /*Limpa a memoria que foi alocada para a matriz*/
+        free(string->matriz_de_linhas);    
+
+        
     
+}
+
+/*Conta as linhas do arquivo*/
+int Conta_Linhas_Arquivo(FILE *arquivo_origem)
+{
+    char caractere;
+    int contador = 0;
+    /*Percorre o arquivo e conta suas linhas*/
+    do
+    {
+        caractere = fgetc(arquivo_origem);
+        if(caractere == '\n' || caractere == EOF)
+        {
+            contador++;
+        }
+    }while(caractere != EOF);
+
+    return contador;
 }
 
 /*Função para escrita no arquivo*/
@@ -127,10 +174,10 @@ void Escreve_no_Arquivo(STRINGS *string)
 {
     EVENTO evento_para_escrita;
     int esc_pressionado = 1;
-    int coloca_caracter_arquivo = 1; 
-    
+    int escrita = 1;
+
     /*Variaveis para imprimir os caracteres na tela*/
-    int i, j;
+    int i;
     
     /*Variaveis para mover o cursor ao abrir o arquivo*/
     int move_cursor_linha = 0;
@@ -141,31 +188,23 @@ void Escreve_no_Arquivo(STRINGS *string)
     string->posicao_cursor_escrita.Y = wherey();
 
 
-    /*Coloca a coordenada no inicio de onde sera impresso o arquivo*/
-    gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y);
-
     /*Loop para pegar os eventos do teclado, no caso os caracteres imprimivei para serem colocado no arquivo*/
     do
     {
-        /*Caso coloque algum tipo de caractere seja colocado no arquivo, entra nessa verificação, ela é verdade somente uma vez para impresão na tela*/
-        if(coloca_caracter_arquivo)
+        /*Caso o usuario escreva vai voltar a ser impresso o texto*/
+        if(escrita)
         {
-            /*Loop para cada linha do arquivo*/
-            for(i = 0; i < string->index_linha_matriz; i++)
+            /*Loop até o final do arquivo*/
+            for(i = 0; i < string->conta_linhas; i++)
             {
-                /*Guarda em um vetor o tamanho de cada linha lida no arquivo*/
-                string->tamanho_das_linhas[i] = strlen(string->matriz_de_linhas[i]);
-
-                /*Loop para imprimir cada caractere da linha com seu devido tamanho*/
-                for(j = 0; j < string->tamanho_das_linhas[i]; j++)
-                {
-                    /*Imprime cada caractere*/
-                    putchar(string->matriz_de_linhas[i][j]);
-                }
+                /*Imprime a linha*/
+                printf("%s", string->matriz_de_linhas[i]);
             }
-            coloca_caracter_arquivo = 0;
+            /*Coloca a coordenada no inicio de onde sera impresso o arquivo*/
+            gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y);
+            escrita = 0;
         }
-
+        
         /*Pega uma ação do teclado*/
         if(hit(KEYBOARD_HIT))
         {
@@ -210,7 +249,7 @@ void Escreve_no_Arquivo(STRINGS *string)
                         case SETA_PARA_BAIXO:
                         {
                             /*Verifica o tamanho das linhas do meu arquivo, caso chegue na linha final não consigo ultrapassa-la*/
-                            if(move_cursor_coluna < string->index_linha_matriz - 1)
+                            if(move_cursor_coluna < string->conta_linhas)
                             {
                                 /*A linha zera para que eu possa andar pelas linhas até o '\n' dela*/
                                 move_cursor_linha = 0;

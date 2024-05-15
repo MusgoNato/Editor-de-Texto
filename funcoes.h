@@ -27,14 +27,15 @@ typedef struct _TAM_JANELA
 typedef struct _STRINGS
 {
     char arquivo_txt[TAM_NOME_ARQUIVO];
+    FILE *arquivo_origem;
     char menu[QTD_STRING][TAM_STRING];
-    char matriz_de_linhas[ALTURA][LARGURA];
+    char **matriz_de_linhas;
     char submenu_arquivo[2][TAM_STRING];
     char submenu_cores[16][TAM_STRING];
+    int conta_linhas;
     int modo_insercao;
     int controla_sub;
     int index_linha_matriz;
-    int tamanho_maximo_das_linhas;
     int tamanho_das_linhas[LARGURA];
     COORD limite_maximo_Janela;
     COORD posicao_cursor_escrita;
@@ -101,6 +102,8 @@ void Submenu_cor_texto(STRINGS *, USUARIO *);
 
 /*Função que escreve caracteres do usuario no arquivo*/
 void Escreve_no_Arquivo(STRINGS *);
+
+int Conta_Linhas_Arquivo(FILE *);
 
 /*
 int Quant_Linhas_Arquivo(STRINGS *string);*/
