@@ -7,7 +7,8 @@
 # define TAM_NOME_ARQUIVO 50
 # define TAM_STRING 50
 # define ESPACAMENTO 10
-# define BLOCO_DE_IMPRESSAO 1024
+# define BLOCO_DE_IMPRESSAO 40
+# define TAM_BUFFER 1024
 
 /*Tamanho da minha janela*/
 # define LARGURA 160

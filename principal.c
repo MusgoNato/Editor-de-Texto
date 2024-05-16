@@ -61,7 +61,8 @@ int main(int argc, char *argv[])
     /*Inicialização da quantidade de linhas no arquivo*/
     string.index_linha_matriz = 0;
 
-    string.limite_maximo_Janela = MaxDimensaoJanela();
+    string.limite_maximo_Janela = tamanhoJanelaConsole();
+    setDimensaoJanela(string.limite_maximo_Janela.X, string.limite_maximo_Janela.Y);
 
     /*Silenciar warnings*/
     argc = argc;

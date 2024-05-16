@@ -4,6 +4,7 @@
 # include <stdio.h> /*FILE, fopen(), printf(), */
 # include <string.h> /*strlen(), strchr()*/
 # include <ctype.h>
+# include <time.h>
 # include "console_v1.5.5.h" /*SETAS_DE_DIREÇÃO*/
 # include "conio_v3.2.4.h" /*gotoxy()*/
 # include "funcoes.h"
@@ -84,8 +85,7 @@ void Abre_Arquivo(STRINGS *string)
     }
 
     /*Verificação do arquivo para o modo leitura*/
-    string->arquivo_origem = fopen(string->arquivo_txt, "a+");
-    
+    string->arquivo_origem = fopen(string->arquivo_txt, "r");
 
     /*Validação da abertura*/
     if(string->arquivo_origem != NULL)
@@ -103,10 +103,10 @@ void Abre_Arquivo(STRINGS *string)
         while(1)
         {
             /*A cada iteração aloca memoria para minha string*/
-            string->matriz_de_linhas[string->index_linha_matriz] = (char *)malloc(BLOCO_DE_IMPRESSAO * sizeof(char));
+            string->matriz_de_linhas[string->index_linha_matriz] = (char *)malloc(TAM_BUFFER * sizeof(char));
 
             /*Retorno do ponteiro para o arquivo*/
-            retorno = fgets(string->matriz_de_linhas[string->index_linha_matriz], BLOCO_DE_IMPRESSAO, string->arquivo_origem);
+            retorno = fgets(string->matriz_de_linhas[string->index_linha_matriz], TAM_BUFFER, string->arquivo_origem);
 
             /*Se for final do arquivo, sai do loop*/
             if(retorno == NULL)
@@ -119,7 +119,8 @@ void Abre_Arquivo(STRINGS *string)
 
         /*Limpa a tela pois preciso limpar a mensagem de compilamento inicial*/
         clrscr();
-        
+        fclose(string->arquivo_origem);
+
         /*Função para escrita no arquivo*/
         Escreve_no_Arquivo(string);
         
@@ -169,22 +170,30 @@ void Escreve_no_Arquivo(STRINGS *string)
 {
     EVENTO evento_para_escrita;
     int esc_pressionado = 1;
-    int i;
+    int i, j = 0;
+    int tamanho_por_bloco = BLOCO_DE_IMPRESSAO;
+
 
     /*Variaveis para mover o cursor ao abrir o arquivo*/
     int move_cursor_linha = 0;
     int move_cursor_coluna = 0;
-
-    /*Inicio da escrita do arquivo, ou seja, é aqui que obtenho a posição do inicio do arquivo quando é impresso na tela*/
+    
+    gotoxy(1,1);
+    
+    /*Pega a posição atual do meu cursor*/
     string->posicao_cursor_escrita.X = wherex();
     string->posicao_cursor_escrita.Y = wherey();
-    
 
-    /*O ERRO ESTA AQUI!
+
+    /*O ERRO ESTA AQUI! Tentar fazer a impressão por blocos quando atingir o final do 1° bloco e assim em diante
     Fazer impressão por blocos de linhas para não misturar com o prompt de comando*/
-    for(i = 0; i < string->conta_linhas; i++)
+    for(i = 0; i < tamanho_por_bloco; i += BLOCO_DE_IMPRESSAO)
     {
-        printf("%s", string->matriz_de_linhas[i]);
+        for(j = i; j < BLOCO_DE_IMPRESSAO; j++)
+        {
+            printf("%s", string->matriz_de_linhas[j]);    
+        }
+        
     }
 
     /*Loop para pegar os eventos do teclado, no caso os caracteres imprimivei para serem colocado no arquivo*/
@@ -240,6 +249,16 @@ void Escreve_no_Arquivo(STRINGS *string)
                                 move_cursor_linha = 0;
                                 move_cursor_coluna += 1;
                                 gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y + move_cursor_coluna);
+                            }
+                            else
+                            {
+                                /*Quando a coluna passar do limite do bloco de impressao de linhas
+                                soma-se a variavel 'tamanho_por_bloco' com uma constante que sera o limite maximo de impressao de linhas,
+                                isso é passado novamente para o loop que faz as impressoes das linhas*/
+                                if(move_cursor_coluna > tamanho_por_bloco)
+                                {
+                                    tamanho_por_bloco += BLOCO_DE_IMPRESSAO;
+                                }
                             }
                             
                             break;
