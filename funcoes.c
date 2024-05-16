@@ -15,7 +15,7 @@ void Abre_Arquivo(STRINGS *string)
     int conta_linhas = 0;
     int shift_pressionado = 0;
     char *retorno;
-    char tam_inicial_linha[BLOCO_DE_IMPRESSAO];
+
     int i = 0;
 
     /*Inserir o arquivo desejado para abertura*/
@@ -96,23 +96,17 @@ void Abre_Arquivo(STRINGS *string)
         /*Volta o cursor na posição inicial do arquivo*/
         fseek(string->arquivo_origem, 0, SEEK_SET);
 
-        /*Aloca memória para minha matriz de linhas*/
+        /*Aloca memoria para minha matriz*/
         string->matriz_de_linhas = (char **)malloc(string->conta_linhas * sizeof(char *));
-        
 
-        /*Modificar a quantidade de linhas e colunas (Fazer por blocos a leitura do arquivo e depois imprimir por partes), talvez
-        ir caractere por caractere*/
-        /*Percorre a quantidade de linhas do meu arquivo*/
+        /*Loop para alocar memoria para cada linha do meu arquivo*/
         while(1)
         {
+            /*A cada iteração aloca memoria para minha string*/
+            string->matriz_de_linhas[string->index_linha_matriz] = (char *)malloc(BLOCO_DE_IMPRESSAO * sizeof(char));
+
             /*Retorno do ponteiro para o arquivo*/
-            retorno = fgets(tam_inicial_linha, BLOCO_DE_IMPRESSAO, string->arquivo_origem);
-
-            /*Aloca memoria para cada linha da minha matriz de strings*/
-            string->matriz_de_linhas[string->index_linha_matriz] = (char *)malloc((strlen(tam_inicial_linha)) * sizeof(char));
-
-            /*Copia o que esta em tam inicial e coloca dentro da lina onde minha matriz teve a sua alocação de memoria*/
-            strcpy(string->matriz_de_linhas[string->index_linha_matriz], tam_inicial_linha);
+            retorno = fgets(string->matriz_de_linhas[string->index_linha_matriz], BLOCO_DE_IMPRESSAO, string->arquivo_origem);
 
             /*Se for final do arquivo, sai do loop*/
             if(retorno == NULL)
@@ -122,9 +116,9 @@ void Abre_Arquivo(STRINGS *string)
 
             string->index_linha_matriz++;
         }
-        
-        /*Ja foi lido o arquivo e armazenado em matrizes suas linhas*/
-        fclose(string->arquivo_origem);
+
+        /*Limpa a tela pois preciso limpar a mensagem de compilamento inicial*/
+        clrscr();
         
         /*Função para escrita no arquivo*/
         Escreve_no_Arquivo(string);
@@ -156,6 +150,7 @@ int Conta_Linhas_Arquivo(FILE *arquivo_origem)
 {
     char caractere;
     int contador = 0;
+
     /*Percorre o arquivo e conta suas linhas*/
     do
     {
@@ -174,11 +169,8 @@ void Escreve_no_Arquivo(STRINGS *string)
 {
     EVENTO evento_para_escrita;
     int esc_pressionado = 1;
-    int escrita = 1;
-
-    /*Variaveis para imprimir os caracteres na tela*/
     int i;
-    
+
     /*Variaveis para mover o cursor ao abrir o arquivo*/
     int move_cursor_linha = 0;
     int move_cursor_coluna = 0;
@@ -186,25 +178,18 @@ void Escreve_no_Arquivo(STRINGS *string)
     /*Inicio da escrita do arquivo, ou seja, é aqui que obtenho a posição do inicio do arquivo quando é impresso na tela*/
     string->posicao_cursor_escrita.X = wherex();
     string->posicao_cursor_escrita.Y = wherey();
+    
 
+    /*O ERRO ESTA AQUI!
+    Fazer impressão por blocos de linhas para não misturar com o prompt de comando*/
+    for(i = 0; i < string->conta_linhas; i++)
+    {
+        printf("%s", string->matriz_de_linhas[i]);
+    }
 
     /*Loop para pegar os eventos do teclado, no caso os caracteres imprimivei para serem colocado no arquivo*/
     do
     {
-        /*Caso o usuario escreva vai voltar a ser impresso o texto*/
-        if(escrita)
-        {
-            /*Loop até o final do arquivo*/
-            for(i = 0; i < string->conta_linhas; i++)
-            {
-                /*Imprime a linha*/
-                printf("%s", string->matriz_de_linhas[i]);
-            }
-            /*Coloca a coordenada no inicio de onde sera impresso o arquivo*/
-            gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y);
-            escrita = 0;
-        }
-        
         /*Pega uma ação do teclado*/
         if(hit(KEYBOARD_HIT))
         {
@@ -278,13 +263,6 @@ void Escreve_no_Arquivo(STRINGS *string)
                         case INSERT:
                         {
                             
-                            break;
-                        }
-
-
-                        case SHIFT_PRESSED:
-                        {
-                        
                             break;
                         }
 
