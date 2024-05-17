@@ -85,7 +85,7 @@ void Abre_Arquivo(STRINGS *string)
     }
 
     /*Verificação do arquivo para o modo leitura*/
-    string->arquivo_origem = fopen(string->arquivo_txt, "r");
+    string->arquivo_origem = fopen(string->arquivo_txt, "r+");
 
     /*Validação da abertura*/
     if(string->arquivo_origem != NULL)
@@ -187,14 +187,14 @@ void Escreve_no_Arquivo(STRINGS *string)
 
     /*O ERRO ESTA AQUI! Tentar fazer a impressão por blocos quando atingir o final do 1° bloco e assim em diante
     Fazer impressão por blocos de linhas para não misturar com o prompt de comando*/
-    for(i = 0; i < tamanho_por_bloco; i += BLOCO_DE_IMPRESSAO)
+    for(i = 0; i < string->conta_linhas; i += BLOCO_DE_IMPRESSAO)
     {
         for(j = i; j < BLOCO_DE_IMPRESSAO; j++)
         {
             printf("%s", string->matriz_de_linhas[j]);    
         }
-        
     }
+    gotoxy(1,1);
 
     /*Loop para pegar os eventos do teclado, no caso os caracteres imprimivei para serem colocado no arquivo*/
     do
@@ -208,7 +208,7 @@ void Escreve_no_Arquivo(STRINGS *string)
             /*Verifica se é um evento do teclado*/
             if(evento_para_escrita.tipo_evento & KEY_EVENT)
             {
-                /*tecla pressionada ounão */
+                /*tecla pressionada ou não */
                 if(evento_para_escrita.teclado.status_tecla == LIBERADA)
                 {
                     /*Casos para cada tecla*/
@@ -243,8 +243,8 @@ void Escreve_no_Arquivo(STRINGS *string)
                         case SETA_PARA_BAIXO:
                         {
                             /*Verifica o tamanho das linhas do meu arquivo, caso chegue na linha final não consigo ultrapassa-la*/
-                            if(move_cursor_coluna < string->conta_linhas)
-                            {
+                            if(move_cursor_coluna < tamanho_por_bloco)
+                            {  
                                 /*A linha zera para que eu possa andar pelas linhas até o '\n' dela*/
                                 move_cursor_linha = 0;
                                 move_cursor_coluna += 1;
@@ -254,11 +254,11 @@ void Escreve_no_Arquivo(STRINGS *string)
                             {
                                 /*Quando a coluna passar do limite do bloco de impressao de linhas
                                 soma-se a variavel 'tamanho_por_bloco' com uma constante que sera o limite maximo de impressao de linhas,
-                                isso é passado novamente para o loop que faz as impressoes das linhas*/
+                                isso é passado novamente para o loop que faz as impressoes das linhas
                                 if(move_cursor_coluna > tamanho_por_bloco)
                                 {
                                     tamanho_por_bloco += BLOCO_DE_IMPRESSAO;
-                                }
+                                }*/
                             }
                             
                             break;
@@ -288,6 +288,8 @@ void Escreve_no_Arquivo(STRINGS *string)
                         /*Sai do loop*/
                         case ESC:
                         {
+                            move_cursor_linha = 0;
+                            move_cursor_coluna = 0;
                             esc_pressionado = 0;
                             break;
                         }
