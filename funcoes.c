@@ -84,8 +84,11 @@ void Abre_Arquivo(STRINGS *string)
                 
     }
 
+    /*Limpa a tela*/
+    clrscr();
+
     /*Verificação do arquivo para o modo leitura*/
-    string->arquivo_origem = fopen(string->arquivo_txt, "r+");
+    string->arquivo_origem = fopen(string->arquivo_txt, "r");
 
     /*Validação da abertura*/
     if(string->arquivo_origem != NULL)
@@ -93,11 +96,14 @@ void Abre_Arquivo(STRINGS *string)
         /*Chamada para a função que conta as linhas do arquivo*/
         string->conta_linhas = Conta_Linhas_Arquivo(string->arquivo_origem);
 
-        /*Volta o cursor na posição inicial do arquivo*/
+        /*Como é append, volta ao cursor no começo do arquivo*/
         fseek(string->arquivo_origem, 0, SEEK_SET);
 
         /*Aloca memoria para minha matriz*/
         string->matriz_de_linhas = (char **)malloc(string->conta_linhas * sizeof(char *));
+        
+        /*Coloca o cursor no começo da janela*/
+        gotoxy(1,1);
 
         /*Loop para alocar memoria para cada linha do meu arquivo*/
         while(1)
@@ -115,10 +121,10 @@ void Abre_Arquivo(STRINGS *string)
             }
 
             string->index_linha_matriz++;
+            
         }
 
-        /*Limpa a tela pois preciso limpar a mensagem de compilamento inicial*/
-        clrscr();
+        /*Encerra o arquivo*/
         fclose(string->arquivo_origem);
 
         /*Função para escrita no arquivo*/
@@ -160,6 +166,7 @@ int Conta_Linhas_Arquivo(FILE *arquivo_origem)
         {
             contador++;
         }
+        
     }while(caractere != EOF);
 
     return contador;
@@ -170,31 +177,23 @@ void Escreve_no_Arquivo(STRINGS *string)
 {
     EVENTO evento_para_escrita;
     int esc_pressionado = 1;
-    int i, j = 0;
-    int tamanho_por_bloco = BLOCO_DE_IMPRESSAO;
+    int i;
+    /*int tamanho_por_bloco = BLOCO_DE_IMPRESSAO;*/
 
 
     /*Variaveis para mover o cursor ao abrir o arquivo*/
     int move_cursor_linha = 0;
     int move_cursor_coluna = 0;
     
-    gotoxy(1,1);
-    
     /*Pega a posição atual do meu cursor*/
     string->posicao_cursor_escrita.X = wherex();
     string->posicao_cursor_escrita.Y = wherey();
 
-
-    /*O ERRO ESTA AQUI! Tentar fazer a impressão por blocos quando atingir o final do 1° bloco e assim em diante
-    Fazer impressão por blocos de linhas para não misturar com o prompt de comando*/
-    for(i = 0; i < string->conta_linhas; i += BLOCO_DE_IMPRESSAO)
+    /*TENTAR FAZER A IMPRESSÃO POR BLOCOS DE TEXTO*/
+    for(i = 0; i < string->conta_linhas; i++)
     {
-        for(j = i; j < BLOCO_DE_IMPRESSAO; j++)
-        {
-            printf("%s", string->matriz_de_linhas[j]);    
-        }
+        printf("%s", string->matriz_de_linhas[i]);
     }
-    gotoxy(1,1);
 
     /*Loop para pegar os eventos do teclado, no caso os caracteres imprimivei para serem colocado no arquivo*/
     do
@@ -243,7 +242,7 @@ void Escreve_no_Arquivo(STRINGS *string)
                         case SETA_PARA_BAIXO:
                         {
                             /*Verifica o tamanho das linhas do meu arquivo, caso chegue na linha final não consigo ultrapassa-la*/
-                            if(move_cursor_coluna < tamanho_por_bloco)
+                            if(move_cursor_coluna < string->conta_linhas)
                             {  
                                 /*A linha zera para que eu possa andar pelas linhas até o '\n' dela*/
                                 move_cursor_linha = 0;
@@ -980,7 +979,7 @@ void Submenu_cor_texto(STRINGS *string, USUARIO *op)
                         break;
                     }
 
-                    /*Escolheu tal cor*/
+                    /*Escolheu cor*/
                     case ENTER:
                     {
                         string->cores_texto = escolhas_setas_cor_texto;
