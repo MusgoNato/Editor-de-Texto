@@ -38,6 +38,7 @@ typedef struct _STRINGS
     int controla_sub;
     int index_linha_matriz;
     int tamanho_das_linhas[LARGURA];
+    int modo;
     COORD limite_maximo_Janela;
     COORD posicao_cursor_escrita;
     COLORS cores_background;
@@ -70,42 +71,113 @@ typedef struct _USUARIO
 
 
 /*Função que realiza a abertura do arquivo pedido ao usuário
-Parametros: Uma string que conterá o nome do arquivo
-Retorno: Nenhum*/
+Parametros: Ponteiro para estrutura STRINGS
+Retorno: 
+Nenhum*/
 void Abre_Arquivo(STRINGS *);
 
-/*Coloca minhas 'opções', na matriz de caracteres 'menu'*/
+/*Coloca minhas 'opções', na matriz de caracteres 'menu'
+Parametros :
+1° -> Ponteiro para estrutura STRINGS
+2° -> Variavel tipo char ponteiro para ponteiro
+3° -> Variavel tipo char ponteiro para ponteiro
+4° -> Variavel tipo char ponteiro para ponteiro
+Retorno : 
+Nenhum
+*/
 void Copiar_caracteres_pra_matrizes(STRINGS *, char **, char **, char **);
 
-/*Função que realiza a cração da minha janela para o menu*/
+/*Função que realiza a cração da minha janela para o menu
+Parametros :
+1° -> Ponteiro para estrutura TAM_JANELA (Contera as variaveis necessarias para impressão da janela na tela)
+Retorno : 
+Nenhum
+*/
 void Desenha_Janela_Menu(TAM_JANELA *);
 
-/*Função que imprime as opções de menu disponíveis*/
+/*Inicializa as variaveis do programa
+Paremetros :
+1° -> Ponteiro para estrutura STRINGS
+2° -> Ponteiro para estrutura USUARIO
+3° -> Ponteiro para estrutura TAM_JANELA
+Retorno : 
+Nenhum
+*/
+void Inicializacao_Variaveis(STRINGS *, USUARIO *, TAM_JANELA *);
+
+/*Função que imprime as opções de menu disponíveis
+Parametros :
+1° -> Ponteiro para estrutura TAM_JANELA
+2° -> Ponteiro para estrutura STRINGS
+3° -> Ponteiro para estrutura USUARIO
+4° -> Ponteiro do tipo char
+Retorno :
+Nenhum
+*/
 void Imprime_op_Menu(TAM_JANELA *, STRINGS *, USUARIO *, char *);
 
-/*Vai ler as teclas do teclado e realizar as devidas chamadas para outras funções*/
+/*Vai ler as teclas do teclado e realizar as devidas chamadas para outras funções
+Parametros :
+1° -> Ponteiro para estrutura LE_TECLADO
+2° -> Ponteiro para estrutura USUARIO
+3° -> Ponteiro para estrutura STRINGS
+Retorno :
+Nenhum
+*/
 void Le_Teclado(LE_TECLADO *, USUARIO *, STRINGS *);
 
-/*Função que mapeia as teclas de entrada para retornar para a verificação inicial da main*/
+/*Função que mapeia as teclas de entrada para retornar para a verificação inicial da main
+Parametros : 
+1° -> Ponteiro para estrutura LE_TECLADO
+Retorno :
+Variavel do tipo inteiro, ela contera 1 caso a tecla que esta sendo verificada dentro da função for pressionada,
+caso contrário retorna 0.
+*/
 int Mapeia_teclas_Entrada(LE_TECLADO *);
 
-/*Pede o caractere para o TAB*/
+/*Pede o caractere para o TAB
+Parametros :
+1° -> Ponteiro para LE_TECLADO
+2° -> Ponteiro para USUARIO 
+Retorno : 
+Nenhum*/
 void Caractere_X(LE_TECLADO *, USUARIO *);
 
-/*Mostra o submenu arquivo para o usuario escolher*/
+/*Mostra o submenu arquivo para o usuario escolher
+Parametros :
+1° -> Ponteiro para estrutura STRINGS
+2° -> Ponteiro para estrutura USUARIO
+Retorno :
+Nenhum*/
 void Submenu_Arquivo(STRINGS *, USUARIO *);
 
-/*Função que imprime as subopções da opção 'COR FUNDO' no menu principal*/
+/*Função que imprime as subopções da opção 'COR FUNDO' no menu principal
+Paramentros : 
+1° -> Ponteiro para estrutura STRINGS
+2° -> Ponteiro para estrutura USUARIO
+Retorno : 
+Nenhum*/
 void Submenu_background(STRINGS *, USUARIO *);
 
-/*Função que muda a cor de texto*/
+/*Função que muda a cor de texto
+Paramentros : 
+1° -> Ponteiro para estrutura STRINGS
+2° -> Ponteiro para estrutura USUARIO
+Retorno : 
+Nenhum*/
 void Submenu_cor_texto(STRINGS *, USUARIO *);
 
-/*Função que escreve caracteres do usuario no arquivo*/
+/*Função que escreve caracteres do usuario no arquivo
+Parametros :
+1° -> Ponteiro para estrutura STRINGS
+Retorno : 
+Nenhum*/
 void Escreve_no_Arquivo(STRINGS *);
 
+/*Função responsável por contar as linhas do arquivo aberto
+Parametros :
+1° -> Ponteiro para arquivo do tipo FILE
+Retorno :
+Retorna uma variavel do tipo 'int' com a quantidade de linhas dentro do arquivo que foi passado commo parametro*/
 int Conta_Linhas_Arquivo(FILE *);
-
-/*
-int Quant_Linhas_Arquivo(STRINGS *string);*/
 

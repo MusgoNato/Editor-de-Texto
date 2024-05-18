@@ -1,13 +1,13 @@
 /*Lógica dos protótipos criados no arquivo 'funcoes.h'*/
 
 /*Bibliotecas/Constantes*/
-# include <stdio.h> /*FILE, fopen(), printf(), */
-# include <string.h> /*strlen(), strchr()*/
-# include <ctype.h>
-# include <time.h>
-# include "console_v1.5.5.h" /*SETAS_DE_DIREÇÃO*/
-# include "conio_v3.2.4.h" /*gotoxy()*/
-# include "funcoes.h"
+# include <stdio.h> /*atoi(), fclose(), fgetc(), fopen(), free(), fseek(), maloc(), printf() */
+# include <string.h> /*strchr(), strcpy(), strlen()*/
+# include "console_v1.5.5.h" /*Evento(), hit(), tamanhoJanelaConsole(), */
+# include "conio_v3.2.4.h" /*clrscr(), getch(), gotoxy(), wherex(), wherey(), textcolor()*/
+# include "funcoes.h" /*Abre_Arquivo(), Caractere_X(), Copiar_caracteres_pra_matrizes(), Conta_Linhas_Arquivo(),
+Escreve_Arquivo(), Desenha_Janela_Menu(), Imprime_op_Menu(), Inicializacao_Variaveis(), Le_Teclado(), Mapeia_teclas_Entrada(), Submenu_Arquivo().
+Submenu_background(), Submenu_cor_texto()*/
 
 /*Função que abre o arquivo*/
 void Abre_Arquivo(STRINGS *string)
@@ -16,8 +16,10 @@ void Abre_Arquivo(STRINGS *string)
     int conta_linhas = 0;
     int shift_pressionado = 0;
     char *retorno;
-
     int i = 0;
+
+    /*Alocação da matriz de linhas para NULL*/
+    string->matriz_de_linhas = NULL;
 
     /*Inserir o arquivo desejado para abertura*/
     printf("Insira o arquivo que deseja abrir: ");
@@ -44,7 +46,6 @@ void Abre_Arquivo(STRINGS *string)
                     if(arquivo.teclado.key_code == ENTER)
                     {
                         string->arquivo_txt[i] = '\0';
-                        printf("\n");
                         break;
                     }
 
@@ -88,7 +89,7 @@ void Abre_Arquivo(STRINGS *string)
     clrscr();
 
     /*Verificação do arquivo para o modo leitura*/
-    string->arquivo_origem = fopen(string->arquivo_txt, "r");
+    string->arquivo_origem = fopen(string->arquivo_txt, "r+");
 
     /*Validação da abertura*/
     if(string->arquivo_origem != NULL)
@@ -99,29 +100,42 @@ void Abre_Arquivo(STRINGS *string)
         /*Como é append, volta ao cursor no começo do arquivo*/
         fseek(string->arquivo_origem, 0, SEEK_SET);
 
-        /*Aloca memoria para minha matriz*/
-        string->matriz_de_linhas = (char **)malloc(string->conta_linhas * sizeof(char *));
-        
-        /*Coloca o cursor no começo da janela*/
-        gotoxy(1,1);
+        /*Realoca memoria para minha matriz, pois ja foi alocada com NULL incialmente*/
+        string->matriz_de_linhas = (char **)realloc(string->matriz_de_linhas, string->conta_linhas * sizeof(char *));
 
-        /*Loop para alocar memoria para cada linha do meu arquivo*/
-        while(1)
+        /*Se a alocação der certo entra no loop*/
+        if(string->matriz_de_linhas != NULL)
         {
-            /*A cada iteração aloca memoria para minha string*/
-            string->matriz_de_linhas[string->index_linha_matriz] = (char *)malloc(TAM_BUFFER * sizeof(char));
+            /*Coloca o cursor no começo da janela*/
+            gotoxy(1,1);
 
-            /*Retorno do ponteiro para o arquivo*/
-            retorno = fgets(string->matriz_de_linhas[string->index_linha_matriz], TAM_BUFFER, string->arquivo_origem);
-
-            /*Se for final do arquivo, sai do loop*/
-            if(retorno == NULL)
+            /*Loop para alocar memoria para cada linha do meu arquivo*/
+            while(1)
             {
-                break;  
-            }
+                /*A cada iteração aloca memoria para minha string*/
+                string->matriz_de_linhas[string->index_linha_matriz] = (char *)malloc(TAM_BUFFER * sizeof(char));
 
-            string->index_linha_matriz++;
-            
+                /*Se caso a alocação der certo continua o loop, caso der errado fecha o arquivo, limpa a memoria alocada e sai do loop*/
+                if(string->matriz_de_linhas[string->index_linha_matriz] == NULL)
+                {
+                    /*Fecha o arquivo e libera memória*/
+                    fclose(string->arquivo_origem);
+                    free(string->matriz_de_linhas[string->index_linha_matriz]);
+                    break;
+                }
+
+                /*Retorno do ponteiro para o arquivo*/
+                retorno = fgets(string->matriz_de_linhas[string->index_linha_matriz], TAM_BUFFER, string->arquivo_origem);
+
+                /*Se for final do arquivo, sai do loop*/
+                if(retorno == NULL)
+                {
+                    break;  
+                }
+
+                string->index_linha_matriz++;
+                
+            }
         }
 
         /*Encerra o arquivo*/
@@ -129,7 +143,6 @@ void Abre_Arquivo(STRINGS *string)
 
         /*Função para escrita no arquivo*/
         Escreve_no_Arquivo(string);
-        
     }
     else
     {
@@ -137,19 +150,95 @@ void Abre_Arquivo(STRINGS *string)
         printf("Abertura do arquivo deu errado!");
     }
     
-    
         /*Libera 1° a memoria alocada para as linhas*/  
         for(i = 0; i < conta_linhas; i++)
         {
             free(string->matriz_de_linhas[i]);
         }
 
-
         /*Limpa a memoria que foi alocada para a matriz*/
         free(string->matriz_de_linhas);    
+}
 
-        
+/*Quando a função le teclado for desabilitada, esta função entra para ler os dados do usuario*/
+void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
+{
+    /*Numeros de 2 unidades somente*/
+    char numero[2];
+    int saida = 1;
+    int i = 0;
+    op->numero_convertido = 0;
     
+    /*Coloca a coordenada da onde deve ser impresso, o caso abaixo da opção do menu principal 'CARACTERE X'*/
+    gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + 1);
+
+    /*Loop ate a conversao ser feita corretamente*/
+    while(saida)
+    {
+            printf("Caractere X: ");
+            /*Loop para pegar os numeros inseridos pelo usuario*/
+            while(1)
+            {
+                /*Pega o caractere digitado sem aparecer na tela*/
+                leitura->tecla.teclado.key_code = getch();
+
+                /*Se este caractere é um dígito*/
+                if(leitura->tecla.teclado.key_code >= 48 && leitura->tecla.teclado.key_code <= 57)
+                {
+                    /*A cada incremento é colocado o caractere na string numero*/
+                    numero[i] = leitura->tecla.teclado.key_code;
+
+                    /*Impresso na tela para o usuário*/
+                    printf("%c", numero[i]);
+                    i++;
+
+                    /*Ao chegar no fim da string, é colocado o '\0'*/
+                    if(i == 2)
+                    {
+                        numero[i] = '\0';
+
+                        /*O numero da string é convertido em um numero inteiro para ser usado no TAB*/
+                        op->numero_convertido = atoi(numero);
+                        
+                        break;
+                    }
+                }
+                else
+                {
+                    /*Caso nao seja um numero o caractere digitado anteriormente*/
+                    printf("Numero invalido!");
+                }
+            }
+
+            /*Ao passar pela conversao sai do loop interno*/
+            saida = 0;
+           
+        }
+    } 
+
+/*Converete a string nas suas devidas posições*/
+void Copiar_caracteres_pra_matrizes(STRINGS *string, char **opcoes, char **submenu_op_arquivo, char **submenu_op_cor)
+{
+    int i;
+
+    /*Copio os caracteres de uma string para usar em uma matriz de caractere,
+    assim eu posso imprimir uma string inteira somente com a sua posição na matriz e não caractere por caractere*/
+    for(i = 0; i < QTD_STRING; i++)
+    {
+        strcpy(string->menu[i], opcoes[i]);
+    }
+
+    /*Loop para as 2 opções do submenu 'ARQUIVO'*/
+    for(i = 0; i <= 1; i++)
+    {
+        strcpy(string->submenu_arquivo[i], submenu_op_arquivo[i]);
+    }
+
+    /*Loop para as 16 cores do submenu 'COR FUNDO'*/
+    for(i = 0; i <= 16; i++)
+    {
+        strcpy(string->submenu_cores[i], submenu_op_cor[i]);
+    }
 }
 
 /*Conta as linhas do arquivo*/
@@ -161,7 +250,10 @@ int Conta_Linhas_Arquivo(FILE *arquivo_origem)
     /*Percorre o arquivo e conta suas linhas*/
     do
     {
+        /*Pega cada caractere do arquivo*/
         caractere = fgetc(arquivo_origem);
+
+        /*Verifica caso seja '\n', significa que é uma linha, EOF para a ultima linha pois nao tem \n*/
         if(caractere == '\n' || caractere == EOF)
         {
             contador++;
@@ -169,6 +261,7 @@ int Conta_Linhas_Arquivo(FILE *arquivo_origem)
         
     }while(caractere != EOF);
 
+    /*Retorna quantas linhas foram contadas no arquivo*/
     return contador;
 }
 
@@ -178,8 +271,6 @@ void Escreve_no_Arquivo(STRINGS *string)
     EVENTO evento_para_escrita;
     int esc_pressionado = 1;
     int i;
-    /*int tamanho_por_bloco = BLOCO_DE_IMPRESSAO;*/
-
 
     /*Variaveis para mover o cursor ao abrir o arquivo*/
     int move_cursor_linha = 0;
@@ -210,6 +301,7 @@ void Escreve_no_Arquivo(STRINGS *string)
                 /*tecla pressionada ou não */
                 if(evento_para_escrita.teclado.status_tecla == LIBERADA)
                 {
+
                     /*Casos para cada tecla*/
                     switch(evento_para_escrita.teclado.key_code)
                     {
@@ -241,23 +333,13 @@ void Escreve_no_Arquivo(STRINGS *string)
                         
                         case SETA_PARA_BAIXO:
                         {
+                            
                             /*Verifica o tamanho das linhas do meu arquivo, caso chegue na linha final não consigo ultrapassa-la*/
                             if(move_cursor_coluna < string->conta_linhas)
-                            {  
-                                /*A linha zera para que eu possa andar pelas linhas até o '\n' dela*/
-                                move_cursor_linha = 0;
-                                move_cursor_coluna += 1;
-                                gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y + move_cursor_coluna);
-                            }
-                            else
                             {
-                                /*Quando a coluna passar do limite do bloco de impressao de linhas
-                                soma-se a variavel 'tamanho_por_bloco' com uma constante que sera o limite maximo de impressao de linhas,
-                                isso é passado novamente para o loop que faz as impressoes das linhas
-                                if(move_cursor_coluna > tamanho_por_bloco)
-                                {
-                                    tamanho_por_bloco += BLOCO_DE_IMPRESSAO;
-                                }*/
+                                /*A linha zera para que eu possa andar pelas linhas até o '\n' dela*/
+                                move_cursor_coluna += 1;
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_linha, string->posicao_cursor_escrita.Y + move_cursor_coluna);   
                             }
                             
                             break;
@@ -268,10 +350,8 @@ void Escreve_no_Arquivo(STRINGS *string)
                             /*Ao subir com o cursor nao pode ultrapassar a 1° linha*/
                             if(move_cursor_coluna >= string->posicao_cursor_escrita.X)
                             {
-                                /*Zera o 'move_cursor_linha' para que eu possa andar pela outra linha normalmente*/
-                                move_cursor_linha = 0;
                                 move_cursor_coluna -= 1;
-                                gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y + move_cursor_coluna);
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_linha, string->posicao_cursor_escrita.Y + move_cursor_coluna);
                             }
                     
                             break;
@@ -280,13 +360,20 @@ void Escreve_no_Arquivo(STRINGS *string)
                         /*Sobrescreve caracteres*/
                         case INSERT:
                         {
-                            
+                            /*Quando queira sobrescrever os caracteres troca de modo
+                            string->modo = 0;*/
+                            break;
+                        }
+
+                        case SHIFT_PRESSED:
+                        {
                             break;
                         }
 
                         /*Sai do loop*/
                         case ESC:
                         {
+                            /*Zera as 2 variaves de controle do cursor e sai do loop por meio da variavel 'esc_pressionado'*/
                             move_cursor_linha = 0;
                             move_cursor_coluna = 0;
                             esc_pressionado = 0;
@@ -296,33 +383,10 @@ void Escreve_no_Arquivo(STRINGS *string)
                 }
             }
         }
+
+    /*Loop até o ESC ser pressionado*/
     }while(esc_pressionado);
     
-}
-
-
-/*Converete a string nas suas devidas posições*/
-void Copiar_caracteres_pra_matrizes(STRINGS *string, char **opcoes, char **submenu_op_arquivo, char **submenu_op_cor)
-{
-    int i;
-    /*Copio os caracteres de uma string para usar em uma matriz de caractere,
-    assim eu posso imprimir uma string inteira somente com a sua posição na matriz e não caractere por caractere*/
-    for(i = 0; i < QTD_STRING; i++)
-    {
-        strcpy(string->menu[i], opcoes[i]);
-    }
-
-    /*Loop para as 2 opções do submenu 'ARQUIVO'*/
-    for(i = 0; i <= 1; i++)
-    {
-        strcpy(string->submenu_arquivo[i], submenu_op_arquivo[i]);
-    }
-
-    /*Loop para as 16 cores do submenu 'COR FUNDO'*/
-    for(i = 0; i <= 16; i++)
-    {
-        strcpy(string->submenu_cores[i], submenu_op_cor[i]);
-    }
 }
 
 /*Desenha minha janela do menu*/
@@ -374,7 +438,6 @@ void Desenha_Janela_Menu(TAM_JANELA *janela)
     
 }
 
-
 /*Função que imprime as opções de menu na tela*/
 void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *letras)
 {
@@ -417,7 +480,6 @@ void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *let
 
         /*Imprime a string referente a opção do menu*/
         printf("%s", string->menu[i]);
-
         
         /*Colore a letra quando apertado o 'ALT_ESQUERDO'*/
         if(op->controle_do_alt)
@@ -445,6 +507,39 @@ void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *let
         tam_opcao_menu += strlen(string->menu[i]) + ESPACAMENTO;
 
     }
+}
+
+/*Função para inicializar as variaveis*/
+void Inicializacao_Variaveis(STRINGS *string, USUARIO *op, TAM_JANELA *janela)
+{
+    /*Declaração da opção do usuário*/
+    op->escolha_do_usuario = 0;
+
+    /*Controle do alt*/
+    op->controle_do_alt = 0;
+
+    /*Controla o desenho da janela, para que eu consiga mover o cursor,
+    é inicializado com 1 pois preciso que imprima na tela pela 1° vez a janela*/
+    op->controla_evento = 1;
+
+    /*Variavel para saida do loop principal da main*/
+    op->esc_apertado = 1;
+
+    /*Precisa imprimir ao menos 1 vez*/
+    op->imprime_janela_cor_diferente = 1;
+
+    /*Coordenadas da Janela, x e y, para eu poder imprimi-la na tela*/
+    janela->coordenadas_janela.X = 1;
+    janela->coordenadas_janela.Y = 1;
+
+    /*Começa com a inserção de caracteres*/
+    string->modo = 1;
+
+    /*Inicialização da quantidade de linhas no arquivo*/
+    string->index_linha_matriz = 0;
+
+    /*Atribui o tamanho da janela do console*/
+    string->limite_maximo_Janela = tamanhoJanelaConsole();
 }
 
 /*Função que le o teclado do usuario*/
@@ -571,10 +666,6 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                         /*switch para a outra tecla após o ALT_ESQUERDO*/
                         switch(leitura->tecla.teclado.key_code)
                         {
-                            /*Uma ideia aqui é criar um vetor de coordenadas, há o erro de ao estar em uma opção, ele nao me redireciona aquela opção,
-                            ao chamar arquivo, estando em altera x, o submenu aparece abaixo de altera x e não abaixo do arquivo, onde é o submenu correspondente*/
-
-
                             /*Os gotoxy() são para setar a coordenada correspondente ao lugar aonde será impresso o submenu de cada opção do menu principal*/
                             /*Teclas de atalho para chamada das opções do menu principal*/
                             /*Atalho para opção 'ARQUIVO'*/
@@ -635,7 +726,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
 
 
 
-/*Controla os eventos para eu ter controle sobre as teclas de pedido de usurio, por isso é necessario mapear as teclas para imprimir novamente a janela de menu*/
+/*Controla as teclas que serão pressionadas pelo teclado, para imprimir novamente a janela de menu é necessario mapear as teclas*/
 int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
 {
     /*Mapeamento de cada tecla*/
@@ -669,66 +760,7 @@ int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
     }
     /*Caso seja qualquer outro tipo de tecla retorna 0, para nao imprimir de novo o menu*/
     return 0;
-}
-
-
-/*Quando a função le teclado for desabilitada, esta função entra para ler os dados do usuario*/
-void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
-{
-    /*Numeros de 2 unidades somente*/
-    char numero[2];
-    int saida = 1;
-    int i = 0;
-    op->numero_convertido = 0;
-    
-    /*Coloca a coordenada da onde deve ser impresso, o caso abaixo da opção do menu principal 'CARACTERE X'*/
-    gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + 1);
-
-    /*Loop ate a conversao ser feita corretamente*/
-    while(saida)
-    {
-            printf("Caractere X: ");
-            /*Loop para pegar os numeros inseridos pelo usuario*/
-            while(1)
-            {
-                /*Pega o caractere digitado sem aparecer na tela*/
-                leitura->tecla.teclado.key_code = getch();
-
-                /*Se este caractere é um dígito*/
-                if(leitura->tecla.teclado.key_code >= 48 && leitura->tecla.teclado.key_code <= 57)
-                {
-                    /*A cada incremento é colocado o caractere na string numero*/
-                    numero[i] = leitura->tecla.teclado.key_code;
-
-                    /*Impresso na tela para o usuário*/
-                    printf("%c", numero[i]);
-                    i++;
-
-                    /*Ao chegar no fim da string, é colocado o '\0'*/
-                    if(i == 2)
-                    {
-                        numero[i] = '\0';
-
-                        /*O numero da string é convertido em um numero inteiro para ser usado no TAB*/
-                        op->numero_convertido = atoi(numero);
-                        
-                        break;
-                    }
-                    
-                }
-                else
-                {
-                    /*Caso nao seja um numero o caractere digitado anteriormente*/
-                    printf("Numero invalido!");
-                }
-            }
-
-            /*Ao passar pela conversao sai do loop interno*/
-            saida = 0;
-           
-        }
-    }   
-
+}  
 
 /*Função para apresentar o submenu quando for apertado na opção arquivo*/
 void Submenu_Arquivo(STRINGS *string, USUARIO *op)
