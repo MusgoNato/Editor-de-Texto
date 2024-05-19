@@ -1,12 +1,15 @@
 /*Programa: Editor de Texto Simples.
-Descrição: O programa será um editor de texto simples que possibilitará ao usuario abertura de arquivos,
-troca de cores de fundo e texto, etc.
+Descrição: Programa que será capaz de editar, inserir e sobrescrever caracteres, podendo o usuario trocar de cor, tanto de
+texto como do fundo do prompt. Pode abrir arquivos de qualquer tamanho e modifica-los.
 Programador: Hugo Josué Lema Das Neves
 RGM: 47159 
-Data da última modificação: 23/04/2024*/
+Data da última modificação: 19/05/2024*/
 
 /*Copiar e colar no prompt de comando
 gcc principal.c -o editor.exe -Wall -pedantic -Werror -Wextra console_v1.5.5.c conio_v3.2.4.c funcoes.c*/
+
+/*Executavel gerado após a linha de compilação acima
+editor.exe*/
 
 /*Bibliotecas*/
 # include <locale.h> /*setlocale()*/

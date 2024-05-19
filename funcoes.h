@@ -143,6 +143,13 @@ Retorno :
 Nenhum*/
 void Caractere_X(LE_TECLADO *, USUARIO *);
 
+/*Função responsável por salvar o arquivo aberto
+Parametros :
+1° -> Ponteiro para STRINGS
+Retorno : 
+Nenhum*/
+void Salvar_Arquivo(STRINGS *);
+
 /*Mostra o submenu arquivo para o usuario escolher
 Parametros :
 1° -> Ponteiro para estrutura STRINGS
