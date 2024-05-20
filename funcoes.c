@@ -88,7 +88,10 @@ void Abre_Arquivo(STRINGS *string)
     clrscr();
 
     /*Verifica‡Æo do arquivo para o modo leitura*/
-    string->arquivo_origem = fopen(string->arquivo_txt, "r+");
+    string->arquivo_origem = fopen(string->arquivo_txt, "a+");
+    
+    /*Como o modo append coloca o ponteiro para o arquivo no final dele, ‚ recolocado o mesmo para posi‡Æo incial*/
+    fseek(string->arquivo_origem, 0, SEEK_SET);
 
     /*Valida‡Æo da abertura*/
     if(string->arquivo_origem != NULL)
