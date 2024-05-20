@@ -1,8 +1,8 @@
 /*L¢gica dos prot¢tipos criados no arquivo 'funcoes.h'*/
 
 /*Bibliotecas/Constantes*/
-# include <stdio.h> /*atoi(), fclose(), fgetc(), fopen(), free(), fseek(), maloc(), printf() */
-# include <string.h> /*strchr(), strcpy(), strlen()*/
+# include <stdio.h> /*atoi(), fclose(), fgetc(), fopen(), free(), fseek(), maloc(), printf(), putchar() */
+# include <string.h> /*strchr(), strcpy(), strlen(), memmove()*/
 # include "console_v1.5.5.h" /*Evento(), hit(), tamanhoJanelaConsole(), */
 # include "conio_v3.2.4.h" /*clrscr(), getch(), gotoxy(), wherex(), wherey(), textcolor()*/
 # include "funcoes.h" /*Abre_Arquivo(), Caractere_X(), Copiar_caracteres_pra_matrizes(), Conta_Linhas_Arquivo(),
@@ -87,7 +87,7 @@ void Abre_Arquivo(STRINGS *string)
     /*Limpa a tela*/
     clrscr();
 
-    /*Verifica‡Æo do arquivo para o modo leitura*/
+    /*Abertura do arquivo para o modo adi‡Æo (append)*/
     string->arquivo_origem = fopen(string->arquivo_txt, "a+");
     
     /*Como o modo append coloca o ponteiro para o arquivo no final dele, ‚ recolocado o mesmo para posi‡Æo incial*/
@@ -256,6 +256,55 @@ int Conta_Linhas_Arquivo(FILE *arquivo_origem)
     return contador;
 }
 
+/*Desenha minha janela do menu*/
+void Desenha_Janela_Menu(TAM_JANELA *janela)
+{
+    int i;
+    
+    /*Desenha a linha superior do menu*/
+    for(i = 0; i < LARGURA; i++)
+    {
+        gotoxy(janela->coordenadas_janela.X + i, janela->coordenadas_janela.Y);
+        printf("=");
+    }
+
+    /*Coluna esquerda*/
+    for(i = 0; i < ALTURA; i++)
+    {
+        gotoxy(janela->coordenadas_janela.X, janela->coordenadas_janela.Y + i);
+        printf("|");
+    }
+
+    /*Linha inferior*/
+    for(i = 0; i < LARGURA; i++)
+    {
+        /*Necess rio o incremento do i em 1, para nao borrar o '|' da coluna esquerda,
+        h  de se decrementar a janela->altura pois o printf da um quebra linha, para isso imprimir o caractere '=' uma linha depois, se decrementa o y*/
+        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + LARGURA - 1);
+        printf("=");
+    }
+
+    /*Coluna Direita*/
+    for(i = 0; i < ALTURA; i++)
+    {
+        /*X recebe o valor da largura, assim eu tenho a coordenada do fim da linha superior, feito isso, somente incrementar o y at‚ a altura
+        definida*/
+        gotoxy(janela->coordenadas_janela.X + LARGURA, janela->coordenadas_janela.Y + i);
+        printf("|");
+    }
+
+    /*Linha inferior a linha superior*/
+    /*A largura ‚ decrementada pois passa do limite da coluna direita*/
+    for(i = 0; i < LARGURA - 1; i++)
+    {
+        /*Dividindo a largura e altura e, somando com a coordenadas_Janela.Y, tenho o lugar para imprimir a linha inferior a superior,
+        somente ‚ necess rio incrementar o x, x + 1 pois ele 'come' a coluna da esquerda, para ajustar incrementei em +1 e decrementei a largura na condi‡Æo de parada*/
+        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + LARGURA/ALTURA);
+        printf("=");
+    }
+    
+}
+
 /*Fun‡Æo para escrita no arquivo*/
 void Escreve_no_Arquivo(STRINGS *string)
 {
@@ -263,6 +312,7 @@ void Escreve_no_Arquivo(STRINGS *string)
     int esc_pressionado = 1;
     int ultima_linha = 0;
     int cursor_final_linha = 0;
+    int tamanho = 0;
     int i;
 
     /*Variaveis para mover o cursor ao abrir o arquivo*/
@@ -310,14 +360,16 @@ void Escreve_no_Arquivo(STRINGS *string)
                             /*Imprime o c¢digo da tecla correspondente dentro do intervalo especificado na condi‡Æo*/
                             putchar(evento_para_escrita.teclado.ascii_code);
                         }
-                        /*Modo de inser‡Æo de caracteres
+                        /*Modo de inser‡Æo de caracteres*/
                         else
-                        {
-                            
-                            
-                        }*/
+                        {   
+                            /*Pega o tamanho da linha atual onde estou*/
+                            tamanho = strlen(string->matriz_de_linhas[move_cursor_na_linha]);
 
-                        
+                            /*Desloca todos os caracteres a direita da posi‡Æo atual do cursor*/
+                            memmove(string->matriz_de_linhas[move_cursor_na_coluna] + move_cursor_na_coluna + 1, string->matriz_de_linhas[move_cursor_na_linha] + move_cursor_na_coluna, tamanho - move_cursor_na_coluna + 1);
+                            string->matriz_de_linhas[move_cursor_na_linha][move_cursor_na_coluna] = evento_para_escrita.teclado.ascii_code;   
+                        }
                     }
                     
 
@@ -462,55 +514,6 @@ void Escreve_no_Arquivo(STRINGS *string)
 
     /*Loop at‚ o ESC ser pressionado*/
     }while(esc_pressionado);
-    
-}
-
-/*Desenha minha janela do menu*/
-void Desenha_Janela_Menu(TAM_JANELA *janela)
-{
-    int i;
-    
-    /*Desenha a linha superior do menu*/
-    for(i = 0; i < LARGURA; i++)
-    {
-        gotoxy(janela->coordenadas_janela.X + i, janela->coordenadas_janela.Y);
-        printf("=");
-    }
-
-    /*Coluna esquerda*/
-    for(i = 0; i < ALTURA; i++)
-    {
-        gotoxy(janela->coordenadas_janela.X, janela->coordenadas_janela.Y + i);
-        printf("|");
-    }
-
-    /*Linha inferior*/
-    for(i = 0; i < LARGURA; i++)
-    {
-        /*Necess rio o incremento do i em 1, para nao borrar o '|' da coluna esquerda,
-        h  de se decrementar a janela->altura pois o printf da um quebra linha, para isso imprimir o caractere '=' uma linha depois, se decrementa o y*/
-        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + LARGURA - 1);
-        printf("=");
-    }
-
-    /*Coluna Direita*/
-    for(i = 0; i < ALTURA; i++)
-    {
-        /*X recebe o valor da largura, assim eu tenho a coordenada do fim da linha superior, feito isso, somente incrementar o y at‚ a altura
-        definida*/
-        gotoxy(janela->coordenadas_janela.X + LARGURA, janela->coordenadas_janela.Y + i);
-        printf("|");
-    }
-
-    /*Linha inferior a linha superior*/
-    /*A largura ‚ decrementada pois passa do limite da coluna direita*/
-    for(i = 0; i < LARGURA - 1; i++)
-    {
-        /*Dividindo a largura e altura e, somando com a coordenadas_Janela.Y, tenho o lugar para imprimir a linha inferior a superior,
-        somente ‚ necess rio incrementar o x, x + 1 pois ele 'come' a coluna da esquerda, para ajustar incrementei em +1 e decrementei a largura na condi‡Æo de parada*/
-        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + LARGURA/ALTURA);
-        printf("=");
-    }
     
 }
 

@@ -67,14 +67,26 @@ typedef struct _USUARIO
 }USUARIO;
 
 
-
-
-
 /*Função que realiza a abertura do arquivo pedido ao usuário
 Parametros: Ponteiro para estrutura STRINGS
 Retorno: 
 Nenhum*/
 void Abre_Arquivo(STRINGS *);
+
+/*Pede o caractere para o TAB
+Parametros :
+1° -> Ponteiro para LE_TECLADO
+2° -> Ponteiro para USUARIO 
+Retorno : 
+Nenhum*/
+void Caractere_X(LE_TECLADO *, USUARIO *);
+
+/*Função responsável por contar as linhas do arquivo aberto
+Parametros :
+1° -> Ponteiro para arquivo do tipo FILE
+Retorno :
+Retorna uma variavel do tipo 'int' com a quantidade de linhas dentro do arquivo que foi passado commo parametro*/
+int Conta_Linhas_Arquivo(FILE *);
 
 /*Coloca minhas 'opções', na matriz de caracteres 'menu'
 Parametros :
@@ -95,6 +107,13 @@ Nenhum
 */
 void Desenha_Janela_Menu(TAM_JANELA *);
 
+/*Função que escreve caracteres do usuario no arquivo
+Parametros :
+1° -> Ponteiro para estrutura STRINGS
+Retorno : 
+Nenhum*/
+void Escreve_no_Arquivo(STRINGS *);
+
 /*Inicializa as variaveis do programa
 Paremetros :
 1° -> Ponteiro para estrutura STRINGS
@@ -103,6 +122,7 @@ Paremetros :
 Retorno : 
 Nenhum
 */
+
 void Inicializacao_Variaveis(STRINGS *, USUARIO *, TAM_JANELA *);
 
 /*Função que imprime as opções de menu disponíveis
@@ -135,14 +155,6 @@ caso contrário retorna 0.
 */
 int Mapeia_teclas_Entrada(LE_TECLADO *);
 
-/*Pede o caractere para o TAB
-Parametros :
-1° -> Ponteiro para LE_TECLADO
-2° -> Ponteiro para USUARIO 
-Retorno : 
-Nenhum*/
-void Caractere_X(LE_TECLADO *, USUARIO *);
-
 /*Função responsável por salvar o arquivo aberto
 Parametros :
 1° -> Ponteiro para STRINGS
@@ -173,18 +185,3 @@ Paramentros :
 Retorno : 
 Nenhum*/
 void Submenu_cor_texto(STRINGS *, USUARIO *);
-
-/*Função que escreve caracteres do usuario no arquivo
-Parametros :
-1° -> Ponteiro para estrutura STRINGS
-Retorno : 
-Nenhum*/
-void Escreve_no_Arquivo(STRINGS *);
-
-/*Função responsável por contar as linhas do arquivo aberto
-Parametros :
-1° -> Ponteiro para arquivo do tipo FILE
-Retorno :
-Retorna uma variavel do tipo 'int' com a quantidade de linhas dentro do arquivo que foi passado commo parametro*/
-int Conta_Linhas_Arquivo(FILE *);
-
