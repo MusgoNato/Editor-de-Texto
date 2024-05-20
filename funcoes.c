@@ -465,39 +465,6 @@ void Escreve_no_Arquivo(STRINGS *string)
     
 }
 
-/*Fun‡Æo que as modifica‡äes feitas no arquivo que foi aberto*/
-void Salvar_Arquivo(STRINGS *string)
-{
-    int i;
-    FILE *escrita;
-
-    /*Encerra o arquivo aberto*/
-    fclose(string->arquivo_origem);
-
-    /*Abre pra escrever*/
-    escrita = fopen(string->arquivo_txt, "w");
-
-    /*Escreve tudo no meu arquivo*/
-    for(i = 0; i < string->conta_linhas; i++)
-    {
-        fprintf(escrita, "%s", string->matriz_de_linhas[i]);
-    }   
-
-    /*Fecha o arquivo de escrita*/
-    fclose(escrita);
-
-    /*Libera 1ø a memoria alocada para as linhas*/  
-    for(i = 0; i < string->conta_linhas; i++)
-    {
-        free(string->matriz_de_linhas[i]);
-    }
-
-    /*Limpa a memoria que foi alocada para a matriz*/
-    free(string->matriz_de_linhas);  
-
-    printf("Arquivo Salvo com sucesso!");
-}   
-
 /*Desenha minha janela do menu*/
 void Desenha_Janela_Menu(TAM_JANELA *janela)
 {
@@ -870,6 +837,39 @@ int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
     /*Caso seja qualquer outro tipo de tecla retorna 0, para nao imprimir de novo o menu*/
     return 0;
 }  
+
+/*Fun‡Æo que as modifica‡äes feitas no arquivo que foi aberto*/
+void Salvar_Arquivo(STRINGS *string)
+{
+    int i;
+    FILE *escrita;
+
+    /*Encerra o arquivo aberto*/
+    fclose(string->arquivo_origem);
+
+    /*Abre pra escrever*/
+    escrita = fopen(string->arquivo_txt, "w");
+
+    /*Escreve tudo no meu arquivo*/
+    for(i = 0; i < string->conta_linhas; i++)
+    {
+        fprintf(escrita, "%s", string->matriz_de_linhas[i]);
+    }   
+
+    /*Fecha o arquivo de escrita*/
+    fclose(escrita);
+
+    /*Libera 1ø a memoria alocada para as linhas*/  
+    for(i = 0; i < string->conta_linhas; i++)
+    {
+        free(string->matriz_de_linhas[i]);
+    }
+
+    /*Limpa a memoria que foi alocada para a matriz*/
+    free(string->matriz_de_linhas);  
+
+    printf("Arquivo Salvo com sucesso!");
+}   
 
 /*Fun‡Æo para apresentar o submenu quando for apertado na op‡Æo arquivo*/
 void Submenu_Arquivo(STRINGS *string, USUARIO *op)
