@@ -13,10 +13,9 @@ Submenu_background(), Submenu_cor_texto()*/
 void Abre_Arquivo(STRINGS *string)
 {
     EVENTO arquivo;
-    int shift_pressionado = 0;
-    char *retorno;
     int i = 0;
-
+    char *retorno;
+    
     /*Aloca‡Æo da matriz de linhas para NULL*/
     string->matriz_de_linhas = NULL;
 
@@ -48,36 +47,30 @@ void Abre_Arquivo(STRINGS *string)
                         break;
                     }
 
-                    /*Quando for pressionado o shift, entra nessa condi‡Æo pra conseguir colocar o caractere correto dentro da string 'arquivo_txt'*/
-                    if(shift_pressionado)
+                    /*Caso seja a tecla backspace, deve voltar, ‚ decrementado o indice 'i' e colocado o espa‡o em branco na string do arquivo .txt*/
+                    if(arquivo.teclado.key_code == BACKSPACE)
                     {
-                        /*Verifca se liberou o shift*/
-                        if(arquivo.teclado.status_tecla == LIBERADA)
-                        {
-                            /*A string que representa meu arquivo recebe o caractere proveniente do teclado e o imprime na tela*/
-                            string->arquivo_txt[i] = arquivo.teclado.ascii_code;
-                            printf("%c", string->arquivo_txt[i]);
-                            i++;
-
-                            /*Reseta a variavel para controle do shift se esta ou nao pressionado*/
-                            shift_pressionado = 0;
-                        }
-        
-                    }
-                    /*Caso normais de teclas diferentes dos shifts*/
-                    else
-                    {
-                        /*Intervalo de caracteres imprim¡veis na tela*/
-                        if(arquivo.teclado.key_code >= 32 && arquivo.teclado.key_code <= 254)
-                        {
-                            /*A string que representa o arquivo que sera aberto recebe o caractere dentro do intervalo da condi‡Æo
-                            e imprime-o na tela*/
-                            string->arquivo_txt[i] = arquivo.teclado.ascii_code;
-                            printf("%c", string->arquivo_txt[i]);
-                            i++;
+                        /*ARRUMAR O BACKSPACE, NAO APAGA AO ANDAR PRA TRµS*/
+                        /*Verifica‡Æo, somente entra caso o indice tenha algum caractere na string*/
+                        if(i > 0)
+                        {                            
+                            string->arquivo_txt[i] = arquivo.teclado.key_code;
+                            putchar(string->arquivo_txt[i]);
                         }
                         
+                         
                     }
+
+                    /*Verifica‡Æo do intervalo das teclas*/
+                    if((arquivo.teclado.key_code > 45 && arquivo.teclado.key_code <= 254) || arquivo.teclado.key_code == 32)
+                    {
+                        /*Pego o caractere correspondente a tabela ascii da tecla pressionada*/
+                        arquivo.teclado.key_code = arquivo.teclado.ascii_code;
+                        string->arquivo_txt[i] = arquivo.teclado.key_code; 
+                        putchar(arquivo.teclado.ascii_code);
+                        i++;
+                    }
+
                 }
             }
         }
@@ -348,7 +341,7 @@ void Escreve_no_Arquivo(STRINGS *string)
                     if((evento_para_escrita.teclado.key_code > 45 && evento_para_escrita.teclado.key_code <= 254) || evento_para_escrita.teclado.key_code == 32)
                     {
                         /*Pega-se o c¢digo da tecla correspondente pressionada em ascii e imprime na tela*/
-                        evento_para_escrita.teclado.ascii_code = evento_para_escrita.teclado.ascii_code;
+                        evento_para_escrita.teclado.ascii_code = evento_para_escrita.teclado.key_code;
 
                         /*Verifica qual modo o usuario esta, caso entre na verifica‡Æo esta no modo de sobrescrita de caracteres*/
                         if(string->modo)
