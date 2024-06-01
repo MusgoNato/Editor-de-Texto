@@ -6,7 +6,8 @@ RGM: 47159
 Data da última modificação: 19/05/2024*/
 
 /*Copiar e colar no prompt de comando
-    */
+gcc principal.c -o editor.exe console_v1.5.5.c conio_v3.2.4.c funcoes.c -Wall -pedantic -Wextra -Werror
+*/
 
 /*Executavel gerado após a linha de compilação acima
 editor.exe*/
@@ -81,6 +82,7 @@ int main(int argc, char *argv[])
             
             /*Reseta a variavel para controlar as cores da janela*/
             op.imprime_janela_cor_diferente = 0;
+            
         }
 
         /*Caso a janela tenha que ser impressa ou tenha uma mudança de cor*/
@@ -92,7 +94,7 @@ int main(int argc, char *argv[])
             /*Reseta a variavel a 0 para controle do menu principal*/
             op.controla_evento = 0;
         }
-        
+
         /*Função que faz a leitura das teclas do programa*/
         Le_Teclado(&leitura, &op, &string);
 

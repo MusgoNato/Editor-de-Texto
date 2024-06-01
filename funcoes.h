@@ -39,6 +39,10 @@ typedef struct _STRINGS
     int index_linha_matriz;
     int tamanho_das_linhas[LARGURA];
     int modo;
+
+    /*Essa matriz vai guardar o save da tela, pra depois somente recolocar, após o usuario ter pressionado qualquer submenu*/
+    char *Tela;
+
     COORD vetor_cord_menu[QTD_STRING];
     COORD limite_maximo_Janela;
     COORD posicao_cursor_escrita;

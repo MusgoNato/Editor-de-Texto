@@ -15,7 +15,8 @@ void Abre_Arquivo(STRINGS *string)
     EVENTO arquivo;
     int i = 0;
     char *retorno;
-    
+    int controla_arquivo = 0;
+
     /*Aloca‡Æo da matriz de linhas para NULL*/
     string->matriz_de_linhas = NULL;
 
@@ -38,6 +39,7 @@ void Abre_Arquivo(STRINGS *string)
                     if(arquivo.teclado.key_code == ESC)
                     {
                         /*Caso se arrependa de digitar volta as op‡äes*/
+                        controla_arquivo = 0;
                         break;
                     }
 
@@ -45,6 +47,7 @@ void Abre_Arquivo(STRINGS *string)
                     if(arquivo.teclado.key_code == ENTER)
                     {
                         string->arquivo_txt[i] = '\0';
+                        controla_arquivo = 1;
                         break;
                     }
 
@@ -61,8 +64,8 @@ void Abre_Arquivo(STRINGS *string)
                             printf("\b ");
                             putchar(string->arquivo_txt[i]);
 
-                            /*recebe um espa‡o em branco pois caso o arquivo contenha o numero da tecla BACKSPACE, ir  entrar no arquivo, mesmo supostamente tendo apagado do terminal
-                            porem nao apaga da string, colocando um espa‡o garante que sera diferente na hora da leitura do arquivo*/
+                            /*recebe um espa‡o em branco pois caso o arquivo contenha o numero da tecla BACKSPACE, ir  entrar no arquivo, mesmo supostamente tendo apagado do terminal,
+                            porem nao apaga da string, colocando um espa‡o garante que na string conter  o espa‡o e nÆo sera apenas apagado do terminal*/
                             string->arquivo_txt[i] = ' ';
 
                             /*Decremento o indice para pegar a proxima tecla na posi‡Æo correta*/
@@ -88,68 +91,73 @@ void Abre_Arquivo(STRINGS *string)
                 
     }
 
-    /*Abertura do arquivo para o modo adi‡Æo (append)*/
-    string->arquivo_origem = fopen(string->arquivo_txt, "a+");
-    
-    /*Como o modo append coloca o ponteiro para o arquivo no final dele, ‚ recolocado o mesmo para posi‡Æo incial*/
-    fseek(string->arquivo_origem, 0, SEEK_SET);
-
-    /*Valida‡Æo da abertura*/
-    if(string->arquivo_origem != NULL)
+    /*Verifica se caso o usuario aperte ESC, o programa sai para ir as outras op‡äes do menu, nÆo ‚ necessario criar outro arquivo se o usuario nem apertou ENTER,
+    entao somente quando ele aperte ENTER, o arquivo ‚ criado e verificado*/
+    if(controla_arquivo)
     {
-        /*Chamada para a fun‡Æo que conta as linhas do arquivo*/
-        string->conta_linhas = Conta_Linhas_Arquivo(string->arquivo_origem);
+        /*Abertura do arquivo para o modo adi‡Æo (append)*/
+        string->arquivo_origem = fopen(string->arquivo_txt, "a+");
 
-        /*Como ‚ append, volta ao cursor no come‡o do arquivo*/
+        /*Como o modo append coloca o ponteiro para o arquivo no final dele, ‚ recolocado o mesmo para posi‡Æo incial*/
         fseek(string->arquivo_origem, 0, SEEK_SET);
 
-        /*Realoca memoria para minha matriz, pois ja foi alocada com NULL incialmente*/
-        string->matriz_de_linhas = (char **)realloc(string->matriz_de_linhas, string->conta_linhas * sizeof(char *));
-
-        /*Se a aloca‡Æo der certo entra no loop*/
-        if(string->matriz_de_linhas != NULL)
+        /*Valida‡Æo da abertura*/
+        if(string->arquivo_origem != NULL)
         {
-            /*Coloca o cursor no come‡o da janela*/
-            gotoxy(1,1);
+            /*Chamada para a fun‡Æo que conta as linhas do arquivo*/
+            string->conta_linhas = Conta_Linhas_Arquivo(string->arquivo_origem);
 
-            /*Loop para alocar memoria para cada linha do meu arquivo*/
-            while(1)
+            /*Como ‚ append, volta ao cursor no come‡o do arquivo*/
+            fseek(string->arquivo_origem, 0, SEEK_SET);
+
+            /*Realoca memoria para minha matriz, pois ja foi alocada com NULL incialmente*/
+            string->matriz_de_linhas = (char **)realloc(string->matriz_de_linhas, string->conta_linhas * sizeof(char *));
+
+            /*Se a aloca‡Æo der certo entra no loop*/
+            if(string->matriz_de_linhas != NULL)
             {
-                /*A cada itera‡Æo aloca memoria para minha string*/
-                string->matriz_de_linhas[string->index_linha_matriz] = (char *)malloc(TAM_BUFFER * sizeof(char));
+                /*Coloca o cursor no come‡o da janela*/
+                gotoxy(1,1);
 
-                /*Se caso a aloca‡Æo der certo continua o loop, caso der errado fecha o arquivo, limpa a memoria alocada e sai do loop*/
-                if(string->matriz_de_linhas[string->index_linha_matriz] == NULL)
+                /*Loop para alocar memoria para cada linha do meu arquivo*/
+                while(1)
                 {
-                    /*Fecha o arquivo e libera mem¢ria*/
-                    fclose(string->arquivo_origem);
-                    free(string->matriz_de_linhas[string->index_linha_matriz]);
-                    break;
+                    /*A cada itera‡Æo aloca memoria para minha string*/
+                    string->matriz_de_linhas[string->index_linha_matriz] = (char *)malloc(TAM_BUFFER * sizeof(char));
+
+                    /*Se caso a aloca‡Æo der certo continua o loop, caso der errado fecha o arquivo, limpa a memoria alocada e sai do loop*/
+                    if(string->matriz_de_linhas[string->index_linha_matriz] == NULL)
+                    {
+                        /*Fecha o arquivo e libera mem¢ria*/
+                        fclose(string->arquivo_origem);
+                        free(string->matriz_de_linhas[string->index_linha_matriz]);
+                        break;
+                    }
+
+                    /*Retorno do ponteiro para o arquivo*/
+                    retorno = fgets(string->matriz_de_linhas[string->index_linha_matriz], TAM_BUFFER, string->arquivo_origem);
+
+                    /*Se for final do arquivo, sai do loop*/
+                    if(retorno == NULL)
+                    {
+                        break;  
+                    }
+
+                    string->index_linha_matriz++;
+                    
                 }
-
-                /*Retorno do ponteiro para o arquivo*/
-                retorno = fgets(string->matriz_de_linhas[string->index_linha_matriz], TAM_BUFFER, string->arquivo_origem);
-
-                /*Se for final do arquivo, sai do loop*/
-                if(retorno == NULL)
-                {
-                    break;  
-                }
-
-                string->index_linha_matriz++;
-                
             }
-        }
 
-        /*Fun‡Æo para escrita no arquivo*/
-        Escreve_no_Arquivo(string);
+            /*Fun‡Æo para escrita no arquivo*/
+            Escreve_no_Arquivo(string);
+        }
+        else
+        {
+            /*Erro na abertura do arquivo*/
+            printf("Abertura do arquivo deu errado!");
+        }
     }
-    else
-    {
-        /*Erro na abertura do arquivo*/
-        printf("Abertura do arquivo deu errado!");
-    }
-      
+    
 }
 
 /*Quando a fun‡Æo le teclado for desabilitada, esta fun‡Æo entra para ler os dados do usuario*/
@@ -624,11 +632,24 @@ void Inicializacao_Variaveis(STRINGS *string, USUARIO *op, TAM_JANELA *janela)
 
     /*Atribui o tamanho da janela do console*/
     string->limite_maximo_Janela = tamanhoJanelaConsole();
+
 }
 
 /*Fun‡Æo que le o teclado do usuario*/
 void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
 {
+    /*Aloco memoria para minha tela*/
+    string->Tela = NULL;
+
+    /*Realoco memoria para a tela de salvamento de acordo com o tamanho maximo da minha janela*/
+    string->Tela = (char *)realloc(string->Tela, string->limite_maximo_Janela.X * string->limite_maximo_Janela.Y * 2 * sizeof(char));
+
+    /*UMA IDEIA  COLOCAR O TEXTO IMPRESSO EMBAIXO DO MENU, ASSIM CONSIGO TER A LOCALIZA€ÇO DA ONDE VAI SER IMPRESSO E COMO FAZER,
+    A IDEIA  IMPRIMIR POR BLOCOS, CADA BLOCO EU IMPRIMO O TEXTO APàS PASSAR O LIMITE DE CADA BLOCO, POSSO GUARDAR A TELA ANTERIOR E COLOCAR NA TELA
+    */
+
+    /*Pego a tela atual para salvar*/
+    _gettext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
 
     /*Identifica um 'hit' do teclado*/   
     if(hit(KEYBOARD_HIT))
@@ -657,7 +678,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                         /*Seleciona a op‡Æo do menu principal*/
                         case ENTER:
                         {
-                           
+
                             /*De acordo com a escolha do usuario, uma das op‡äes sera selecionada*/
                             switch(op->escolha_do_usuario)
                             {
@@ -666,6 +687,9 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                                 {
                                     /*Chama fun‡Æo para abrir o submenu arquivo*/
                                     Submenu_Arquivo(string);
+
+                                    /*Ap¢s ter chamado minha fun‡Æo coloco a tela que foi salva anteriormente e o mesmo ‚ feito para as demais fun‡äes*/
+                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
                                     break;
                                 }
 
@@ -682,6 +706,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
 
                                     /*Chama a fun‡Æo para pegar o numero dado pelo usuario*/
                                     Caractere_X(leitura, op, string);
+                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
                                     break;
                                 }
 
@@ -690,6 +715,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                                 {
                                     /*Chama a fun‡Æo para o submenu de cor de fundo*/
                                     Submenu_background(string, op);
+                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
                                     break;
                                 }
 
@@ -698,6 +724,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                                 {
                                     /*Chama a fun‡Æo para o submenu de cor de texto*/
                                     Submenu_cor_texto(string, op);
+                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
                                     break;
                                 }
                             }
