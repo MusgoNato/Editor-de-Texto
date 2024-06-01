@@ -100,6 +100,9 @@ int main(int argc, char *argv[])
 
     }  
 
+    /*Libera a memoria alocada inicialmente para guradar a tela de save*/
+    free(string.Tela);
+
     /*Devolve as cores de fundo e de texto para as originais*/
     textbackground(BLACK);
     textcolor(LIGHTGRAY);
