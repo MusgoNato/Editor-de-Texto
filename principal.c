@@ -6,7 +6,7 @@ RGM: 47159
 Data da última modificação: 19/05/2024*/
 
 /*Copiar e colar no prompt de comando
-gcc principal.c -o editor.exe -Wall -pedantic -Werror -Wextra console_v1.5.5.c conio_v3.2.4.c funcoes.c*/
+    */
 
 /*Executavel gerado após a linha de compilação acima
 editor.exe*/

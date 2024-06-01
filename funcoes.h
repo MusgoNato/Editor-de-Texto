@@ -39,6 +39,7 @@ typedef struct _STRINGS
     int index_linha_matriz;
     int tamanho_das_linhas[LARGURA];
     int modo;
+    COORD vetor_cord_menu[QTD_STRING];
     COORD limite_maximo_Janela;
     COORD posicao_cursor_escrita;
     COLORS cores_background;
@@ -79,7 +80,7 @@ Parametros :
 2° -> Ponteiro para USUARIO 
 Retorno : 
 Nenhum*/
-void Caractere_X(LE_TECLADO *, USUARIO *);
+void Caractere_X(LE_TECLADO *, USUARIO *, STRINGS *);
 
 /*Função responsável por contar as linhas do arquivo aberto
 Parametros :
@@ -168,7 +169,7 @@ Parametros :
 2° -> Ponteiro para estrutura USUARIO
 Retorno :
 Nenhum*/
-void Submenu_Arquivo(STRINGS *, USUARIO *);
+void Submenu_Arquivo(STRINGS *);
 
 /*Função que imprime as subopções da opção 'COR FUNDO' no menu principal
 Paramentros : 

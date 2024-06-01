@@ -28,6 +28,7 @@ void Abre_Arquivo(STRINGS *string)
         {
             /*Imprime na tela o caractere digitado*/
             arquivo = Evento();
+
             if(arquivo.tipo_evento & KEY_EVENT)
             {
                 /*Verifica se a tecla foi liberada*/
@@ -50,15 +51,23 @@ void Abre_Arquivo(STRINGS *string)
                     /*Caso seja a tecla backspace, deve voltar, ‚ decrementado o indice 'i' e colocado o espa‡o em branco na string do arquivo .txt*/
                     if(arquivo.teclado.key_code == BACKSPACE)
                     {
-                        /*ARRUMAR O BACKSPACE, NAO APAGA AO ANDAR PRA TRµS*/
                         /*Verifica‡Æo, somente entra caso o indice tenha algum caractere na string*/
                         if(i > 0)
                         {                            
+                            /*Pego o backspace pressionado*/
                             string->arquivo_txt[i] = arquivo.teclado.key_code;
+
+                            /*Move o cursor uma posi‡Æo atras no terminal e coloca um espa‡o em branco na posi‡Æo anterior antes de mover*/
+                            printf("\b ");
                             putchar(string->arquivo_txt[i]);
+
+                            /*recebe um espa‡o em branco pois caso o arquivo contenha o numero da tecla BACKSPACE, ir  entrar no arquivo, mesmo supostamente tendo apagado do terminal
+                            porem nao apaga da string, colocando um espa‡o garante que sera diferente na hora da leitura do arquivo*/
+                            string->arquivo_txt[i] = ' ';
+
+                            /*Decremento o indice para pegar a proxima tecla na posi‡Æo correta*/
+                            i--;
                         }
-                        
-                         
                     }
 
                     /*Verifica‡Æo do intervalo das teclas*/
@@ -68,6 +77,8 @@ void Abre_Arquivo(STRINGS *string)
                         arquivo.teclado.key_code = arquivo.teclado.ascii_code;
                         string->arquivo_txt[i] = arquivo.teclado.key_code; 
                         putchar(arquivo.teclado.ascii_code);
+
+                        /*Incrementa para a pr¢xima tecla*/
                         i++;
                     }
 
@@ -76,9 +87,6 @@ void Abre_Arquivo(STRINGS *string)
         }
                 
     }
-
-    /*Limpa a tela*/
-    clrscr();
 
     /*Abertura do arquivo para o modo adi‡Æo (append)*/
     string->arquivo_origem = fopen(string->arquivo_txt, "a+");
@@ -145,7 +153,7 @@ void Abre_Arquivo(STRINGS *string)
 }
 
 /*Quando a fun‡Æo le teclado for desabilitada, esta fun‡Æo entra para ler os dados do usuario*/
-void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
+void Caractere_X(LE_TECLADO *leitura, USUARIO *op, STRINGS *string)
 {
     /*Numeros de 2 unidades somente*/
     char numero[2];
@@ -153,8 +161,8 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op)
     int i = 0;
     op->numero_convertido = 0;
     
-    /*Coloca a coordenada da onde deve ser impresso, o caso abaixo da op‡Æo do menu principal 'CARACTERE X'*/
-    gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + 1);
+    /*Seta na coordenada correta de onde est  minha op‡Æo no menu*/
+    gotoxy(string->vetor_cord_menu[2].X, string->vetor_cord_menu[2].Y + 1);
 
     /*Loop ate a conversao ser feita corretamente*/
     while(saida)
@@ -322,7 +330,7 @@ void Escreve_no_Arquivo(STRINGS *string)
         printf("%s", string->matriz_de_linhas[i]);
     }
 
-    /*Loop para pegar os eventos do teclado, no caso os caracteres imprimivei para serem colocado no arquivo*/
+    /*Loop para pegar os eventos do teclado, no caso os caracteres imprimiveis para serem colocado no arquivo*/
     do
     {
         /*Pega uma a‡Æo do teclado*/
@@ -340,8 +348,9 @@ void Escreve_no_Arquivo(STRINGS *string)
                     /*Verifica‡Æo para impressÆo de caracteres que sÆo imprimiveis na tela e para que nÆo imprima as setas de dire‡Æo ao mover o cursor sobre o arquivo*/
                     if((evento_para_escrita.teclado.key_code > 45 && evento_para_escrita.teclado.key_code <= 254) || evento_para_escrita.teclado.key_code == 32)
                     {
-                        /*Pega-se o c¢digo da tecla correspondente pressionada em ascii e imprime na tela*/
-                        evento_para_escrita.teclado.ascii_code = evento_para_escrita.teclado.key_code;
+                        /*Pega-se o c¢digo da tecla correspondente pressionada em ascii e imprime na tela, ‚ necess rio pegar novamente a tecla, pois caso nÆo haja essa linha,
+                        as teclas pegas apenas serÆo em maiusculas, nao em minusculas*/
+                        evento_para_escrita.teclado.ascii_code = evento_para_escrita.teclado.ascii_code;
 
                         /*Verifica qual modo o usuario esta, caso entre na verifica‡Æo esta no modo de sobrescrita de caracteres*/
                         if(string->modo)
@@ -450,7 +459,6 @@ void Escreve_no_Arquivo(STRINGS *string)
                         case ESC:
                         {
                             /*Zera as 2 variaves de controle do cursor e sai do loop por meio da variavel 'esc_pressionado'*/
-                            clrscr();
                             move_cursor_na_coluna = 0;
                             move_cursor_na_linha = 0;
                             esc_pressionado = 0;
@@ -574,6 +582,10 @@ void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *let
         /*Ap¢s imprimir na tela a op‡Æo com a cor de navega‡Æo padrao do menu, volta-se a cor original do prompt pra nao colorir toda a tela*/
         textcolor(string->cores_texto);
 
+        /*Como o Ponto_destaque, que ‚ uma coordenada para pintar a letra ao pressionamento do ALT, esta j  esta pegando a coordenada atual da minha string,
+        reuso ela para simplesmente armazenar em um vetor de coordenadas, as coordenadas de todas as strings, para reusar na funcionalidade dos atalhos*/
+        string->vetor_cord_menu[i] = Ponto_destaque;
+
         /*O tamanho da opcao armazena o tamanho da string do menu e o soma com a quantidade de espa‡amento declarado fixo,
         isso faz com que haja um espa‡amento entre as op‡äes do menu independente do tamanho da string */
         tam_opcao_menu += strlen(string->menu[i]) + ESPACAMENTO;
@@ -653,7 +665,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                                 case 0:
                                 {
                                     /*Chama fun‡Æo para abrir o submenu arquivo*/
-                                    Submenu_Arquivo(string, op);
+                                    Submenu_Arquivo(string);
                                     break;
                                 }
 
@@ -669,7 +681,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                                 {
 
                                     /*Chama a fun‡Æo para pegar o numero dado pelo usuario*/
-                                    Caractere_X(leitura, op);
+                                    Caractere_X(leitura, op, string);
                                     break;
                                 }
 
@@ -743,10 +755,9 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                             /*Atalho para op‡Æo 'ARQUIVO'*/
                             case 'A':
                             {
-                                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y);
 
                                 /*Chama a fun‡Æo para a abertura do arquivo*/
-                                Submenu_Arquivo(string, op);
+                                Submenu_Arquivo(string);
                                 break;
                             }
                             
@@ -759,17 +770,15 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                             /*Atalho para op‡Æo 'ALTERAR X'*/
                             case 'X':
                             {
-                                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y);
 
                                 /*Chama a fun‡Æo para o caractere TAB*/
-                                Caractere_X(leitura, op);
+                                Caractere_X(leitura, op, string);
                                 break;
                             }
 
                             /*Atalho para op‡Æo 'COR FUNDO'*/
                             case 'F':
                             {
-                                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y);
 
                                 /*Chamada da fun‡Æo para trocar a cor de fundo*/
                                 Submenu_background(string, op);
@@ -779,7 +788,6 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                             /*Atalho para op‡Æo 'COR TEXTO'*/
                             case 'T':
                             {
-                                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y);
 
                                 /*Chamada para a fun‡Æo que troca a cor de texto*/
                                 Submenu_cor_texto(string, op);
@@ -868,7 +876,7 @@ void Salvar_Arquivo(STRINGS *string)
 }   
 
 /*Fun‡Æo para apresentar o submenu quando for apertado na op‡Æo arquivo*/
-void Submenu_Arquivo(STRINGS *string, USUARIO *op)
+void Submenu_Arquivo(STRINGS *string)
 {
     /* criado outro tipo EVENTO para armazenar as teclas da navega‡Æo e escolha do submenu arquivo*/
     EVENTO sub_arquivo;
@@ -876,7 +884,7 @@ void Submenu_Arquivo(STRINGS *string, USUARIO *op)
     int saida = 1;
     int controla_sub = 1;
     int escolha_setas_submenu = 0;
-
+    
     /*Loop pra pegar somente as teclas necessarias*/
     while(saida)
     {
@@ -890,9 +898,12 @@ void Submenu_Arquivo(STRINGS *string, USUARIO *op)
                 {
                     textcolor(YELLOW);
                 }
-                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + i + 1);
+
+                /*Como j  tenho a posi‡Æo de cada string do menu, pode ser feito manualmente acessando seu ¡ndice*/
+                gotoxy(string->vetor_cord_menu[0].X, string->vetor_cord_menu[0].Y + i + 1);
                 printf("%s", string->submenu_arquivo[i]);
                 textcolor(string->cores_texto);
+
             }    
             /*S¢ ‚ necessario imprimir uma 1ø vez, caso o usuario pressione as teclas de navega‡Æo, ai a variavel volta com seu valor 1, caso nao continua zerado*/
             controla_sub = 0;
@@ -995,8 +1006,9 @@ void Submenu_background(STRINGS *string, USUARIO *op)
                 {
                     textcolor(YELLOW);
                 }
-                /*Imprime as op‡äes do submenu no devido lugar gra‡as a coordenada que foi pega na fun‡Æo onde imprime as op‡äes principais do menu*/
-                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + i + 1);
+
+                /*Mesma funcionalidade da fun‡Æo Submenu_arquivo*/
+                gotoxy(string->vetor_cord_menu[3].X ,string->vetor_cord_menu[3].Y + i + 1);
                 printf("%s", string->submenu_cores[i]);
                 textcolor(string->cores_texto);
             }
@@ -1074,7 +1086,9 @@ void Submenu_cor_texto(STRINGS *string, USUARIO *op)
                 {
                     textcolor(YELLOW);
                 }
-                gotoxy(op->coordenadas_submenus.X, op->coordenadas_submenus.Y + i + 1);
+
+                /*Seta a coordenada correta dpara impressÆo do meu submenu*/
+                gotoxy(string->vetor_cord_menu[4].X, string->vetor_cord_menu[4].Y + i + 1);
                 printf("%s", string->submenu_cores[i]);
                 textcolor(string->cores_texto);
             }
