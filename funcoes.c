@@ -331,7 +331,7 @@ void Escreve_no_Arquivo(STRINGS *string)
     /*Pega a posiá∆o atual do meu cursor*/
     string->posicao_cursor_escrita.X = wherex();
     string->posicao_cursor_escrita.Y = wherey();
-
+    
     /*Impress∆o das linhas do meu arquivo*/
     for(i = 0; i < string->conta_linhas; i++)
     {
@@ -590,7 +590,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *let
         /*Ap¢s imprimir na tela a opá∆o com a cor de navegaá∆o padrao do menu, volta-se a cor original do prompt pra nao colorir toda a tela*/
         textcolor(string->cores_texto);
 
-        /*Como o Ponto_destaque, que Ç uma coordenada para pintar a letra ao pressionamento do ALT, esta j† esta pegando a coordenada atual da minha string,
+        /*Como o Ponto_destaque, que Ç uma coordenada para pintar a letra ao pressionamento do ALT, j† esta pegando a coordenada atual da minha string,
         reuso ela para simplesmente armazenar em um vetor de coordenadas, as coordenadas de todas as strings, para reusar na funcionalidade dos atalhos*/
         string->vetor_cord_menu[i] = Ponto_destaque;
 

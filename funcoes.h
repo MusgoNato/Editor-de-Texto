@@ -40,6 +40,9 @@ typedef struct _STRINGS
     int tamanho_das_linhas[LARGURA];
     int modo;
 
+    /*Vai controlar a impressão por blocos do texto do arquivo aberto*/
+    int imprime_por_bloco;
+
     /*Essa matriz vai guardar o save da tela, pra depois somente recolocar, após o usuario ter pressionado qualquer submenu*/
     char *Tela;
 
