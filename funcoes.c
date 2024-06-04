@@ -110,6 +110,7 @@ void Abre_Arquivo(STRINGS *string)
             /*Como ‚ append, volta ao cursor no come‡o do arquivo*/
             fseek(string->arquivo_origem, 0, SEEK_SET);
 
+            /*MODIFICAR PARA MALLOC, POIS O REALLOC NÇO  PORTAVEL, PODE VARIAR PARA OUTROS SISTEMAS*/
             /*Realoca memoria para minha matriz, pois ja foi alocada com NULL incialmente*/
             string->matriz_de_linhas = (char **)realloc(string->matriz_de_linhas, string->conta_linhas * sizeof(char *));
 
