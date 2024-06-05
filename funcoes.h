@@ -33,7 +33,7 @@ typedef struct _STRINGS
     char **matriz_de_linhas;
     char submenu_arquivo[2][TAM_STRING];
     char submenu_cores[16][TAM_STRING];
-    int conta_linhas;
+    int caracteres_no_arquivo;
     int modo_insercao;
     int controla_sub;
     int index_linha_matriz;
@@ -68,7 +68,7 @@ typedef struct _USUARIO
     int esc_apertado;
     int controla_evento;
     int enter_pressionado;
-    int numero_convertido;
+    int numero_TAB_X;
     int imprime_janela_cor_diferente;
     COLORS cor_atalho;
     COORD coordenadas_submenus;
@@ -88,13 +88,6 @@ Parametros :
 Retorno : 
 Nenhum*/
 void Caractere_X(LE_TECLADO *, USUARIO *, STRINGS *);
-
-/*Função responsável por contar as linhas do arquivo aberto
-Parametros :
-1° -> Ponteiro para arquivo do tipo FILE
-Retorno :
-Retorna uma variavel do tipo 'int' com a quantidade de linhas dentro do arquivo que foi passado commo parametro*/
-int Conta_Linhas_Arquivo(FILE *);
 
 /*Coloca minhas 'opções', na matriz de caracteres 'menu'
 Parametros :
@@ -169,6 +162,13 @@ Parametros :
 Retorno : 
 Nenhum*/
 void Salvar_Arquivo(STRINGS *);
+
+/*Função responsável por contar quantos caracteres existem dentro do meu arquivo já aberto, o retorno da função servirá para alocar memoria na matriz de strings
+Parametros :
+1° -> Ponteiro para arquivo do tipo FILE
+Retorno :
+Retorna uma variavel do tipo 'int' com a quantidade de caracteres presentes dentro do arquivo que foi passado commo parametro*/
+int Pega_caracteres_do_arquivo(FILE *);
 
 /*Mostra o submenu arquivo para o usuario escolher
 Parametros :

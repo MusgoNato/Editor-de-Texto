@@ -5,7 +5,7 @@
 # include <string.h> /*strchr(), strcpy(), strlen(), memmove()*/
 # include "console_v1.5.5.h" /*Evento(), hit(), tamanhoJanelaConsole(), */
 # include "conio_v3.2.4.h" /*clrscr(), getch(), gotoxy(), wherex(), wherey(), textcolor()*/
-# include "funcoes.h" /*Abre_Arquivo(), Caractere_X(), Copiar_caracteres_pra_matrizes(), Conta_Linhas_Arquivo(),
+# include "funcoes.h" /*Abre_Arquivo(), Caractere_X(), Copiar_caracteres_pra_matrizes(), Pega_Caracteres_do_arquivo(),
 Escreve_Arquivo(), Desenha_Janela_Menu(), Imprime_op_Menu(), Inicializacao_Variaveis(), Le_Teclado(), Mapeia_teclas_Entrada(), Submenu_Arquivo().
 Submenu_background(), Submenu_cor_texto()*/
 
@@ -17,8 +17,8 @@ void Abre_Arquivo(STRINGS *string)
     char *retorno;
     int controla_arquivo = 0;
 
-    /*Alocaá∆o da matriz de linhas para NULL*/
-    string->matriz_de_linhas = NULL;
+    /*Alocaá∆o da matriz de linhas para NULL
+    string->matriz_de_linhas = NULL;*/
 
     /*Inserir o arquivo desejado para abertura*/
     printf("Insira o arquivo que deseja abrir: ");
@@ -74,7 +74,7 @@ void Abre_Arquivo(STRINGS *string)
                     }
 
                     /*Verificaá∆o do intervalo das teclas*/
-                    if((arquivo.teclado.key_code > 45 && arquivo.teclado.key_code <= 254) || arquivo.teclado.key_code == 32)
+                    if((arquivo.teclado.key_code > 45 && arquivo.teclado.key_code <= 254) || arquivo.teclado.key_code == ' ')
                     {
                         /*Pego o caractere correspondente a tabela ascii da tecla pressionada*/
                         arquivo.teclado.key_code = arquivo.teclado.ascii_code;
@@ -105,14 +105,13 @@ void Abre_Arquivo(STRINGS *string)
         if(string->arquivo_origem != NULL)
         {
             /*Chamada para a funá∆o que conta as linhas do arquivo*/
-            string->conta_linhas = Conta_Linhas_Arquivo(string->arquivo_origem);
+            string->caracteres_no_arquivo = Pega_caracteres_do_arquivo(string->arquivo_origem);
 
             /*Como Ç append, volta ao cursor no comeáo do arquivo*/
             fseek(string->arquivo_origem, 0, SEEK_SET);
 
-            /*MODIFICAR PARA MALLOC, POIS O REALLOC N«O ê PORTAVEL, PODE VARIAR PARA OUTROS SISTEMAS*/
-            /*Realoca memoria para minha matriz, pois ja foi alocada com NULL incialmente*/
-            string->matriz_de_linhas = (char **)realloc(string->matriz_de_linhas, string->conta_linhas * sizeof(char *));
+            /*Aloca memoria para minha matriz de acordo com a quantidade de caracteres contados anteriormente pela funá∆o 'Pega_caracteres_do_arquivo'*/
+            string->matriz_de_linhas = (char **)malloc(string->caracteres_no_arquivo * sizeof(char *));
 
             /*Se a alocaá∆o der certo entra no loop*/
             if(string->matriz_de_linhas != NULL)
@@ -144,6 +143,7 @@ void Abre_Arquivo(STRINGS *string)
                         break;  
                     }
 
+                    /*Incrementa o indice da minha matriz, indo linha por linha*/
                     string->index_linha_matriz++;
                     
                 }
@@ -168,7 +168,7 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op, STRINGS *string)
     char numero[2];
     int saida = 1;
     int i = 0;
-    op->numero_convertido = 0;
+    op->numero_TAB_X = 0;
     
     /*Seta na coordenada correta de onde est† minha opá∆o no menu*/
     gotoxy(string->vetor_cord_menu[2].X, string->vetor_cord_menu[2].Y + 1);
@@ -183,8 +183,8 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op, STRINGS *string)
                 /*Pega o caractere digitado sem aparecer na tela*/
                 leitura->tecla.teclado.key_code = getch();
 
-                /*Se este caractere Ç um d°gito*/
-                if(leitura->tecla.teclado.key_code >= 48 && leitura->tecla.teclado.key_code <= 57)
+                /*Se este caractere Ç um d°gito no intervalo definido*/
+                if(leitura->tecla.teclado.key_code >= '0' && leitura->tecla.teclado.key_code <= '9')
                 {
                     /*A cada incremento Ç colocado o caractere na string numero*/
                     numero[i] = leitura->tecla.teclado.key_code;
@@ -199,15 +199,10 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op, STRINGS *string)
                         numero[i] = '\0';
 
                         /*O numero da string Ç convertido em um numero inteiro para ser usado no TAB*/
-                        op->numero_convertido = atoi(numero);
+                        op->numero_TAB_X = atoi(numero);
                         
                         break;
                     }
-                }
-                else
-                {
-                    /*Caso nao seja um numero o caractere digitado anteriormente*/
-                    printf("Numero invalido!");
                 }
             }
 
@@ -242,27 +237,31 @@ void Copiar_caracteres_pra_matrizes(STRINGS *string, char **opcoes, char **subme
     }
 }
 
-/*Conta as linhas do arquivo*/
-int Conta_Linhas_Arquivo(FILE *arquivo_origem)
+/*Pega todos os caracteres do arquivo aberto para alocar na minha matriz de linhas posteriormente*/
+int Pega_caracteres_do_arquivo(FILE *arquivo_origem)
 {
     char caractere;
     int contador = 0;
 
-    /*Percorre o arquivo e conta suas linhas*/
+    /*Percorre o arquivo e pega cada caractere dentro dele*/
     do
     {
         /*Pega cada caractere do arquivo*/
         caractere = fgetc(arquivo_origem);
 
-        /*Verifica caso seja '\n', significa que Ç uma linha, EOF para a ultima linha pois nao tem \n*/
-        if(caractere == '\n' || caractere == EOF)
+        /*Verifica se chegou ao fim do arquivo, preciso pegar caractere por caractere para armazenar na minha matriz de string, necessito de todos os caracteres do arquivo para isso*/
+        if(caractere == EOF)
+        {
+            break;
+        }
+        else
         {
             contador++;
         }
         
     }while(caractere != EOF);
 
-    /*Retorna quantas linhas foram contadas no arquivo*/
+    /*Retorna a quantidade de caracteres que foram contados no arquivo*/
     return contador;
 }
 
@@ -322,7 +321,7 @@ void Escreve_no_Arquivo(STRINGS *string)
     int esc_pressionado = 1;
     int ultima_linha = 0;
     int cursor_final_linha = 0;
-    int tamanho = 0;
+    /*nt tamanho = 0;*/
     int i;
 
     /*Variaveis para mover o cursor ao abrir o arquivo*/
@@ -334,7 +333,9 @@ void Escreve_no_Arquivo(STRINGS *string)
     string->posicao_cursor_escrita.Y = wherey();
     
     /*Impress∆o das linhas do meu arquivo*/
-    for(i = 0; i < string->conta_linhas; i++)
+    /*O index linha matriz ser† um contador de quntas linhas eu tenho no meu arquivo, pois na abertura dele, no momento da alocaá∆o ele serve de indice para acesso a cada linha,
+    ent∆o pode servir de limite pois guarda a ultima linha contada*/
+    for(i = 0; i < string->index_linha_matriz; i++)
     {
         printf("%s", string->matriz_de_linhas[i]);
     }
@@ -355,7 +356,7 @@ void Escreve_no_Arquivo(STRINGS *string)
                 if(evento_para_escrita.teclado.status_tecla == LIBERADA)
                 {
                     /*Verificaá∆o para impress∆o de caracteres que s∆o imprimiveis na tela e para que n∆o imprima as setas de direá∆o ao mover o cursor sobre o arquivo*/
-                    if((evento_para_escrita.teclado.key_code > 45 && evento_para_escrita.teclado.key_code <= 254) || evento_para_escrita.teclado.key_code == 32)
+                    if((evento_para_escrita.teclado.key_code > 45 && evento_para_escrita.teclado.key_code <= 254) || evento_para_escrita.teclado.key_code == ' ')
                     {
                         /*Pega-se o c¢digo da tecla correspondente pressionada em ascii e imprime na tela, Ç necess†rio pegar novamente a tecla, pois caso n∆o haja essa linha,
                         as teclas pegas apenas ser∆o em maiusculas, nao em minusculas*/
@@ -371,16 +372,16 @@ void Escreve_no_Arquivo(STRINGS *string)
                             /*Imprime o c¢digo da tecla correspondente dentro do intervalo especificado na condiá∆o*/
                             putchar(evento_para_escrita.teclado.ascii_code);
                         }
-                        /*Modo de inserá∆o de caracteres*/
+                        /*Modo de inserá∆o de caracteres
                         else
                         {   
-                            /*Pega o tamanho da linha atual onde estou*/
+                            Pega o tamanho da linha atual onde estou
                             tamanho = strlen(string->matriz_de_linhas[move_cursor_na_linha]);
 
-                            /*Desloca todos os caracteres a direita da posiá∆o atual do cursor*/
+                            Desloca todos os caracteres a direita da posiá∆o atual do cursor
                             memmove(string->matriz_de_linhas[move_cursor_na_coluna] + move_cursor_na_coluna + 1, string->matriz_de_linhas[move_cursor_na_linha] + move_cursor_na_coluna, tamanho - move_cursor_na_coluna + 1);
-                            string->matriz_de_linhas[move_cursor_na_linha][move_cursor_na_coluna] = evento_para_escrita.teclado.ascii_code;   
-                        }
+                            string->matriz_de_linhas[move_cursor_na_linha][move_cursor_na_coluna] = evento_para_escrita.teclado.ascii_code;
+                        }*/
                     }
                     
 
@@ -418,7 +419,7 @@ void Escreve_no_Arquivo(STRINGS *string)
                         {
                             
                             /*Verifica o tamanho das linhas do meu arquivo, caso chegue na linha final n∆o consigo ultrapassa-la*/
-                            if(move_cursor_na_linha < string->conta_linhas)
+                            if(move_cursor_na_linha < string->index_linha_matriz)
                             {
                                 /*A linha zera para que eu possa andar pelas linhas atÇ o '\n' dela*/
                                 move_cursor_na_linha += 1;
@@ -478,9 +479,9 @@ void Escreve_no_Arquivo(STRINGS *string)
                         case PAGE_DOWN:
                         {
                             /*Pega o tamanho da ultima linha do arquivo*/
-                            ultima_linha = strlen(string->matriz_de_linhas[string->conta_linhas]);
+                            ultima_linha = strlen(string->matriz_de_linhas[string->index_linha_matriz]);
                             move_cursor_na_coluna = ultima_linha;
-                            move_cursor_na_linha = string->conta_linhas;
+                            move_cursor_na_linha = string->index_linha_matriz;
 
                             /*Posiciona o cursor na ultima linha do arquivo*/
                             gotoxy(move_cursor_na_coluna, move_cursor_na_linha);
@@ -883,7 +884,7 @@ void Salvar_Arquivo(STRINGS *string)
     escrita = fopen(string->arquivo_txt, "w");
 
     /*Escreve tudo no meu arquivo*/
-    for(i = 0; i < string->conta_linhas; i++)
+    for(i = 0; i < string->index_linha_matriz; i++)
     {
         fprintf(escrita, "%s", string->matriz_de_linhas[i]);
     }   
@@ -892,7 +893,7 @@ void Salvar_Arquivo(STRINGS *string)
     fclose(escrita);
 
     /*Libera 1¯ a memoria alocada para as linhas*/  
-    for(i = 0; i < string->conta_linhas; i++)
+    for(i = 0; i < string->index_linha_matriz; i++)
     {
         free(string->matriz_de_linhas[i]);
     }
