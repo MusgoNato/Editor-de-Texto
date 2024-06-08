@@ -337,7 +337,12 @@ void Escreve_no_Arquivo(STRINGS *string)
     ent?o pode servir de limite pois guarda a ultima linha contada*/
     for(i = 0; i < string->index_linha_matriz; i++)
     {
+        /*Aqui vai ser o local para ser impresso o meu arquivo, que ficar  abaixo da linha do menu principal*/
+        gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y + LARGURA/ALTURA + i);
+
+        /*ImpressÆo das linhas do arquivo*/
         printf("%s", string->matriz_de_linhas[i]);
+        
     }
 
     /*Loop para pegar os eventos do teclado, no caso os caracteres imprimiveis para serem colocado no arquivo*/
@@ -397,7 +402,7 @@ void Escreve_no_Arquivo(STRINGS *string)
                             {
                                 /*Posiciona o cursor*/
                                 move_cursor_na_coluna += 1;
-                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + move_cursor_na_linha);
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + LARGURA/ALTURA + move_cursor_na_linha);
                                 
                             }
                             break;
@@ -410,7 +415,7 @@ void Escreve_no_Arquivo(STRINGS *string)
                             {
                                 /*Posiciona o meu cursor quando ando para atr?s*/
                                 move_cursor_na_coluna -= 1;
-                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + move_cursor_na_linha);
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + LARGURA/ALTURA + move_cursor_na_linha);
                             }
                             break;
                         }
@@ -423,7 +428,7 @@ void Escreve_no_Arquivo(STRINGS *string)
                             {
                                 /*A linha zera para que eu possa andar pelas linhas at? o '\n' dela*/
                                 move_cursor_na_linha += 1;
-                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + move_cursor_na_linha);   
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + LARGURA/ALTURA + move_cursor_na_linha);   
                             }
                             
                             break;
@@ -435,7 +440,7 @@ void Escreve_no_Arquivo(STRINGS *string)
                             if(move_cursor_na_linha >= string->posicao_cursor_escrita.X)
                             {
                                 move_cursor_na_linha -= 1;
-                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + move_cursor_na_linha);
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + LARGURA/ALTURA + move_cursor_na_linha);
                             }
                     
                             break;
@@ -457,7 +462,7 @@ void Escreve_no_Arquivo(STRINGS *string)
                             {
                                 /*move o cursor*/
                                 move_cursor_na_coluna -= 1;
-                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + move_cursor_na_linha);
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + LARGURA/ALTURA + move_cursor_na_linha);
 
                                 /*Referente ao espa?o em branco na tabela ascii, usando pucthar ao inv?s do printf por causa do \n no final*/
                                 putchar(32);
@@ -635,21 +640,20 @@ void Inicializacao_Variaveis(STRINGS *string, USUARIO *op, TAM_JANELA *janela)
     /*Atribui o tamanho da janela do console*/
     string->limite_maximo_Janela = tamanhoJanelaConsole();
 
+    /*Aloco memoria para a tela de salvamento de acordo com o tamanho maximo da minha janela*/
+    string->Tela = (char *)malloc(string->limite_maximo_Janela.X * string->limite_maximo_Janela.Y * 2 * sizeof(char));
+
 }
 
 /*Fun??o que le o teclado do usuario*/
 void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
 {
-
-    /*Realoco memoria para a tela de salvamento de acordo com o tamanho maximo da minha janela
-    string->Tela = (char *)malloc(string->limite_maximo_Janela.X * string->limite_maximo_Janela.Y * 2 * sizeof(char));*/
-
     /*UMA IDEIA ? COLOCAR O TEXTO IMPRESSO EMBAIXO DO MENU, ASSIM CONSIGO TER A LOCALIZA??O DA ONDE VAI SER IMPRESSO E COMO FAZER,
     A IDEIA ? IMPRIMIR POR BLOCOS, CADA BLOCO EU IMPRIMO O TEXTO AP?S PASSAR O LIMITE DE CADA BLOCO, POSSO GUARDAR A TELA ANTERIOR E COLOCAR NA TELA
     */
 
-    /*Pego a tela atual para salvar
-    _gettext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);*/
+    /*Pego a tela atual para salvamento*/
+    _gettext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
 
     /*Identifica um 'hit' do teclado*/   
     if(hit(KEYBOARD_HIT))
@@ -706,7 +710,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
 
                                     /*Chama a fun??o para pegar o numero dado pelo usuario*/
                                     Caractere_X(leitura, op, string);
-                                    /*puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);*/
+                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
                                     break;
                                 }
 
@@ -715,7 +719,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                                 {
                                     /*Chama a fun??o para o submenu de cor de fundo*/
                                     Submenu_background(string, op);
-                                    /*puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);*/
+                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
                                     break;
                                 }
 
@@ -724,7 +728,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                                 {
                                     /*Chama a fun??o para o submenu de cor de texto*/
                                     Submenu_cor_texto(string, op);
-                                    /*puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);*/
+                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
                                     break;
                                 }
                             }
