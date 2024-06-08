@@ -321,6 +321,7 @@ void Escreve_no_Arquivo(STRINGS *string)
     int esc_pressionado = 1;
     int ultima_linha = 0;
     int cursor_final_linha = 0;
+    int limite_a_ser_impresso = 0;
     /*nt tamanho = 0;*/
     int i;
 
@@ -331,18 +332,33 @@ void Escreve_no_Arquivo(STRINGS *string)
     /*Pega a posi??o atual do meu cursor*/
     string->posicao_cursor_escrita.X = wherex();
     string->posicao_cursor_escrita.Y = wherey();
-    
+
+    /*Guarda a metade do tamanho maximo da minha janela*/
+    limite_a_ser_impresso += string->limite_maximo_Janela.Y/2;
+
     /*Impress?o das linhas do meu arquivo*/
     /*O index linha matriz ser? um contador de quntas linhas eu tenho no meu arquivo, pois na abertura dele, no momento da aloca??o ele serve de indice para acesso a cada linha,
     ent?o pode servir de limite pois guarda a ultima linha contada*/
     for(i = 0; i < string->index_linha_matriz; i++)
     {
         /*Aqui vai ser o local para ser impresso o meu arquivo, que ficar  abaixo da linha do menu principal*/
-        gotoxy(string->posicao_cursor_escrita.X, string->posicao_cursor_escrita.Y + LARGURA/ALTURA + i);
+        gotoxy(string->posicao_cursor_escrita.X, string->limite_maximo_Janela.Y/2 + i);
 
-        /*ImpressÆo das linhas do arquivo*/
-        printf("%s", string->matriz_de_linhas[i]);
-        
+        /*A variavel limite a ser impresso guarda o valor do tamanho maximo da janela dividido por 2, me proporciona a metade da janela,
+        assim eu tenho o limite de imprimir o meu arquivo*/
+        if(i <= limite_a_ser_impresso)
+        {
+            /*Imprime cada linha do arquivo*/
+            printf("%s", string->matriz_de_linhas[i]);
+        }
+        else
+        {
+            break;
+        }
+
+        /*FAZER A LOGICA PARA IMPRIMIR O ARQUIVO PELO PAGE UP E PAGE DOWN*/
+
+
     }
 
     /*Loop para pegar os eventos do teclado, no caso os caracteres imprimiveis para serem colocado no arquivo*/
@@ -672,6 +688,9 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                 /*Verifica??o da tecla se foi liberada ao pressionada*/
                 if(leitura->tecla.teclado.status_tecla == LIBERADA)
                 {
+                    
+                    /*gotoxy(1, LARGURA/ALTURA + 1);
+                    printf("asdasd");*/   
                     /*O controle da tecla alt esquerda ? atribuida em 0 pois a tecla esta solta*/
                     op->controle_do_alt = 0;
 
