@@ -40,9 +40,6 @@ typedef struct _STRINGS
     int tamanho_das_linhas[LARGURA];
     int modo;
 
-    /*Vai controlar a impressão por blocos do texto do arquivo aberto*/
-    int imprime_por_bloco;
-
     /*Essa matriz vai guardar o save da tela, pra depois somente recolocar, após o usuario ter pressionado qualquer submenu*/
     char *Tela;
 
@@ -115,17 +112,6 @@ Retorno :
 Nenhum*/
 void Escreve_no_Arquivo(STRINGS *);
 
-/*Inicializa as variaveis do programa
-Paremetros :
-1° -> Ponteiro para estrutura STRINGS
-2° -> Ponteiro para estrutura USUARIO
-3° -> Ponteiro para estrutura TAM_JANELA
-Retorno : 
-Nenhum
-*/
-
-void Inicializacao_Variaveis(STRINGS *, USUARIO *, TAM_JANELA *);
-
 /*Função que imprime as opções de menu disponíveis
 Parametros :
 1° -> Ponteiro para estrutura TAM_JANELA
@@ -136,6 +122,17 @@ Retorno :
 Nenhum
 */
 void Imprime_op_Menu(TAM_JANELA *, STRINGS *, USUARIO *, char *);
+
+/*Inicializa as variaveis do programa
+Paremetros :
+1° -> Ponteiro para estrutura STRINGS
+2° -> Ponteiro para estrutura USUARIO
+3° -> Ponteiro para estrutura TAM_JANELA
+Retorno : 
+Nenhum
+*/
+
+void Inicializacao_Variaveis(STRINGS *, USUARIO *, TAM_JANELA *);
 
 /*Vai ler as teclas do teclado e realizar as devidas chamadas para outras funções
 Parametros :

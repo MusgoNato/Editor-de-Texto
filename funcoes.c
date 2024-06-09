@@ -1,4 +1,4 @@
-/*L?gica dos prot?tipos criados no arquivo 'funcoes.h'*/
+/*L¢gica dos prot¢tipos criados no arquivo 'funcoes.h'*/
 
 /*Bibliotecas/Constantes*/
 # include <stdio.h> /*atoi(), fclose(), fgetc(), fopen(), free(), fseek(), maloc(), printf(), putchar() */
@@ -9,16 +9,13 @@
 Escreve_Arquivo(), Desenha_Janela_Menu(), Imprime_op_Menu(), Inicializacao_Variaveis(), Le_Teclado(), Mapeia_teclas_Entrada(), Submenu_Arquivo().
 Submenu_background(), Submenu_cor_texto()*/
 
-/*Fun??o que abre o arquivo*/
+/*Funá∆o que abre o arquivo*/
 void Abre_Arquivo(STRINGS *string)
 {
     EVENTO arquivo;
     int i = 0;
     char *retorno;
     int controla_arquivo = 0;
-
-    /*Aloca??o da matriz de linhas para NULL
-    string->matriz_de_linhas = NULL;*/
 
     /*Inserir o arquivo desejado para abertura*/
     printf("Insira o arquivo que deseja abrir: ");
@@ -35,10 +32,10 @@ void Abre_Arquivo(STRINGS *string)
                 /*Verifica se a tecla foi liberada*/
                 if(arquivo.teclado.status_tecla == LIBERADA)
                 {
-                    /*Caso for um ESC sai do loop e volta ao menu padr?o*/
+                    /*Caso for um ESC sai do loop e volta ao menu padr∆o*/
                     if(arquivo.teclado.key_code == ESC)
                     {
-                        /*Caso se arrependa de digitar volta as op??es*/
+                        /*Caso se arrependa de digitar volta as opá‰es*/
                         controla_arquivo = 0;
                         break;
                     }
@@ -51,29 +48,29 @@ void Abre_Arquivo(STRINGS *string)
                         break;
                     }
 
-                    /*Caso seja a tecla backspace, deve voltar, ? decrementado o indice 'i' e colocado o espa?o em branco na string do arquivo .txt*/
+                    /*Caso seja a tecla backspace, deve voltar, Ç decrementado o indice 'i' e colocado o espaáo em branco na string do arquivo .txt*/
                     if(arquivo.teclado.key_code == BACKSPACE)
                     {
-                        /*Verifica??o, somente entra caso o indice tenha algum caractere na string*/
+                        /*Verificaá∆o, somente entra caso o indice tenha algum caractere na string*/
                         if(i > 0)
                         {                            
                             /*Pego o backspace pressionado*/
                             string->arquivo_txt[i] = arquivo.teclado.key_code;
 
-                            /*Move o cursor uma posi??o atras no terminal e coloca um espa?o em branco na posi??o anterior antes de mover*/
+                            /*Move o cursor uma posiá∆o atras no terminal e coloca um espa?o em branco na posiá∆o anterior antes de mover*/
                             printf("\b ");
                             putchar(string->arquivo_txt[i]);
 
-                            /*recebe um espa?o em branco pois caso o arquivo contenha o numero da tecla BACKSPACE, ir? entrar no arquivo, mesmo supostamente tendo apagado do terminal,
-                            porem nao apaga da string, colocando um espa?o garante que na string conter? o espa?o e n?o sera apenas apagado do terminal*/
+                            /*recebe um espaáo em branco pois caso o arquivo contenha o numero da tecla BACKSPACE, ir† entrar no arquivo, mesmo supostamente tendo apagado do terminal,
+                            porem nao apaga da string, colocando um espaáo garante que na string conter† o espaáo e n∆o sera apenas apagado do terminal*/
                             string->arquivo_txt[i] = ' ';
 
-                            /*Decremento o indice para pegar a proxima tecla na posi??o correta*/
+                            /*Decremento o indice para pegar a proxima tecla na posiá∆o correta*/
                             i--;
                         }
                     }
 
-                    /*Verifica??o do intervalo das teclas*/
+                    /*Verificaá∆o do intervalo das teclas*/
                     if((arquivo.teclado.key_code > 45 && arquivo.teclado.key_code <= 254) || arquivo.teclado.key_code == ' ')
                     {
                         /*Pego o caractere correspondente a tabela ascii da tecla pressionada*/
@@ -81,7 +78,7 @@ void Abre_Arquivo(STRINGS *string)
                         string->arquivo_txt[i] = arquivo.teclado.key_code; 
                         putchar(arquivo.teclado.ascii_code);
 
-                        /*Incrementa para a pr?xima tecla*/
+                        /*Incrementa para a pr¢xima tecla*/
                         i++;
                     }
 
@@ -91,44 +88,44 @@ void Abre_Arquivo(STRINGS *string)
                 
     }
 
-    /*Verifica se caso o usuario aperte ESC, o programa sai para ir as outras op??es do menu, n?o ? necessario criar outro arquivo se o usuario nem apertou ENTER,
-    entao somente quando ele aperte ENTER, o arquivo ? criado e verificado*/
+    /*Verifica se caso o usuario aperte ESC, o programa sai para ir as outras opá‰es do menu, n?o ? necessario criar outro arquivo se o usuario nem apertou ENTER,
+    entao somente quando ele aperte ENTER, o arquivo Ç criado e verificado*/
     if(controla_arquivo)
     {
-        /*Abertura do arquivo para o modo adi??o (append)*/
+        /*Abertura do arquivo para o modo adiá∆o (append)*/
         string->arquivo_origem = fopen(string->arquivo_txt, "a+");
 
-        /*Como o modo append coloca o ponteiro para o arquivo no final dele, ? recolocado o mesmo para posi??o incial*/
+        /*Como o modo append coloca o ponteiro para o arquivo no final dele, Ç recolocado o mesmo para posiá∆o incial*/
         fseek(string->arquivo_origem, 0, SEEK_SET);
 
-        /*Valida??o da abertura*/
+        /*Validaá∆o da abertura*/
         if(string->arquivo_origem != NULL)
         {
-            /*Chamada para a fun??o que conta as linhas do arquivo*/
+            /*Chamada para a funá∆o que conta as linhas do arquivo*/
             string->caracteres_no_arquivo = Pega_caracteres_do_arquivo(string->arquivo_origem);
 
-            /*Como ? append, volta ao cursor no come?o do arquivo*/
+            /*Como Ç append, volta ao cursor no comeáo do arquivo*/
             fseek(string->arquivo_origem, 0, SEEK_SET);
 
-            /*Aloca memoria para minha matriz de acordo com a quantidade de caracteres contados anteriormente pela fun??o 'Pega_caracteres_do_arquivo'*/
+            /*Aloca memoria para minha matriz de acordo com a quantidade de caracteres contados anteriormente pela funá∆o 'Pega_caracteres_do_arquivo'*/
             string->matriz_de_linhas = (char **)malloc(string->caracteres_no_arquivo * sizeof(char *));
 
-            /*Se a aloca??o der certo entra no loop*/
+            /*Se a alocaá∆o der certo entra no loop*/
             if(string->matriz_de_linhas != NULL)
             {
-                /*Coloca o cursor no come?o da janela*/
+                /*Coloca o cursor no comeáo da janela*/
                 gotoxy(1,1);
 
                 /*Loop para alocar memoria para cada linha do meu arquivo*/
                 while(1)
                 {
-                    /*A cada itera??o aloca memoria para minha string*/
+                    /*A cada iteraá∆o aloca memoria para minha string*/
                     string->matriz_de_linhas[string->index_linha_matriz] = (char *)malloc(TAM_BUFFER * sizeof(char));
 
-                    /*Se caso a aloca??o der certo continua o loop, caso der errado fecha o arquivo, limpa a memoria alocada e sai do loop*/
+                    /*Se caso a alocaá∆o der certo continua o loop, caso der errado fecha o arquivo, limpa a memoria alocada e sai do loop*/
                     if(string->matriz_de_linhas[string->index_linha_matriz] == NULL)
                     {
-                        /*Fecha o arquivo e libera mem?ria*/
+                        /*Fecha o arquivo e libera mem¢ria*/
                         fclose(string->arquivo_origem);
                         free(string->matriz_de_linhas[string->index_linha_matriz]);
                         break;
@@ -149,7 +146,7 @@ void Abre_Arquivo(STRINGS *string)
                 }
             }
 
-            /*Fun??o para escrita no arquivo*/
+            /*Funá∆o para escrita no arquivo*/
             Escreve_no_Arquivo(string);
         }
         else
@@ -161,7 +158,7 @@ void Abre_Arquivo(STRINGS *string)
     
 }
 
-/*Quando a fun??o le teclado for desabilitada, esta fun??o entra para ler os dados do usuario*/
+/*Quando a funá∆o le teclado for desabilitada, esta funá∆o entra para ler os dados do usuario*/
 void Caractere_X(LE_TECLADO *leitura, USUARIO *op, STRINGS *string)
 {
     /*Numeros de 2 unidades somente*/
@@ -170,7 +167,7 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op, STRINGS *string)
     int i = 0;
     op->numero_TAB_X = 0;
     
-    /*Seta na coordenada correta de onde est? minha op??o no menu*/
+    /*Seta na coordenada correta de onde est† minha opá∆o no menu*/
     gotoxy(string->vetor_cord_menu[2].X, string->vetor_cord_menu[2].Y + 1);
 
     /*Loop ate a conversao ser feita corretamente*/
@@ -183,22 +180,22 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op, STRINGS *string)
                 /*Pega o caractere digitado sem aparecer na tela*/
                 leitura->tecla.teclado.key_code = getch();
 
-                /*Se este caractere ? um d?gito no intervalo definido*/
+                /*Se este caractere Ç um d°gito no intervalo definido*/
                 if(leitura->tecla.teclado.key_code >= '0' && leitura->tecla.teclado.key_code <= '9')
                 {
-                    /*A cada incremento ? colocado o caractere na string numero*/
+                    /*A cada incremento Ç colocado o caractere na string numero*/
                     numero[i] = leitura->tecla.teclado.key_code;
 
-                    /*Impresso na tela para o usu?rio*/
+                    /*Impresso na tela para o usu†rio*/
                     printf("%c", numero[i]);
                     i++;
 
-                    /*Ao chegar no fim da string, ? colocado o '\0'*/
+                    /*Ao chegar no fim da string, Ç colocado o '\0'*/
                     if(i == 2)
                     {
                         numero[i] = '\0';
 
-                        /*O numero da string ? convertido em um numero inteiro para ser usado no TAB*/
+                        /*O numero da string Ç convertido em um numero inteiro para ser usado no TAB*/
                         op->numero_TAB_X = atoi(numero);
                         
                         break;
@@ -212,19 +209,19 @@ void Caractere_X(LE_TECLADO *leitura, USUARIO *op, STRINGS *string)
         }
     } 
 
-/*Converete a string nas suas devidas posi??es*/
+/*Converete a string nas suas devidas posiá‰es*/
 void Copiar_caracteres_pra_matrizes(STRINGS *string, char **opcoes, char **submenu_op_arquivo, char **submenu_op_cor)
 {
     int i;
 
     /*Copio os caracteres de uma string para usar em uma matriz de caractere,
-    assim eu posso imprimir uma string inteira somente com a sua posi??o na matriz e n?o caractere por caractere*/
+    assim eu posso imprimir uma string inteira somente com a sua posiá∆o na matriz e n?o caractere por caractere*/
     for(i = 0; i < QTD_STRING; i++)
     {
         strcpy(string->menu[i], opcoes[i]);
     }
 
-    /*Loop para as 2 op??es do submenu 'ARQUIVO'*/
+    /*Loop para as 2 opá‰es do submenu 'ARQUIVO'*/
     for(i = 0; i <= 1; i++)
     {
         strcpy(string->submenu_arquivo[i], submenu_op_arquivo[i]);
@@ -236,6 +233,629 @@ void Copiar_caracteres_pra_matrizes(STRINGS *string, char **opcoes, char **subme
         strcpy(string->submenu_cores[i], submenu_op_cor[i]);
     }
 }
+
+/*Desenha minha janela do menu*/
+void Desenha_Janela_Menu(TAM_JANELA *janela)
+{
+    int i;
+    
+    /*Desenha a linha superior do menu*/
+    for(i = 0; i < LARGURA; i++)
+    {
+        gotoxy(janela->coordenadas_janela.X + i, janela->coordenadas_janela.Y);
+        printf("=");
+    }
+
+    /*Coluna esquerda*/
+    for(i = 0; i < ALTURA; i++)
+    {
+        gotoxy(janela->coordenadas_janela.X, janela->coordenadas_janela.Y + i);
+        printf("|");
+    }
+
+    /*Linha inferior*/
+    for(i = 0; i < LARGURA; i++)
+    {
+        /*Necess†rio o incremento do i em 1, para nao borrar o '|' da coluna esquerda,
+        h† de se decrementar a janela->altura pois o printf da um quebra linha, para isso imprimir o caractere '=' uma linha depois, se decrementa o y*/
+        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + LARGURA - 1);
+        printf("=");
+    }
+
+    /*Coluna Direita*/
+    for(i = 0; i < ALTURA; i++)
+    {
+        /*X recebe o valor da largura, assim eu tenho a coordenada do fim da linha superior, feito isso, somente incrementar o y atÇ a altura
+        definida*/
+        gotoxy(janela->coordenadas_janela.X + LARGURA, janela->coordenadas_janela.Y + i);
+        printf("|");
+    }
+
+    /*Linha inferior a linha superior*/
+    /*A largura Ç decrementada pois passa do limite da coluna direita*/
+    for(i = 0; i < LARGURA - 1; i++)
+    {
+        /*Dividindo a largura e altura e, somando com a coordenadas_Janela.Y, tenho o lugar para imprimir a linha inferior a superior,
+        somente Ç necess†rio incrementar o x, x + 1 pois ele 'come' a coluna da esquerda, para ajustar incrementei em +1 e decrementei a largura na condiá∆o de parada*/
+        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + LARGURA/ALTURA);
+        printf("=");
+    }
+    
+}
+
+/*Funá∆o para escrita no arquivo*/
+void Escreve_no_Arquivo(STRINGS *string)
+{
+    EVENTO evento_para_escrita;
+    int esc_pressionado = 1; 
+    int cursor_final_linha = 0;
+    int limite_a_ser_impresso = 0;
+    int pgd = 0;
+    int controla_impressao_arquivo = 1;
+    int i;
+
+    /*Variaveis para mover o cursor ao abrir o arquivo*/
+    int move_cursor_na_coluna = 0;
+    int move_cursor_na_linha = 0;
+    
+    /*Pega a posiá∆o atual do meu cursor*/
+    string->posicao_cursor_escrita.X = wherex();
+    string->posicao_cursor_escrita.Y = wherey();
+
+    /*Guarda a metade do tamanho maximo da minha janela*/
+    limite_a_ser_impresso += string->limite_maximo_Janela.Y/2;
+    
+    do
+    {
+        /*Verificaá∆o para n∆o impress∆o do meu arquivo a todo momento*/
+        if(controla_impressao_arquivo)
+        {
+            /*Impress∆o das linhas do meu arquivo*/
+            /*O index linha matriz ser† um contador de quntas linhas eu tenho no meu arquivo, pois na abertura dele, no momento da alocaá∆o
+            ele serve de indice para acesso a cada linha,
+            ent∆o pode servir de limite pois guarda a ultima linha contada*/
+            for(i = 0; i < string->index_linha_matriz; i++)
+            {
+                /*Aqui vai ser o local para ser impresso o meu arquivo, que ficar† no meio da tela encostado ao lado esquerdo*/
+                gotoxy(string->posicao_cursor_escrita.X, string->limite_maximo_Janela.Y/2 + i);
+
+                /*A variavel limite_a_ser impresso guarda o valor do tamanho maximo da janela dividido por 2, me proporciona a metade da janela,
+                assim eu tenho o limite do cmd para imprimir o meu arquivo*/
+                if(i <= limite_a_ser_impresso)
+                {
+                    /*Apaga a linha atual, isso se deve pois caso o usuario pressione PAGE_DOWN, Ç necessario apagar a linha da coordenada atual,
+                    para que imprima a proxima normalmente*/
+                    clreol();
+
+                    /*Imprime cada linha do arquivo*/
+                    printf("%s", string->matriz_de_linhas[i + pgd]);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            /*Seta a variavel controla_impressao_arquivo para 0 novamente para n∆o imprimir o arquivo a todo momento*/
+            controla_impressao_arquivo = 0;
+        }
+
+        /*Pega uma aá∆o do teclado*/
+        if(hit(KEYBOARD_HIT))
+        {
+            /*Pega o evento de origem do teclado*/
+            evento_para_escrita = Evento();
+
+            /*Verifica se Ç um evento do teclado*/
+            if(evento_para_escrita.tipo_evento & KEY_EVENT)
+            {
+                /*tecla pressionada ou n∆o */
+                if(evento_para_escrita.teclado.status_tecla == LIBERADA)
+                {
+                    /*Verificaá∆o para impress∆o de caracteres que s∆o imprimiveis na tela e para que n∆o imprima as setas de direá∆o ao mover o cursor sobre o arquivo*/
+                    if((evento_para_escrita.teclado.key_code > 45 && evento_para_escrita.teclado.key_code <= 254) || evento_para_escrita.teclado.key_code == ' ')
+                    {
+                        /*Pega-se o c¢digo da tecla correspondente pressionada em ascii e imprime na tela, Ç necess†rio pegar novamente a tecla, pois caso n∆o haja essa linha,
+                        as teclas pegas apenas ser∆o em maiusculas, nao em minusculas*/
+                        evento_para_escrita.teclado.ascii_code = evento_para_escrita.teclado.ascii_code;
+
+                        /*Verifica qual modo o usuario esta, caso entre na verificaá∆o esta no modo de sobrescrita de caracteres*/
+                        if(string->modo)
+                        {
+                            /*Quando coloco um caractere, a posiá∆o onde estou andando com o cursor na linha deve andar tambem*/
+                            move_cursor_na_coluna += 1;
+                            string->matriz_de_linhas[move_cursor_na_linha][move_cursor_na_coluna] = evento_para_escrita.teclado.ascii_code;
+                            
+                            /*Imprime o c¢digo da tecla correspondente dentro do intervalo especificado na condiá∆o*/
+                            putchar(evento_para_escrita.teclado.ascii_code);
+                        }
+                    }
+                    
+                    /*Casos para cada tecla*/
+                    switch(evento_para_escrita.teclado.key_code)
+                    {
+                        /*Navegaá∆o no arquivo usando o cursor*/
+                        case SETA_PARA_DIREITA:
+                        {
+                            /*Verificaá∆o para n∆o ultrapassar o fim da linha, ao estar dentro do intervalo Ç incrementado o cursor, o '\0' Ç justamente para o fim da ultima linha, ja que ela nao contem '\n'*/
+                            if(string->matriz_de_linhas[move_cursor_na_linha][move_cursor_na_coluna] != '\n' && string->matriz_de_linhas[move_cursor_na_linha][move_cursor_na_coluna] != '\0')
+                            {
+                                /*Posiciona o cursor*/
+                                move_cursor_na_coluna += 1;
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->limite_maximo_Janela.Y/2 +  move_cursor_na_linha);
+                                
+                            }
+                            break;
+                        }
+
+                        case SETA_PARA_ESQUERDA:
+                        {
+                            /*Verificaá∆o para a movimentaá∆o do cursor n∆o ser menor do que o inicio da coordenada do meu arquivo*/
+                            if(move_cursor_na_coluna >= string->posicao_cursor_escrita.X)
+                            {
+                                /*Posiciona o meu cursor quando ando para atr†s*/
+                                move_cursor_na_coluna -= 1;
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->limite_maximo_Janela.Y/2 + move_cursor_na_linha);
+                            }
+                            break;
+                        }
+                        
+                        case SETA_PARA_BAIXO:
+                        {
+                            
+                            /*Verifica o tamanho das linhas do meu arquivo, caso chegue na linha final n∆o consigo ultrapassa-la*/
+                            if(move_cursor_na_linha < string->index_linha_matriz)
+                            {
+                                /*A linha zera para que eu possa andar pelas linhas atÇ o '\n' dela*/
+                                move_cursor_na_linha += 1;
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->limite_maximo_Janela.Y/2 + move_cursor_na_linha);   
+                            }
+                            
+                            break;
+                        }
+
+                        case SETA_PARA_CIMA:
+                        {
+                            /*Ao subir com o cursor nao pode ultrapassar a 1¯ linha*/
+                            if(move_cursor_na_linha >= string->posicao_cursor_escrita.X)
+                            {
+                                move_cursor_na_linha -= 1;
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->limite_maximo_Janela.Y/2 + move_cursor_na_linha);
+                            }
+                    
+                            break;
+                        }
+
+                        /*Sobrescreve caracteres*/
+                        case INSERT:
+                        {
+                            /*Quando queira sobrescrever os caracteres troca de modo*/
+                            string->modo = 1;
+                            break;
+                        }
+                        
+                        /*Volta apagando um caractere*/
+                        case BACKSPACE:
+                        {
+                            /*Verifica se posso decrementar a linha*/
+                            if(move_cursor_na_coluna >= 0)
+                            {
+                                /*move o cursor*/
+                                move_cursor_na_coluna -= 1;
+                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + move_cursor_na_linha);
+
+                                /*Referente ao espaáo em branco na tabela ascii, usando pucthar ao invÇs do printf por causa do \n no final*/
+                                putchar(32);
+                            }
+                            break;
+                        }
+
+                        /*Sai do loop*/
+                        case ESC:
+                        {
+                            /*Zera as 2 variaves de controle do cursor e sai do loop por meio da variavel 'esc_pressionado'*/
+                            move_cursor_na_coluna = 0;
+                            move_cursor_na_linha = 0;
+                            esc_pressionado = 0;
+                            break;
+                        }
+
+                        /*Pula linha por linha do arquivo*/
+                        case PAGE_DOWN:
+                        {
+                            /*Verificaá∆o da limitaá∆o para andar no meu arquivo linha por linha*/
+                            /*string->index_linha_matriz armazena a ultima linha contada no meu arquivo, ou seja armazena a quantidade de linhas que meu arquivo contem,
+                            string->limite_maximo_Janela armazena o tamanho da janela do console, como somente quero a limitaá∆o para nao incrementar a minha variavel page novamente,
+                            divide-se por 2 e subtrai 1, justamente para n∆o imprimir lixo na tela, pois incrementando sem a verificaá∆o
+                            estaria acessando lugares invalidos na minha matriz de linhas*/
+                            if(pgd < string->index_linha_matriz - string->limite_maximo_Janela.Y/2 - 1)
+                            {
+                                pgd += 1;
+                                controla_impressao_arquivo = 1;
+                            }
+                            
+                            break;
+                        }
+
+                        /*Vai para o inicio do arquivo, 1? linha*/
+                        case PAGE_UP:
+                        {
+                            /*Verificaá∆o para n∆o acessar algum local invalido da minha matriz, no caso da usu†rio por exemplo pressionar PAGE_UP
+                            logo ap¢s abrir o arquivo, como usa-se somente uma v†riavel para controlar a impress∆o do arquivo linha por linha,
+                            somente verifica-se o limite 0, pois inicialmente a variavel pgd Ç setada com 0*/
+                            if(pgd > 0)
+                            {
+                                pgd -= 1;
+                                controla_impressao_arquivo = 1;
+                            }
+                            
+
+                            break;
+                        }
+
+                        /*Volta no inicio da linha da string*/
+                        case HOME:
+                        {
+                            move_cursor_na_coluna = 1;
+
+                            /*Posiciona no inicio da linha que esta meu cursor*/
+                            gotoxy(move_cursor_na_coluna, move_cursor_na_linha + 1);
+                            break;
+                        }
+                        
+                        /*Vai pro final da linha aonde o cursor esta*/
+                        case END:
+                        {
+                            cursor_final_linha = strlen(string->matriz_de_linhas[move_cursor_na_linha]);
+                            move_cursor_na_coluna = cursor_final_linha;
+                            
+                            /*Posiciona o cursor*/
+                            gotoxy(move_cursor_na_coluna, move_cursor_na_linha + 1);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+    /*Loop atÇ o ESC ser pressionado*/
+    }while(esc_pressionado);
+    
+}
+
+/*Funá∆o que imprime as op??es de menu na tela*/
+void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *letras)
+{
+    int i;
+
+    /*Armazenar† o tamanho de cada string*/
+    int tam_opcao_menu = 0;
+
+    /*Armazenar† a posiá∆o da letra de atalho encontrada nas opá‰es de menu*/
+    int pos;
+
+    /*Armazenar† um ponteiro para a posiá∆o da letra encontrada nas strings*/
+    char *p_posicao_letra;
+
+    /*Armazenar† a coordenada de onde devo destacar a tecla de atalho*/
+    COORD Ponto_destaque;
+
+    /*Imprime na tela as opá‰es do menu*/
+    for(i = 0; i < QTD_STRING; i++)
+    {   
+        /*Seta o lugar aonde deve ser impresso o menu*/
+        gotoxy(janela->coordenadas_janela.X + tam_opcao_menu + 1, janela->coordenadas_janela.Y + LARGURA/ALTURA/2);
+
+        /*Foi criada outro tipo COORD para representar a coordenada do destaque da letra de atalho, poderia utilizar-se somente a coordenada atual da janela.
+        Mas o c¢digo ficaria um pouco confuso*/
+        Ponto_destaque.X = wherex();
+        Ponto_destaque.Y = wherey();
+
+
+        /*Verificaá∆o da navegaá∆o do usuario por meio das teclas direcionais*/
+        if(i == op->escolha_do_usuario)
+        {
+            /*Quando uma opá∆o for selecionada, eu tenho a coordenada dela para imprimir o submenu dessa opá∆o, caso precise*/
+            op->coordenadas_submenus.X = wherex();
+            op->coordenadas_submenus.Y = wherey();
+
+            /*Cor para somente simular uma navegaá∆o entre as opá‰es*/
+            textcolor(YELLOW);
+        }
+
+        /*Imprime a string referente a opá∆o do menu*/
+        printf("%s", string->menu[i]);
+        
+        /*Colore a letra quando apertado o 'ALT_ESQUERDO'*/
+        if(op->controle_do_alt)
+        {
+            /*A funá∆o strchr retorna um ponteiro com a posiá∆o da 1¯ ocorrància da letra dentro de uma string.*/
+            p_posicao_letra = strchr(string->menu[i], letras[i]);
+
+            /*ê feito um calculo para pegar a posiá∆o inteira da letra na string*/
+            pos = p_posicao_letra - string->menu[i];
+
+            /*Com a posiá∆o da letra encontrada em m∆os, esta Ç somada com a coordenada atual*/
+            gotoxy(Ponto_destaque.X + pos, Ponto_destaque.Y);
+
+            /*Modifica a cor do texto para demostrar o destaque da letra de atalho*/
+            textcolor(op->cor_atalho);
+            printf("%c", letras[i]);
+           
+        }
+        
+        /*Ap¢s imprimir na tela a opá∆o com a cor de navegaá∆o padrao do menu, volta-se a cor original do prompt pra nao colorir toda a tela*/
+        textcolor(string->cores_texto);
+
+        /*Como o Ponto_destaque, que Ç uma coordenada para pintar a letra ao pressionamento do ALT, j† esta pegando a coordenada atual da minha string,
+        reuso ela para simplesmente armazenar em um vetor de coordenadas, as coordenadas de todas as strings, para reusar na funcionalidade dos atalhos*/
+        string->vetor_cord_menu[i] = Ponto_destaque;
+
+        /*O tamanho da opcao armazena o tamanho da string do menu e o soma com a quantidade de espaáaamento declarado fixo,
+        isso faz com que haja um espaáamento entre as opá‰es do menu independente do tamanho da string */
+        tam_opcao_menu += strlen(string->menu[i]) + ESPACAMENTO;
+
+    }
+}
+
+/*Funá∆o para inicializar as variaveis*/
+void Inicializacao_Variaveis(STRINGS *string, USUARIO *op, TAM_JANELA *janela)
+{
+    /*Declaraá∆o da opá∆o do usu?rio*/
+    op->escolha_do_usuario = 0;
+
+    /*Controle do alt*/
+    op->controle_do_alt = 0;
+
+    /*Controla o desenho da janela, para que eu consiga mover o cursor,
+    ? inicializado com 1 pois preciso que imprima na tela pela 1¯ vez a janela*/
+    op->controla_evento = 1;
+
+    /*Variavel para saida do loop principal da main*/
+    op->esc_apertado = 1;
+
+    /*Precisa imprimir ao menos 1 vez*/
+    op->imprime_janela_cor_diferente = 1;
+
+    /*Coordenadas da Janela, x e y, para eu poder imprimi-la na tela*/
+    janela->coordenadas_janela.X = 1;
+    janela->coordenadas_janela.Y = 1;
+
+    /*Comeáa com a inserá∆o de caracteres*/
+    string->modo = 0;
+
+    /*Inicializaá∆o da quantidade de linhas no arquivo*/
+    string->index_linha_matriz = 0;
+
+    /*Atribui o tamanho da janela do console*/
+    string->limite_maximo_Janela = tamanhoJanelaConsole();
+
+    /*Aloco memoria para a tela de salvamento de acordo com o tamanho maximo da minha janela*/
+    string->Tela = (char *)malloc(string->limite_maximo_Janela.X * string->limite_maximo_Janela.Y * 2 * sizeof(char));
+
+}
+
+/*Funá∆o que le o teclado do usuario*/
+void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
+{
+
+    /*Pego a tela atual para salvamento*/
+    _gettext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
+
+    /*Identifica um 'hit' do teclado*/   
+    if(hit(KEYBOARD_HIT))
+    {
+        /*Atribuiá∆o do evento que ocorreu*/
+        leitura->tecla = Evento();
+        
+        /*Verificaá∆o caso seja um evento origin†rio do teclado*/
+        if(leitura->tecla.tipo_evento & KEY_EVENT)
+        {
+            /*Precisa ser aqui dentro o controle dos eventos, pois somente se for um evento do teclado, vai ser retornado se vai ou nao ser impresso o menu*/
+            op->controla_evento = Mapeia_teclas_Entrada(leitura);
+
+            if(op->controla_evento)
+            {
+                /*Verificaá∆o da tecla se foi liberada ao pressionada*/
+                if(leitura->tecla.teclado.status_tecla == LIBERADA)
+                {
+                     
+                    /*O controle da tecla alt esquerda Ç atribuida em 0 pois a tecla esta solta*/
+                    op->controle_do_alt = 0;
+
+                    /*Casos para o menu*/
+                    switch(leitura->tecla.teclado.key_code)
+                    {
+                        
+                        /*Seleciona a opá∆o do menu principal*/
+                        case ENTER:
+                        {
+
+                            /*De acordo com a escolha do usuario, uma das opá‰es sera selecionada*/
+                            switch(op->escolha_do_usuario)
+                            {
+                                /*Caso quando o usuario escolher o submenu arquivo*/
+                                case 0:
+                                {
+                                    /*Chama funá∆o para abrir o submenu arquivo*/
+                                    Submenu_Arquivo(string);
+                                    break;
+                                }
+
+                                /*Caso para alinhar o texto*/
+                                case 1:
+                                {
+                                    
+                                    break;
+                                }
+
+                                /*Usuario escolheu modificar a quantidade de caracteres do x para o TAB*/
+                                case 2:
+                                {
+
+                                    /*Chama a funá∆o para pegar o numero dado pelo usuario*/
+                                    Caractere_X(leitura, op, string);
+                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
+                                    break;
+                                }
+
+                                /*Caso para trocar a cor de fundo*/
+                                case 3:
+                                {
+                                    /*Chama a funá∆o para o submenu de cor de fundo*/
+                                    Submenu_background(string, op);
+                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
+                                    break;
+                                }
+
+                                /*Caso para trocar a cor de texto*/
+                                case 4:
+                                {
+                                    /*Chama a funá∆o para o submenu de cor de texto*/
+                                    Submenu_cor_texto(string, op);
+                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
+                                    break;
+                                }
+                            }
+
+                        }
+
+                        /*Navegaá∆o a direita*/
+                        case SETA_PARA_DIREITA:
+                        {
+                            
+                            /*Foi criado uma variavel para a escolha do usuario para simular a navegaá∆o do menu, Ç necessario somente
+                            modificar o valor da pr¢pria variavel conforme o usuario aperta as teclas direcionais, a verificaá∆o Ç feita para a navegaá∆o
+                            ficar limitada entre o intervalo da 1¯ a ultima opá∆o, o mesmo Ç feito nas outras setas de direá∆o, porem com verificaá‰es distintas*/
+                            if(op->escolha_do_usuario >= 0 && op->escolha_do_usuario < QTD_STRING - 1)
+                            {
+                                op->escolha_do_usuario += 1;
+                            }
+                            break;
+                        }
+
+                        /*Navegaá∆o a esquerda*/
+                        case SETA_PARA_ESQUERDA:
+                        {
+                            if(op->escolha_do_usuario > 0 && op->escolha_do_usuario <= QTD_STRING)
+                            {
+                                op->escolha_do_usuario -= 1;
+                            }
+                            
+                            break;
+                        }
+                        
+                        /*Saida do programa*/
+                        case ESC:
+                        {
+                            op->esc_apertado -= 1;
+                            break;
+                        }
+
+                    }
+                }
+                else
+                {
+                    /*Casos especificos para teclas de controle*/
+                    if(leitura->tecla.teclado.status_teclas_controle & ALT_ESQUERDO)
+                    {
+                        /*ê definido o alt_esquerdo como 1 pois esta sendo pressionado, a cor muda para azul*/
+                        op->controle_do_alt = 1;
+                        op->cor_atalho = BLUE;
+
+                        /*switch para a outra tecla ap?s o ALT_ESQUERDO*/
+                        switch(leitura->tecla.teclado.key_code)
+                        {
+                            /*Teclas de atalho para chamada das opá‰es do menu principal*/
+                            /*Atalho para opá∆o 'ARQUIVO'*/
+                            case 'A':
+                            {
+
+                                /*Chama a funá∆o para a abertura do arquivo*/
+                                Submenu_Arquivo(string);
+                                break;
+                            }
+                            
+                            /*Atalho para opá∆o 'ALINHAMENTO'*/
+                            case 'L':
+                            {
+                                break;
+                            }
+
+                            /*Atalho para opá∆o 'ALTERAR X'*/
+                            case 'X':
+                            {
+
+                                /*Chama a funá∆o para o caractere TAB*/
+                                Caractere_X(leitura, op, string);
+                                break;
+                            }
+
+                            /*Atalho para opá∆o 'COR FUNDO'*/
+                            case 'F':
+                            {
+
+                                /*Chamada da funá∆o para trocar a cor de fundo*/
+                                Submenu_background(string, op);
+                                break;
+                            }
+
+                            /*Atalho para opá∆o 'COR TEXTO'*/
+                            case 'T':
+                            {
+
+                                /*Chamada para a funá∆o que troca a cor de texto*/
+                                Submenu_cor_texto(string, op);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+      
+    }
+}
+    
+
+
+
+/*Controla as teclas que ser∆o pressionadas pelo teclado, para imprimir novamente a janela de menu Ç necessario mapear as teclas*/
+int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
+{
+    /*Mapeamento de cada tecla*/
+
+    /*Verificaá∆o do alt esquerdo pois Ç uma tecla de controle*/
+    if(leitura->tecla.teclado.status_teclas_controle & ALT_ESQUERDO)
+    {
+        return 1;
+    }
+
+    /*Switch para cases de teclas que nao sao de controle*/
+    switch(leitura->tecla.teclado.key_code)
+    {
+        case SETA_PARA_DIREITA:
+        {
+            return 1;
+        }
+        case SETA_PARA_ESQUERDA:
+        {
+            return 1;
+        }
+        case ENTER:
+        {
+            return 1;
+        }
+        case ESC:
+        {
+            return 1;
+        }
+
+    }
+    /*Caso seja qualquer outro tipo de tecla retorna 0, para nao imprimir de novo o menu*/
+    return 0;
+}   
 
 /*Pega todos os caracteres do arquivo aberto para alocar na minha matriz de linhas posteriormente*/
 int Pega_caracteres_do_arquivo(FILE *arquivo_origem)
@@ -265,640 +885,7 @@ int Pega_caracteres_do_arquivo(FILE *arquivo_origem)
     return contador;
 }
 
-/*Desenha minha janela do menu*/
-void Desenha_Janela_Menu(TAM_JANELA *janela)
-{
-    int i;
-    
-    /*Desenha a linha superior do menu*/
-    for(i = 0; i < LARGURA; i++)
-    {
-        gotoxy(janela->coordenadas_janela.X + i, janela->coordenadas_janela.Y);
-        printf("=");
-    }
-
-    /*Coluna esquerda*/
-    for(i = 0; i < ALTURA; i++)
-    {
-        gotoxy(janela->coordenadas_janela.X, janela->coordenadas_janela.Y + i);
-        printf("|");
-    }
-
-    /*Linha inferior*/
-    for(i = 0; i < LARGURA; i++)
-    {
-        /*Necess?rio o incremento do i em 1, para nao borrar o '|' da coluna esquerda,
-        h? de se decrementar a janela->altura pois o printf da um quebra linha, para isso imprimir o caractere '=' uma linha depois, se decrementa o y*/
-        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + LARGURA - 1);
-        printf("=");
-    }
-
-    /*Coluna Direita*/
-    for(i = 0; i < ALTURA; i++)
-    {
-        /*X recebe o valor da largura, assim eu tenho a coordenada do fim da linha superior, feito isso, somente incrementar o y at? a altura
-        definida*/
-        gotoxy(janela->coordenadas_janela.X + LARGURA, janela->coordenadas_janela.Y + i);
-        printf("|");
-    }
-
-    /*Linha inferior a linha superior*/
-    /*A largura ? decrementada pois passa do limite da coluna direita*/
-    for(i = 0; i < LARGURA - 1; i++)
-    {
-        /*Dividindo a largura e altura e, somando com a coordenadas_Janela.Y, tenho o lugar para imprimir a linha inferior a superior,
-        somente ? necess?rio incrementar o x, x + 1 pois ele 'come' a coluna da esquerda, para ajustar incrementei em +1 e decrementei a largura na condi??o de parada*/
-        gotoxy(janela->coordenadas_janela.X + i + 1, janela->coordenadas_janela.Y + LARGURA/ALTURA);
-        printf("=");
-    }
-    
-}
-
-/*Fun??o para escrita no arquivo*/
-void Escreve_no_Arquivo(STRINGS *string)
-{
-    EVENTO evento_para_escrita;
-    int esc_pressionado = 1;
-    /*int ultima_linha = 0;*/   
-    int cursor_final_linha = 0;
-    int limite_a_ser_impresso = 0;
-    int pgd_down = 0;
-    /*nt tamanho = 0;*/
-    int i;
-
-    /*Variaveis para mover o cursor ao abrir o arquivo*/
-    int move_cursor_na_coluna = 0;
-    int move_cursor_na_linha = 0;
-    
-    /*Pega a posi??o atual do meu cursor*/
-    string->posicao_cursor_escrita.X = wherex();
-    string->posicao_cursor_escrita.Y = wherey();
-
-    /*Guarda a metade do tamanho maximo da minha janela*/
-    limite_a_ser_impresso += string->limite_maximo_Janela.Y/2;
-
-    /*Impress?o das linhas do meu arquivo*/
-    /*O index linha matriz ser? um contador de quntas linhas eu tenho no meu arquivo, pois na abertura dele, no momento da aloca??o ele serve de indice para acesso a cada linha,
-    ent?o pode servir de limite pois guarda a ultima linha contada*/
-    
-
-    /*Loop para pegar os eventos do teclado, no caso os caracteres imprimiveis para serem colocado no arquivo*/
-    do
-    {
-        /*pensar no jeito de pegar a tela e nao ficar limpando a tela*/
-        /*Imprime meu arquivo*/
-        for(i = 0; i < string->index_linha_matriz; i++)
-        {
-            /*Aqui vai ser o local para ser impresso o meu arquivo, que ficar† abaixo da linha do menu principal*/
-            gotoxy(string->posicao_cursor_escrita.X, string->limite_maximo_Janela.Y/2 + i);
-
-            /*A variavel limite a ser impresso guarda o valor do tamanho maximo da janela dividido por 2, me proporciona a metade da janela,
-            assim eu tenho o limite de imprimir o meu arquivo*/
-            if(i <= limite_a_ser_impresso)
-            {
-                /*Imprime cada linha do arquivo*/
-                printf("%s", string->matriz_de_linhas[i + pgd_down]);
-            }
-            else
-            {
-                break;
-            }
-
-            /*FAZER A LOGICA PARA IMPRIMIR O ARQUIVO PELO PAGE UP E PAGE DOWN*/
-
-        }
-
-        /*Pega uma a??o do teclado*/
-        if(hit(KEYBOARD_HIT))
-        {
-            /*Pega o evento de origem do teclado*/
-            evento_para_escrita = Evento();
-
-            /*Verifica se ? um evento do teclado*/
-            if(evento_para_escrita.tipo_evento & KEY_EVENT)
-            {
-                /*tecla pressionada ou n?o */
-                if(evento_para_escrita.teclado.status_tecla == LIBERADA)
-                {
-                    /*Verifica??o para impress?o de caracteres que s?o imprimiveis na tela e para que n?o imprima as setas de dire??o ao mover o cursor sobre o arquivo*/
-                    if((evento_para_escrita.teclado.key_code > 45 && evento_para_escrita.teclado.key_code <= 254) || evento_para_escrita.teclado.key_code == ' ')
-                    {
-                        /*Pega-se o c?digo da tecla correspondente pressionada em ascii e imprime na tela, ? necess?rio pegar novamente a tecla, pois caso n?o haja essa linha,
-                        as teclas pegas apenas ser?o em maiusculas, nao em minusculas*/
-                        evento_para_escrita.teclado.ascii_code = evento_para_escrita.teclado.ascii_code;
-
-                        /*Verifica qual modo o usuario esta, caso entre na verifica??o esta no modo de sobrescrita de caracteres*/
-                        if(string->modo)
-                        {
-                            /*Quando coloco um caractere, a posi??o onde estou andando com o cursor na linha deve andar tambem*/
-                            move_cursor_na_coluna += 1;
-                            string->matriz_de_linhas[move_cursor_na_linha][move_cursor_na_coluna] = evento_para_escrita.teclado.ascii_code;
-                            
-                            /*Imprime o c?digo da tecla correspondente dentro do intervalo especificado na condi??o*/
-                            putchar(evento_para_escrita.teclado.ascii_code);
-                        }
-                        /*Modo de inser??o de caracteres
-                        else
-                        {   
-                            Pega o tamanho da linha atual onde estou
-                            tamanho = strlen(string->matriz_de_linhas[move_cursor_na_linha]);
-
-                            Desloca todos os caracteres a direita da posi??o atual do cursor
-                            memmove(string->matriz_de_linhas[move_cursor_na_coluna] + move_cursor_na_coluna + 1, string->matriz_de_linhas[move_cursor_na_linha] + move_cursor_na_coluna, tamanho - move_cursor_na_coluna + 1);
-                            string->matriz_de_linhas[move_cursor_na_linha][move_cursor_na_coluna] = evento_para_escrita.teclado.ascii_code;
-                        }*/
-                    }
-                    
-
-
-                    /*Casos para cada tecla*/
-                    switch(evento_para_escrita.teclado.key_code)
-                    {
-                        /*Navega??o no arquivo usando o cursor*/
-                        case SETA_PARA_DIREITA:
-                        {
-                            /*Verifica??o para n?o ultrapassar o fim da linha, ao estar dentro do intervalo ? incrementado o cursor, o '\0' ? justamente para o fim da ultima linha, ja que ela nao contem '\n'*/
-                            if(string->matriz_de_linhas[move_cursor_na_linha][move_cursor_na_coluna] != '\n' && string->matriz_de_linhas[move_cursor_na_linha][move_cursor_na_coluna] != '\0')
-                            {
-                                /*Posiciona o cursor*/
-                                move_cursor_na_coluna += 1;
-                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + LARGURA/ALTURA + move_cursor_na_linha);
-                                
-                            }
-                            break;
-                        }
-
-                        case SETA_PARA_ESQUERDA:
-                        {
-                            /*Verifica??o para a movimenta??o do cursor n?o ser menor do que o inicio da coordenada do meu arquivo*/
-                            if(move_cursor_na_coluna >= string->posicao_cursor_escrita.X)
-                            {
-                                /*Posiciona o meu cursor quando ando para atr?s*/
-                                move_cursor_na_coluna -= 1;
-                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + LARGURA/ALTURA + move_cursor_na_linha);
-                            }
-                            break;
-                        }
-                        
-                        case SETA_PARA_BAIXO:
-                        {
-                            
-                            /*Verifica o tamanho das linhas do meu arquivo, caso chegue na linha final n?o consigo ultrapassa-la*/
-                            if(move_cursor_na_linha < string->index_linha_matriz)
-                            {
-                                /*A linha zera para que eu possa andar pelas linhas at? o '\n' dela*/
-                                move_cursor_na_linha += 1;
-                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + LARGURA/ALTURA + move_cursor_na_linha);   
-                            }
-                            
-                            break;
-                        }
-
-                        case SETA_PARA_CIMA:
-                        {
-                            /*Ao subir com o cursor nao pode ultrapassar a 1? linha*/
-                            if(move_cursor_na_linha >= string->posicao_cursor_escrita.X)
-                            {
-                                move_cursor_na_linha -= 1;
-                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + LARGURA/ALTURA + move_cursor_na_linha);
-                            }
-                    
-                            break;
-                        }
-
-                        /*Sobrescreve caracteres*/
-                        case INSERT:
-                        {
-                            /*Quando queira sobrescrever os caracteres troca de modo*/
-                            string->modo = 1;
-                            break;
-                        }
-                        
-                        /*Volta apagando um caractere*/
-                        case BACKSPACE:
-                        {
-                            /*Verifica se posso decrementar a linha*/
-                            if(move_cursor_na_coluna >= 0)
-                            {
-                                /*move o cursor*/
-                                move_cursor_na_coluna -= 1;
-                                gotoxy(string->posicao_cursor_escrita.X + move_cursor_na_coluna, string->posicao_cursor_escrita.Y + LARGURA/ALTURA + move_cursor_na_linha);
-
-                                /*Referente ao espa?o em branco na tabela ascii, usando pucthar ao inv?s do printf por causa do \n no final*/
-                                putchar(32);
-                            }
-                            break;
-                        }
-
-                        /*Sai do loop*/
-                        case ESC:
-                        {
-                            /*Zera as 2 variaves de controle do cursor e sai do loop por meio da variavel 'esc_pressionado'*/
-                            move_cursor_na_coluna = 0;
-                            move_cursor_na_linha = 0;
-                            esc_pressionado = 0;
-                            break;
-                        }
-
-                        /*Vai para o final do arquivo, ?ltima linha*/
-                        case PAGE_DOWN:
-                        {
-                            /*Pega o tamanho da ultima linha do arquivo
-                            ultima_linha = strlen(string->matriz_de_linhas[string->index_linha_matriz]);
-                            move_cursor_na_coluna = ultima_linha;
-                            move_cursor_na_linha = string->index_linha_matriz;*/
-
-                            /*Posiciona o cursor na ultima linha do arquivo
-                            gotoxy(move_cursor_na_coluna, move_cursor_na_linha);*/
-
-                            pgd_down += 1;
-                            break;
-                        }
-
-                        /*Vai para o inicio do arquivo, 1? linha*/
-                        case PAGE_UP:
-                        {
-                            move_cursor_na_coluna = 1;
-                            move_cursor_na_linha = 1;
-
-                            /*Posiciona meu cursor no inicio do arquivo*/
-                            gotoxy(move_cursor_na_coluna, move_cursor_na_linha);
-                            break;
-                        }
-
-                        /*Volta no inicio da linha da string*/
-                        case HOME:
-                        {
-                            move_cursor_na_coluna = 1;
-
-                            /*Posiciona no inicio da linha que esta meu cursor*/
-                            gotoxy(move_cursor_na_coluna, move_cursor_na_linha + 1);
-                            break;
-                        }
-                        
-                        /*Vai pro final da linha aonde o cursor esta*/
-                        case END:
-                        {
-                            cursor_final_linha = strlen(string->matriz_de_linhas[move_cursor_na_linha]);
-                            move_cursor_na_coluna = cursor_final_linha;
-                            /*Posiciona o cursor*/
-                            gotoxy(move_cursor_na_coluna, move_cursor_na_linha + 1);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-    /*Loop at? o ESC ser pressionado*/
-    }while(esc_pressionado);
-    
-}
-
-/*Fun??o que imprime as op??es de menu na tela*/
-void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *letras)
-{
-    int i;
-
-    /*Armazenar? o tamanho de cada string*/
-    int tam_opcao_menu = 0;
-
-    /*Armazenar? a posi??o da letra de atalho encontrada nas op??es de menu*/
-    int pos;
-
-    /*Armazenar? um ponteiro para a posi??o da letra encontrada nas strings*/
-    char *p_posicao_letra;
-
-    /*Armazenar? a coordenada de onde devo destacar a tecla de atalho*/
-    COORD Ponto_destaque;
-
-    /*Imprime na tela as op??es do menu*/
-    for(i = 0; i < QTD_STRING; i++)
-    {   
-        /*Seta o lugar aonde deve ser impresso o menu*/
-        gotoxy(janela->coordenadas_janela.X + tam_opcao_menu + 1, janela->coordenadas_janela.Y + LARGURA/ALTURA/2);
-
-        /*Foi criada outro tipo COORD para representar a coordenada do destaque da letra de atalho, poderia utilizar-se somente a coordenada atual da janela.
-        Mas o c?digo ficaria um pouco confuso*/
-        Ponto_destaque.X = wherex();
-        Ponto_destaque.Y = wherey();
-
-
-        /*Verifica??o da navega??o do usuario por meio das teclas direcionais*/
-        if(i == op->escolha_do_usuario)
-        {
-            /*Quando uma op??o for selecionada, eu tenho a coordenada dela para imprimir o submenu dessa op??o, caso precise*/
-            op->coordenadas_submenus.X = wherex();
-            op->coordenadas_submenus.Y = wherey();
-
-            /*Cor para somente simular uma navega??o entre as op??es*/
-            textcolor(YELLOW);
-        }
-
-        /*Imprime a string referente a op??o do menu*/
-        printf("%s", string->menu[i]);
-        
-        /*Colore a letra quando apertado o 'ALT_ESQUERDO'*/
-        if(op->controle_do_alt)
-        {
-            /*A fun??o strchr retorna um ponteiro com a posi??o da 1? ocorr?ncia da letra dentro de uma string.*/
-            p_posicao_letra = strchr(string->menu[i], letras[i]);
-
-            /*? feito um calculo para pegar a posi??o inteira da letra na string*/
-            pos = p_posicao_letra - string->menu[i];
-
-            /*Com a posi??o da letra encontrada em m?os, esta ? somada com a coordenada atual*/
-            gotoxy(Ponto_destaque.X + pos, Ponto_destaque.Y);
-
-            /*Modifica a cor do texto para demostrar o destaque da letra de atalho*/
-            textcolor(op->cor_atalho);
-            printf("%c", letras[i]);
-           
-        }
-        
-        /*Ap?s imprimir na tela a op??o com a cor de navega??o padrao do menu, volta-se a cor original do prompt pra nao colorir toda a tela*/
-        textcolor(string->cores_texto);
-
-        /*Como o Ponto_destaque, que ? uma coordenada para pintar a letra ao pressionamento do ALT, j? esta pegando a coordenada atual da minha string,
-        reuso ela para simplesmente armazenar em um vetor de coordenadas, as coordenadas de todas as strings, para reusar na funcionalidade dos atalhos*/
-        string->vetor_cord_menu[i] = Ponto_destaque;
-
-        /*O tamanho da opcao armazena o tamanho da string do menu e o soma com a quantidade de espa?amento declarado fixo,
-        isso faz com que haja um espa?amento entre as op??es do menu independente do tamanho da string */
-        tam_opcao_menu += strlen(string->menu[i]) + ESPACAMENTO;
-
-    }
-}
-
-/*Fun??o para inicializar as variaveis*/
-void Inicializacao_Variaveis(STRINGS *string, USUARIO *op, TAM_JANELA *janela)
-{
-    /*Declara??o da op??o do usu?rio*/
-    op->escolha_do_usuario = 0;
-
-    /*Controle do alt*/
-    op->controle_do_alt = 0;
-
-    /*Controla o desenho da janela, para que eu consiga mover o cursor,
-    ? inicializado com 1 pois preciso que imprima na tela pela 1? vez a janela*/
-    op->controla_evento = 1;
-
-    /*Variavel para saida do loop principal da main*/
-    op->esc_apertado = 1;
-
-    /*Precisa imprimir ao menos 1 vez*/
-    op->imprime_janela_cor_diferente = 1;
-
-    /*Coordenadas da Janela, x e y, para eu poder imprimi-la na tela*/
-    janela->coordenadas_janela.X = 1;
-    janela->coordenadas_janela.Y = 1;
-
-    /*Come?a com a inser??o de caracteres*/
-    string->modo = 0;
-
-    /*Inicializa??o da quantidade de linhas no arquivo*/
-    string->index_linha_matriz = 0;
-
-    /*Atribui o tamanho da janela do console*/
-    string->limite_maximo_Janela = tamanhoJanelaConsole();
-
-    /*Aloco memoria para a tela de salvamento de acordo com o tamanho maximo da minha janela*/
-    string->Tela = (char *)malloc(string->limite_maximo_Janela.X * string->limite_maximo_Janela.Y * 2 * sizeof(char));
-
-}
-
-/*Fun??o que le o teclado do usuario*/
-void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
-{
-    /*UMA IDEIA ? COLOCAR O TEXTO IMPRESSO EMBAIXO DO MENU, ASSIM CONSIGO TER A LOCALIZA??O DA ONDE VAI SER IMPRESSO E COMO FAZER,
-    A IDEIA ? IMPRIMIR POR BLOCOS, CADA BLOCO EU IMPRIMO O TEXTO AP?S PASSAR O LIMITE DE CADA BLOCO, POSSO GUARDAR A TELA ANTERIOR E COLOCAR NA TELA
-    */
-
-    /*Pego a tela atual para salvamento*/
-    _gettext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
-
-    /*Identifica um 'hit' do teclado*/   
-    if(hit(KEYBOARD_HIT))
-    {
-        /*Atribui??o do evento que ocorreu*/
-        leitura->tecla = Evento();
-        
-        /*Verifica??o caso seja um evento origin?rio do teclado*/
-        if(leitura->tecla.tipo_evento & KEY_EVENT)
-        {
-            /*Precisa ser aqui dentro o controle dos eventos, pois somente se for um evento do teclado, vai ser retornado se vai ou nao ser impresso o menu*/
-            op->controla_evento = Mapeia_teclas_Entrada(leitura);
-
-            if(op->controla_evento)
-            {
-                /*Verifica??o da tecla se foi liberada ao pressionada*/
-                if(leitura->tecla.teclado.status_tecla == LIBERADA)
-                {
-                    
-                    /*gotoxy(1, LARGURA/ALTURA + 1);
-                    printf("asdasd");*/   
-                    /*O controle da tecla alt esquerda ? atribuida em 0 pois a tecla esta solta*/
-                    op->controle_do_alt = 0;
-
-                    /*Casos para o menu*/
-                    switch(leitura->tecla.teclado.key_code)
-                    {
-                        
-                        /*Seleciona a op??o do menu principal*/
-                        case ENTER:
-                        {
-
-                            /*De acordo com a escolha do usuario, uma das op??es sera selecionada*/
-                            switch(op->escolha_do_usuario)
-                            {
-                                /*Caso quando o usuario escolher o submenu arquivo*/
-                                case 0:
-                                {
-                                    /*Chama fun??o para abrir o submenu arquivo*/
-                                    Submenu_Arquivo(string);
-
-                                    /*Ap?s ter chamado minha fun??o coloco a tela que foi salva anteriormente e o mesmo ? feito para as demais fun??es
-                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);*/
-                                    break;
-                                }
-
-                                /*Caso para alinhar o texto*/
-                                case 1:
-                                {
-                                    
-                                    break;
-                                }
-
-                                /*Usuario escolheu modificar a quantidade de caracteres do x para o TAB*/
-                                case 2:
-                                {
-
-                                    /*Chama a fun??o para pegar o numero dado pelo usuario*/
-                                    Caractere_X(leitura, op, string);
-                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
-                                    break;
-                                }
-
-                                /*Caso para trocar a cor de fundo*/
-                                case 3:
-                                {
-                                    /*Chama a fun??o para o submenu de cor de fundo*/
-                                    Submenu_background(string, op);
-                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
-                                    break;
-                                }
-
-                                /*Caso para trocar a cor de texto*/
-                                case 4:
-                                {
-                                    /*Chama a fun??o para o submenu de cor de texto*/
-                                    Submenu_cor_texto(string, op);
-                                    puttext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
-                                    break;
-                                }
-                            }
-
-                        }
-
-                        /*Navega??o ? direita*/
-                        case SETA_PARA_DIREITA:
-                        {
-                            
-                            /*Foi criado uma variavel para a escolha do usuario para simular a navega??o do menu, ? necessario somente
-                            modificar o valor da pr?pria variavel conforme o usuario aperta as teclas direcionais, a verifica??o ? feita para a navega??o
-                            ficar limitada entre o intervalo da 1? a ultima op??o, o mesmo ? feito nas outras setas de dire??o, porem com verifica??es distintas*/
-                            if(op->escolha_do_usuario >= 0 && op->escolha_do_usuario < QTD_STRING - 1)
-                            {
-                                op->escolha_do_usuario += 1;
-                            }
-                            break;
-                        }
-
-                        /*Navega??o ? esquerda*/
-                        case SETA_PARA_ESQUERDA:
-                        {
-                            if(op->escolha_do_usuario > 0 && op->escolha_do_usuario <= QTD_STRING)
-                            {
-                                op->escolha_do_usuario -= 1;
-                            }
-                            
-                            break;
-                        }
-                        
-                        /*Saida do programa*/
-                        case ESC:
-                        {
-                            op->esc_apertado -= 1;
-                            break;
-                        }
-
-                    }
-                }
-                else
-                {
-                    /*Casos especificos para teclas de controle*/
-                    if(leitura->tecla.teclado.status_teclas_controle & ALT_ESQUERDO)
-                    {
-                        /*? definido o alt_esquerdo como 1 pois esta sendo pressionado, a cor muda para azul*/
-                        op->controle_do_alt = 1;
-                        op->cor_atalho = BLUE;
-
-                        /*switch para a outra tecla ap?s o ALT_ESQUERDO*/
-                        switch(leitura->tecla.teclado.key_code)
-                        {
-                            /*Os gotoxy() s?o para setar a coordenada correspondente ao lugar aonde ser? impresso o submenu de cada op??o do menu principal*/
-                            /*Teclas de atalho para chamada das op??es do menu principal*/
-                            /*Atalho para op??o 'ARQUIVO'*/
-                            case 'A':
-                            {
-
-                                /*Chama a fun??o para a abertura do arquivo*/
-                                Submenu_Arquivo(string);
-                                break;
-                            }
-                            
-                            /*Atalho para op??o 'ALINHAMENTO'*/
-                            case 'L':
-                            {
-                                break;
-                            }
-
-                            /*Atalho para op??o 'ALTERAR X'*/
-                            case 'X':
-                            {
-
-                                /*Chama a fun??o para o caractere TAB*/
-                                Caractere_X(leitura, op, string);
-                                break;
-                            }
-
-                            /*Atalho para op??o 'COR FUNDO'*/
-                            case 'F':
-                            {
-
-                                /*Chamada da fun??o para trocar a cor de fundo*/
-                                Submenu_background(string, op);
-                                break;
-                            }
-
-                            /*Atalho para op??o 'COR TEXTO'*/
-                            case 'T':
-                            {
-
-                                /*Chamada para a fun??o que troca a cor de texto*/
-                                Submenu_cor_texto(string, op);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            
-        }
-      
-    }
-}
-    
-
-
-
-/*Controla as teclas que ser?o pressionadas pelo teclado, para imprimir novamente a janela de menu ? necessario mapear as teclas*/
-int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
-{
-    /*Mapeamento de cada tecla*/
-
-    /*Verifica??o do alt esquerdo pois ? uma tecla de controle*/
-    if(leitura->tecla.teclado.status_teclas_controle & ALT_ESQUERDO)
-    {
-        return 1;
-    }
-
-    /*Switch para cases de teclas que nao sao de controle*/
-    switch(leitura->tecla.teclado.key_code)
-    {
-        case SETA_PARA_DIREITA:
-        {
-            return 1;
-        }
-        case SETA_PARA_ESQUERDA:
-        {
-            return 1;
-        }
-        case ENTER:
-        {
-            return 1;
-        }
-        case ESC:
-        {
-            return 1;
-        }
-
-    }
-    /*Caso seja qualquer outro tipo de tecla retorna 0, para nao imprimir de novo o menu*/
-    return 0;
-}  
-
-/*Fun??o que as modifica??es feitas no arquivo que foi aberto*/
+/*Funá∆o que as modificaá‰es feitas no arquivo que foi aberto*/
 void Salvar_Arquivo(STRINGS *string)
 {
     int i;
@@ -919,7 +906,7 @@ void Salvar_Arquivo(STRINGS *string)
     /*Fecha o arquivo de escrita*/
     fclose(escrita);
 
-    /*Libera 1? a memoria alocada para as linhas*/  
+    /*Libera 1¯ a memoria alocada para as linhas*/  
     for(i = 0; i < string->index_linha_matriz; i++)
     {
         free(string->matriz_de_linhas[i]);
@@ -931,10 +918,10 @@ void Salvar_Arquivo(STRINGS *string)
     printf("Arquivo Salvo com sucesso!");
 }   
 
-/*Fun??o para apresentar o submenu quando for apertado na op??o arquivo*/
+/*Funá∆o para apresentar o submenu quando for apertado na opá∆o arquivo*/
 void Submenu_Arquivo(STRINGS *string)
 {
-    /*? criado outro tipo EVENTO para armazenar as teclas da navega??o e escolha do submenu arquivo*/
+    /*? criado outro tipo EVENTO para armazenar as teclas da navegaá∆o e escolha do submenu arquivo*/
     EVENTO sub_arquivo;
     int i;
     int saida = 1;
@@ -947,7 +934,7 @@ void Submenu_Arquivo(STRINGS *string)
         /*Controla a impressao do submenu*/
         if(controla_sub)
         {
-            /*Imprime as op??es de arquivo*/
+            /*Imprime as opá‰es de arquivo*/
             for(i = 0; i <= 1; i++)
             {
                 if(i == escolha_setas_submenu)
@@ -955,20 +942,20 @@ void Submenu_Arquivo(STRINGS *string)
                     textcolor(YELLOW);
                 }
 
-                /*Como j? tenho a posi??o de cada string do menu, pode ser feito manualmente acessando seu ?ndice*/
+                /*Como j† tenho a posiá∆o de cada string do menu, pode ser feito manualmente acessando seu °ndice*/
                 gotoxy(string->vetor_cord_menu[0].X, string->vetor_cord_menu[0].Y + i + 1);
                 printf("%s", string->submenu_arquivo[i]);
                 textcolor(string->cores_texto);
 
             }    
-            /*S? ? necessario imprimir uma 1? vez, caso o usuario pressione as teclas de navega??o, ai a variavel volta com seu valor 1, caso nao continua zerado*/
+            /*S¢ Ç necessario imprimir uma vez, caso o usuario pressione as teclas de navegaá∆o, ai a variavel volta com seu valor 1, caso nao continua zerado*/
             controla_sub = 0;
         }
         
         /*Armazena os eventos do teclado*/
         sub_arquivo = Evento();
 
-        /*Verifica se ? um evento do teclado*/
+        /*Verifica se Ç um evento do teclado*/
         if(sub_arquivo.tipo_evento & KEY_EVENT)
         {   
             /*Verifica se foi liberada a tecla*/
@@ -977,10 +964,10 @@ void Submenu_Arquivo(STRINGS *string)
                 /*Qual tecla foi apertada*/
                 switch(sub_arquivo.teclado.key_code)
                 {
-                    /*Navega??o do submenu arquivo*/
+                    /*Navegaá∆o do submenu arquivo*/
                     case SETA_PARA_BAIXO:
                     {
-                        /*Navega??o do submenu na op??o arquivo*/
+                        /*Navegaá∆o do submenu na opá∆o arquivo*/
                         if(escolha_setas_submenu >= 0 && escolha_setas_submenu < 1)
                         {
                             escolha_setas_submenu += 1;
@@ -1006,10 +993,10 @@ void Submenu_Arquivo(STRINGS *string)
                         break;
                     }
 
-                    /*Meio de saida do loop e entrada em outra fun??o*/
+                    /*Meio de saida do loop e entrada em outra funá∆o*/
                     case ENTER:
                     {
-                        /*Ao apertar o enter, ? aonde a posi??o 'escolha_estas_submenu' vai estar, entao eu tenho controle de qual op??o sera selecionada somente
+                        /*Ao apertar o enter, Ç aonde a posiá∆o 'escolha_estas_submenu' vai estar, entao eu tenho controle de qual opá∆o sera selecionada somente
                         com uma variavel*/
                         switch(escolha_setas_submenu)
                         {
@@ -1017,7 +1004,7 @@ void Submenu_Arquivo(STRINGS *string)
                             /*Usuario optou por abrir um arquivo*/
                             case 0:
                             {
-                                /*Chama a fun??o para abrir o arquivo*/
+                                /*Chama a funá∆o para abrir o arquivo*/
                                 Abre_Arquivo(string);
                                 saida = 0;
                                 controla_sub = 0;
@@ -1027,7 +1014,7 @@ void Submenu_Arquivo(STRINGS *string)
                             /*Usuario optou pra salvar o arquivo aberto*/
                             case 1:
                             {
-                                /*Chama a fun??o para salvar o arquivo*/
+                                /*Chama a funá∆o para salvar o arquivo*/
                                 Salvar_Arquivo(string);
                                 break;
                             }
@@ -1041,7 +1028,7 @@ void Submenu_Arquivo(STRINGS *string)
 
 }
 
-/*Fun??o para imprimir os submenus da op??o 'COR FUNDO'*/
+/*Funá∆o para imprimir os submenus da opá∆o 'COR FUNDO'*/
 void Submenu_background(STRINGS *string, USUARIO *op)
 {
     EVENTO sub_cor_fundo;
@@ -1050,7 +1037,7 @@ void Submenu_background(STRINGS *string, USUARIO *op)
     int controla_sub_cor = 1;
     int escolhas_setas_background = 0;
     
-    /*Pega os eventos do teclado para navegar entre as op??es do menu*/
+    /*Pega os eventos do teclado para navegar entre as opá‰es do menu*/
     while(saida)
     {  
         if(controla_sub_cor)
@@ -1063,7 +1050,7 @@ void Submenu_background(STRINGS *string, USUARIO *op)
                     textcolor(YELLOW);
                 }
 
-                /*Mesma funcionalidade da fun??o Submenu_arquivo*/
+                /*Mesma funcionalidade da funá∆o Submenu_arquivo*/
                 gotoxy(string->vetor_cord_menu[3].X ,string->vetor_cord_menu[3].Y + i + 1);
                 printf("%s", string->submenu_cores[i]);
                 textcolor(string->cores_texto);
@@ -1080,7 +1067,7 @@ void Submenu_background(STRINGS *string, USUARIO *op)
             {
                 switch(sub_cor_fundo.teclado.key_code)
                 {
-                    /*Navega??o no menu cores de fundo*/
+                    /*Navegaá∆o no menu cores de fundo*/
                     case SETA_PARA_CIMA:
                     {
                         if(escolhas_setas_background > 0 && escolhas_setas_background < 16)
