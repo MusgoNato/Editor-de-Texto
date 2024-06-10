@@ -88,7 +88,7 @@ void Abre_Arquivo(STRINGS *string)
                 
     }
 
-    /*Verifica se caso o usuario aperte ESC, o programa sai para ir as outras opá‰es do menu, n?o ? necessario criar outro arquivo se o usuario nem apertou ENTER,
+    /*Verifica se caso o usuario aperte ESC, o programa sai para ir as outras opá‰es do menu, n∆o Ç necessario criar outro arquivo se o usuario nem apertou ENTER,
     entao somente quando ele aperte ENTER, o arquivo Ç criado e verificado*/
     if(controla_arquivo)
     {
@@ -289,56 +289,16 @@ void Escreve_no_Arquivo(STRINGS *string)
     EVENTO evento_para_escrita;
     int esc_pressionado = 1; 
     int cursor_final_linha = 0;
-    int limite_a_ser_impresso = 0;
-    int pgd = 0;
-    int controla_impressao_arquivo = 1;
-    int i;
 
     /*Variaveis para mover o cursor ao abrir o arquivo*/
     int move_cursor_na_coluna = 0;
     int move_cursor_na_linha = 0;
-    
-    /*Pega a posiá∆o atual do meu cursor*/
-    string->posicao_cursor_escrita.X = wherex();
-    string->posicao_cursor_escrita.Y = wherey();
 
-    /*Guarda a metade do tamanho maximo da minha janela*/
-    limite_a_ser_impresso += string->limite_maximo_Janela.Y/2;
-    
     do
     {
-        /*Verificaá∆o para n∆o impress∆o do meu arquivo a todo momento*/
-        if(controla_impressao_arquivo)
-        {
-            /*Impress∆o das linhas do meu arquivo*/
-            /*O index linha matriz ser† um contador de quntas linhas eu tenho no meu arquivo, pois na abertura dele, no momento da alocaá∆o
-            ele serve de indice para acesso a cada linha,
-            ent∆o pode servir de limite pois guarda a ultima linha contada*/
-            for(i = 0; i < string->index_linha_matriz; i++)
-            {
-                /*Aqui vai ser o local para ser impresso o meu arquivo, que ficar† no meio da tela encostado ao lado esquerdo*/
-                gotoxy(string->posicao_cursor_escrita.X, string->limite_maximo_Janela.Y/2 + i);
-
-                /*A variavel limite_a_ser impresso guarda o valor do tamanho maximo da janela dividido por 2, me proporciona a metade da janela,
-                assim eu tenho o limite do cmd para imprimir o meu arquivo*/
-                if(i <= limite_a_ser_impresso)
-                {
-                    /*Apaga a linha atual, isso se deve pois caso o usuario pressione PAGE_DOWN, Ç necessario apagar a linha da coordenada atual,
-                    para que imprima a proxima normalmente*/
-                    clreol();
-
-                    /*Imprime cada linha do arquivo*/
-                    printf("%s", string->matriz_de_linhas[i + pgd]);
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            /*Seta a variavel controla_impressao_arquivo para 0 novamente para n∆o imprimir o arquivo a todo momento*/
-            controla_impressao_arquivo = 0;
-        }
+        _gettext(1, 1, string->limite_maximo_Janela.X, string->limite_maximo_Janela.Y, string->Tela);
+        /*Chama a funá∆o para impressao do meu arquivo*/
+        Imprimir_Arquivo(string);
 
         /*Pega uma aá∆o do teclado*/
         if(hit(KEYBOARD_HIT))
@@ -468,10 +428,10 @@ void Escreve_no_Arquivo(STRINGS *string)
                             string->limite_maximo_Janela armazena o tamanho da janela do console, como somente quero a limitaá∆o para nao incrementar a minha variavel page novamente,
                             divide-se por 2 e subtrai 1, justamente para n∆o imprimir lixo na tela, pois incrementando sem a verificaá∆o
                             estaria acessando lugares invalidos na minha matriz de linhas*/
-                            if(pgd < string->index_linha_matriz - string->limite_maximo_Janela.Y/2 - 1)
+                            if(string->tecla_pgd < string->index_linha_matriz - string->limite_maximo_Janela.Y/2 - 1)
                             {
-                                pgd += 1;
-                                controla_impressao_arquivo = 1;
+                                string->tecla_pgd += 1;
+                                string->controla_impressao_arquivo = 1;
                             }
                             
                             break;
@@ -482,14 +442,13 @@ void Escreve_no_Arquivo(STRINGS *string)
                         {
                             /*Verificaá∆o para n∆o acessar algum local invalido da minha matriz, no caso da usu†rio por exemplo pressionar PAGE_UP
                             logo ap¢s abrir o arquivo, como usa-se somente uma v†riavel para controlar a impress∆o do arquivo linha por linha,
-                            somente verifica-se o limite 0, pois inicialmente a variavel pgd Ç setada com 0*/
-                            if(pgd > 0)
+                            somente verifica-se o limite 0, pois inicialmente a variavel string->tecla_pgd Ç setada com 0*/
+                            if(string->tecla_pgd > 0)
                             {
-                                pgd -= 1;
-                                controla_impressao_arquivo = 1;
+                                string->tecla_pgd -= 1;
+                                string->controla_impressao_arquivo = 1;
                             }
                             
-
                             break;
                         }
 
@@ -522,6 +481,45 @@ void Escreve_no_Arquivo(STRINGS *string)
     }while(esc_pressionado);
     
 }
+
+/*Imprime meu arquivo aberto*/
+void Imprimir_Arquivo(STRINGS *string)
+{
+    int i = 0;
+    /*Verificaá∆o para n∆o impress∆o do meu arquivo a todo momento*/
+    if(string->controla_impressao_arquivo)
+    {
+        /*Impress∆o das linhas do meu arquivo*/
+        /*O index linha matriz ser† um contador de quntas linhas eu tenho no meu arquivo, pois na abertura dele, no momento da alocaá∆o
+        ele serve de indice para acesso a cada linha,
+        ent∆o pode servir de limite pois guarda a ultima linha contada*/
+        for(i = 0; i < string->index_linha_matriz; i++)
+        {
+            /*Aqui vai ser o local para ser impresso o meu arquivo, que ficar† no meio da tela encostado ao lado esquerdo*/
+            gotoxy(string->posicao_cursor_escrita.X, string->limite_maximo_Janela.Y/2 + i);
+
+            /*A variavel limite_a_ser impresso guarda o valor do tamanho maximo da janela dividido por 2, me proporciona a metade da janela,
+            assim eu tenho o limite do cmd para imprimir o meu arquivo*/
+            if(i <= string->limite_impressao_arq)
+            {
+                /*Apaga a linha atual, isso se deve pois caso o usuario pressione PAGE_DOWN, Ç necessario apagar a linha da coordenada atual,
+                para que imprima a proxima normalmente*/
+                clreol();
+
+                /*Imprime cada linha do arquivo*/
+                printf("%s", string->matriz_de_linhas[i + string->tecla_pgd]);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        /*Seta a variavel controla_impressao_arquivo para 0 novamente para n∆o imprimir o arquivo a todo momento*/
+        string->controla_impressao_arquivo = 0;
+    }
+}
+
 
 /*Funá∆o que imprime as op??es de menu na tela*/
 void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *letras)
@@ -601,7 +599,7 @@ void Imprime_op_Menu(TAM_JANELA *janela, STRINGS *string, USUARIO *op, char *let
 /*Funá∆o para inicializar as variaveis*/
 void Inicializacao_Variaveis(STRINGS *string, USUARIO *op, TAM_JANELA *janela)
 {
-    /*Declaraá∆o da opá∆o do usu?rio*/
+    /*Declaraá∆o da opá∆o do usu†rio*/
     op->escolha_do_usuario = 0;
 
     /*Controle do alt*/
@@ -627,11 +625,26 @@ void Inicializacao_Variaveis(STRINGS *string, USUARIO *op, TAM_JANELA *janela)
     /*Inicializaá∆o da quantidade de linhas no arquivo*/
     string->index_linha_matriz = 0;
 
+    /*Variavel que controlara a impressao do meu arquivo*/
+    string->controla_impressao_arquivo = 1;
+
+    /*Variavel que sera um incrementador para imprimir meu arquivo linha por linha*/
+    string->tecla_pgd = 0;  
+
     /*Atribui o tamanho da janela do console*/
     string->limite_maximo_Janela = tamanhoJanelaConsole();
 
+    /*Ap¢s ter pego o limite maximo da janela, atribuiá∆o do limite de atÇ onde na janela meu arquivo deve ser impresso*/
+    string->limite_impressao_arq = string->limite_maximo_Janela.Y/2;
+
+    /*Devido a entrar de novo no arquivo, ao inves de pegar a posiá∆o atual com where(), foi setado com 1, isso se deve pois ap¢s imprimir o arquivo
+    o cursor Ç colocado em uma nova posiá∆o na janela, quando o usuario entrar novamente no arquivo por meio da tecla SETA PARA BAIXO no menu principal
+    o cursor fara o calculo errado, pois esta no lugar errado, assim sendo foi setado para 1, para nao ocasionar esse erro*/
+    string->posicao_cursor_escrita.X = 1;
+    string->posicao_cursor_escrita.Y = 1;
+
     /*Aloco memoria para a tela de salvamento de acordo com o tamanho maximo da minha janela*/
-    string->Tela = (char *)malloc(string->limite_maximo_Janela.X * string->limite_maximo_Janela.Y * 2 * sizeof(char));
+    string->Tela = (char *)malloc(string->limite_maximo_Janela.X * string->limite_maximo_Janela.Y * ALTURA * sizeof(char));
 
 }
 
@@ -744,7 +757,19 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                             
                             break;
                         }
-                        
+
+                        case SETA_PARA_BAIXO:
+                        {
+                            /*Faz a verificaá∆o se o arquivo foi aberto ou nao, caso a abertura do arquivo tenha dado certo entao ele entra
+                            novamente no arquivo para modificacao*/
+                            if(string->arquivo_origem != NULL)
+                            {
+                                /*Chama a funá∆o para escrita no arquivo*/
+                                Escreve_no_Arquivo(string);
+                            }
+                            break;
+                        }
+
                         /*Saida do programa*/
                         case ESC:
                         {
@@ -763,7 +788,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
                         op->controle_do_alt = 1;
                         op->cor_atalho = BLUE;
 
-                        /*switch para a outra tecla ap?s o ALT_ESQUERDO*/
+                        /*switch para a outra tecla ap¢s o ALT_ESQUERDO*/
                         switch(leitura->tecla.teclado.key_code)
                         {
                             /*Teclas de atalho para chamada das opá‰es do menu principal*/
@@ -816,6 +841,7 @@ void Le_Teclado(LE_TECLADO *leitura, USUARIO *op, STRINGS * string)
         }
       
     }
+
 }
     
 
@@ -840,6 +866,10 @@ int Mapeia_teclas_Entrada(LE_TECLADO *leitura)
             return 1;
         }
         case SETA_PARA_ESQUERDA:
+        {
+            return 1;
+        }
+        case SETA_PARA_BAIXO:
         {
             return 1;
         }
@@ -916,6 +946,7 @@ void Salvar_Arquivo(STRINGS *string)
     free(string->matriz_de_linhas);  
 
     printf("Arquivo Salvo com sucesso!");
+    
 }   
 
 /*Funá∆o para apresentar o submenu quando for apertado na opá∆o arquivo*/

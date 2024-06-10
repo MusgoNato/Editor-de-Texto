@@ -39,6 +39,9 @@ typedef struct _STRINGS
     int index_linha_matriz;
     int tamanho_das_linhas[LARGURA];
     int modo;
+    int controla_impressao_arquivo;
+    int tecla_pgd;
+    int limite_impressao_arq;
 
     /*Essa matriz vai guardar o save da tela, pra depois somente recolocar, após o usuario ter pressionado qualquer submenu*/
     char *Tela;
@@ -111,6 +114,13 @@ Parametros :
 Retorno : 
 Nenhum*/
 void Escreve_no_Arquivo(STRINGS *);
+
+/*Responsável por imprimir o arquivo escolhido
+Parametros : 
+1° -> Ponteiro para estrutura STRINGS
+Retorno : 
+Nenhum*/
+void Imprimir_Arquivo(STRINGS *);
 
 /*Função que imprime as opções de menu disponíveis
 Parametros :
